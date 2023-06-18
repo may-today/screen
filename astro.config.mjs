@@ -1,19 +1,15 @@
 import { defineConfig } from 'astro/config'
 import UnoCSS from 'unocss/astro'
 
-import { presetUno, presetIcons, presetWebFonts } from 'unocss'
+import { presetUno, presetIcons } from 'unocss'
 import AstroPWA from '@vite-pwa/astro'
-import yaml from '@rollup/plugin-yaml'
 import solid from '@astrojs/solid-js'
+import netlify from '@astrojs/netlify/edge-functions'
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [yaml()],
-    define: {
-      __DATE__: `'${new Date().toISOString()}'`,
-    },
-  },
+  output: 'server',
+  adapter: netlify(),
   integrations: [
     solid(),
     UnoCSS({

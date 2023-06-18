@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^2.3.0",
     "@astrojs/prefetch": "^0.2.3",
     "@astrojs/solid-js": "^2.2.0",
     "@fontsource/newsreader": "^5.0.2",
@@ -21,7 +22,6 @@
   },
   "devDependencies": {
     "@iconify-json/ph": "^1.1.5",
-    "@rollup/plugin-yaml": "^4.1.0",
     "@unocss/preset-icons": "^0.52.7",
     "@unocss/preset-web-fonts": "^0.52.7",
     "@vite-pwa/astro": "^0.0.5",
