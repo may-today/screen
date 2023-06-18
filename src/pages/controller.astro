@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import SongList from '@/components/SongList'
+---
+
+<Layout>
+	<div class="flex w-screen h-screen">
+    <aside class="border-r border-base">
+      <SongList client:load />
+    </aside>
+    <main>
+      <h1>Home</h1>
+    </main>
+  </div>
+</Layout>
+
