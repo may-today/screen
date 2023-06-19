@@ -26,8 +26,8 @@ const pageTitle = title
 		<title>{pageTitle}</title>
 		<meta name="description" content="Mayday lyrics collection.">
 		{ import.meta.env.HEAD_SCRIPTS ? <Fragment set:html={import.meta.env.HEAD_SCRIPTS} /> : null }
-    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
 		<script src="/src/pwa.ts"></script>
+    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
 	</head>
 	<body class="bg-base fg-base pb-[env(safe-area-inset-bottom)]">
 		<slot />

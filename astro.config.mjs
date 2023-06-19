@@ -4,12 +4,9 @@ import UnoCSS from 'unocss/astro'
 import { presetUno, presetIcons } from 'unocss'
 import AstroPWA from '@vite-pwa/astro'
 import solid from '@astrojs/solid-js'
-import netlify from '@astrojs/netlify/edge-functions'
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: netlify(),
   integrations: [
     solid(),
     UnoCSS({
@@ -38,7 +35,6 @@ export default defineConfig({
       }],
     }),
     AstroPWA({
-      mode: 'development',
       base: '/',
       scope: '/',
       includeAssets: [
