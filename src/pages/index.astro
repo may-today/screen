@@ -1,8 +1,13 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import DataLayer from '@/components/DataLayer'
+import PresenterPeer from '@/components/PresenterPeer'
+import LyricShow from '@/components/presenter/LyricShow'
 ---
 
 <Layout>
-	<div>index</div>
+  <DataLayer client:only />
+	<!-- <PresenterPeer client:only /> -->
+	<LyricShow client:load />
 </Layout>
 

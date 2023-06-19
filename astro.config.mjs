@@ -34,6 +34,7 @@ export default defineConfig({
         'fcc': 'flex items-center justify-center',
         'button': 'bg-base-100 hv-base hover:bg-base-200',
         'button-highlight': 'fg-primary bg-primary hover:bg-primary! hover:fg-primary!',
+        'button-icon': 'button fcc rounded-md w-8 h-8',
         'badge': 'fcc text-xs rounded bg-base-200 text-dark/40 dark:text-light/50',
       }],
     }),

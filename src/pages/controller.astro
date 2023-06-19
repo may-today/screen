@@ -1,15 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import SongList from '@/components/SongList'
+import DataLayer from '@/components/DataLayer'
+import SongList from '@/components/controller/SongList'
+import LyricControl from '@/components/controller/LyricControl'
+import ControllerPeer from '@/components/ControllerPeer'
 ---
 
 <Layout>
-	<div class="flex w-screen h-screen">
-    <aside class="border-r border-base">
-      <SongList client:load />
-    </aside>
-    <main>
-      <h1>Home</h1>
+  <DataLayer client:only />
+	<div class="w-screen h-100dvh overflow-hidden">
+    <SongList client:load />
+    <main class="w-screen h-full overflow-hidden">
+      <!-- <ControllerPeer client:only /> -->
+      <LyricControl client:load />
     </main>
   </div>
 </Layout>
