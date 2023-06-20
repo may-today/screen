@@ -18,9 +18,10 @@ const parseTime = (time: number) => {
 export default () => {
   const currentSongId = useStore($currentSongId)
   const [currentSongData, setCurrentSongData] = createSignal<SongMeta | null>(null)
-  let currentLyricTimeline = null as Map<number, TimelineData> | null
+  const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)
+  const [isScreenOn, setIsScreenOn] = createSignal(true)
 
   const handleSetTime = (time: number) => {
     timeController.pause()
@@ -32,12 +33,12 @@ export default () => {
     timeController.clear()
     setCurrentSongData(getDataById(songId))
     if (!currentSongData()) return
-    currentLyricTimeline = parseLyricTimeline(currentSongData()!.detail)
+    setCurrentLyricTimeline(parseLyricTimeline(currentSongData()!.detail))
   }))
   createEffect(on(currentTime, time => {
-    if (!currentLyricTimeline) return
-    if (currentLyricTimeline.has(time)) {
-      const line = currentLyricTimeline.get(time)
+    if (!currentLyricTimeline()) return
+    if (currentLyricTimeline()!.has(time)) {
+      const line = currentLyricTimeline()!.get(time)
       console.log(line)
       setCurrentLyricStartTime(line!.startTime)
     }
@@ -46,20 +47,32 @@ export default () => {
   return (
     <div class="flex flex-col h-full">
       <div class="flex-1 overflow-auto">
-        <Show when={currentSongData()}>
-          <For each={currentSongData()!.detail}>
+        <Show when={currentLyricTimeline()}>
+          <For each={Array.from(currentLyricTimeline()!.values())}>
             {(line) => (
               <div
-                class="flex items-start gap-2 px-6 py-2 border-b border-base hv-base"
-                onClick={() => { handleSetTime(line.time) }}
+                class="relative flex items-start gap-2 px-6 py-2 border-b border-base hv-base"
+                onClick={() => { handleSetTime(line.startTime) }}
               >
-                <div class="text-xs op-50 font-mono mt-1">{parseTime(line.time)}</div>
+                <div
+                  class={[
+                    'absolute inset-0',
+                    currentLyricStartTime() === line.startTime && timeController.isRunning() ? 'anim-bar' : ''
+                  ].join(' ')}
+                  style={{ 'animation-duration': `${line.duration}s` }}
+                />
+                <div class={[
+                  'text-xs font-mono mt-1',
+                  currentLyricStartTime() === line.startTime ? 'font-bold fg-primary op-70' : 'op-30',
+                ].join(' ')}>
+                  {parseTime(line.startTime)}
+                </div>
                 <div class={[
                   'flex-1',
-                  line.isHighlight ? 'fg-primary' : '',
-                  currentLyricStartTime() === line.time ? 'font-bold' : ''
+                  line.data.isHighlight ? 'fg-primary' : '',
+                  currentLyricStartTime() === line.startTime ? 'font-bold' : ''
                 ].join(' ')}>
-                  {line.text}
+                  {line.data.text}
                 </div>
               </div>
             )}
@@ -69,8 +82,13 @@ export default () => {
       <div class="shrink-0 flex items-center justify-between gap-2 h-14 px-4 border-t border-base">
         <Button icon="i-ph-list" onClick={() => $sidebarOpen.set(!$sidebarOpen.get())} />
         <div class="flex items-center gap-2">
-        <div class="text-xs op-50 font-mono">{parseTime(currentTime())}</div>
-          <Button icon="i-ph-list" onClick={() => timeController.startOrPause()} />
+          <div class="text-xs op-50 font-mono">{parseTime(currentTime())}</div>
+          <Button icon={timeController.isRunning() ? 'i-ph:pause' : 'i-ph:play'} onClick={() => timeController.startOrPause()} />
+          <Button
+            class={isScreenOn() ? '' : 'bg-red/40 hover:bg-red/50 text-red-800 dark:text-red-400'}
+            icon={isScreenOn() ? 'i-ph:eye' : 'i-ph:eye-closed'}
+            onClick={() => setIsScreenOn(!isScreenOn())}
+          />
         </div>
       </div>
     </div>

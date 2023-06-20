@@ -2,6 +2,16 @@
   --c-scroll: #d9d9d9;
   --c-scroll-hover: #bbbbbb;
   --c-shadow: #00000008;
+  --c-primary: #0369a120;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-scroll: #333333;
+    --c-scroll-hover: #555555;
+    --c-shadow: #ffffff08;
+    --c-primary: #7dd3fc20;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -15,4 +25,20 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--c-scroll-hover);
+}
+
+.anim-bar {
+  background-color: var(--c-primary);
+  animation-iteration-count: infinite;
+  animation-name: progress-bar-loop;
+  animation-timing-function: linear;
+}
+
+@keyframes progress-bar-loop {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
