@@ -1,7 +1,6 @@
 import type { LyricLine, TimelineData } from '@/types'
 
 export const parseLyricTimeline = (lyrics?: LyricLine[]) => {
-  console.log('parseLyricTimeline')
   if (!lyrics) return null
   const lyricMap = new Map<number, TimelineData>()
   for (let i = 0; i < lyrics.length; i++) {

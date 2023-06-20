@@ -2,18 +2,12 @@ import { For, Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { getDataById } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
+import { sendDataToPresenter } from '@/stores/peer'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
+import { parseTime } from '@/logic/time'
 import Button from '../ui/Button'
 import type { SongMeta, TimelineData } from '@/types'
-
-const parseTime = (time: number) => {
-  const minutes = Math.floor(time / 60)
-  const seconds = time % 60
-  const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`
-  const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`
-  return `${minutesStr}:${secondsStr}`
-}
 
 export default () => {
   const currentSongId = useStore($currentSongId)
@@ -21,19 +15,16 @@ export default () => {
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)
-  const [isScreenOn, setIsScreenOn] = createSignal(true)
-
-  const handleSetTime = (time: number) => {
-    timeController.pause()
-    setCurrentTime(time)
-    timeController.start()
-  }
+  const [isScreenOff, setIsScreenOff] = createSignal(false)
 
   createEffect(on(currentSongId, songId => {
+    if (!songId) return
     timeController.clear()
     setCurrentSongData(getDataById(songId))
     if (!currentSongData()) return
-    setCurrentLyricTimeline(parseLyricTimeline(currentSongData()!.detail))
+    sendDataToPresenter({ type: 'set_id', value: songId })
+    const timeline = parseLyricTimeline(currentSongData()!.detail)
+    setCurrentLyricTimeline(timeline)
   }))
   createEffect(on(currentTime, time => {
     if (!currentLyricTimeline()) return
@@ -43,6 +34,28 @@ export default () => {
       setCurrentLyricStartTime(line!.startTime)
     }
   }, { defer: true }))
+
+  const handleSetTime = (time: number) => {
+    timeController.pause()
+    sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
+    setCurrentTime(time)
+    sendDataToPresenter({ type: 'set_time', value: time })
+    timeController.start()
+    sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
+  }
+  const handleSetScreenOff = () => {
+    setIsScreenOff(!isScreenOff())
+    sendDataToPresenter({ type: 'set_screen_off', value: !isScreenOff() })
+  }
+  const handleStartPause = () => {
+    if (timeController.isRunning()) {
+      timeController.pause()
+      sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
+    } else {
+      timeController.start()
+      sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
+    }
+  }
 
   return (
     <div class="flex flex-col h-full">
@@ -83,11 +96,11 @@ export default () => {
         <Button icon="i-ph-list" onClick={() => $sidebarOpen.set(!$sidebarOpen.get())} />
         <div class="flex items-center gap-2">
           <div class="text-xs op-50 font-mono">{parseTime(currentTime())}</div>
-          <Button icon={timeController.isRunning() ? 'i-ph:pause' : 'i-ph:play'} onClick={() => timeController.startOrPause()} />
+          <Button icon={timeController.isRunning() ? 'i-ph:pause' : 'i-ph:play'} onClick={handleStartPause} />
           <Button
-            class={isScreenOn() ? '' : 'bg-red/40 hover:bg-red/50 text-red-800 dark:text-red-400'}
-            icon={isScreenOn() ? 'i-ph:eye' : 'i-ph:eye-closed'}
-            onClick={() => setIsScreenOn(!isScreenOn())}
+            class={isScreenOff() ? 'bg-red/40 hover:bg-red/50 text-red-800 dark:text-red-400' : ''}
+            icon={isScreenOff() ? 'i-ph:eye-closed' : 'i-ph:eye'}
+            onClick={handleSetScreenOff}
           />
         </div>
       </div>

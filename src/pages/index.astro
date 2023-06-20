@@ -7,7 +7,9 @@ import LyricShow from '@/components/presenter/LyricShow'
 
 <Layout>
   <DataLayer client:only />
-	<!-- <PresenterPeer client:only /> -->
-	<LyricShow client:load />
+	<PresenterPeer client:only />
+	<div class="w-screen h-100dvh overflow-hidden">
+    <LyricShow client:load />
+  </div>
 </Layout>
 

@@ -26,3 +26,27 @@ export interface TimelineData {
   data: LyricLine
   duration: number
 }
+
+export type ConnectState = 'none' | 'connected' | 'error'
+
+export interface PeerActionBase {
+  type: string
+  value: any
+}
+export interface PeerActionSetId extends PeerActionBase {
+  type: 'set_id'
+  value: string
+}
+export interface PeerActionSetTime extends PeerActionBase {
+  type: 'set_time'
+  value: number
+}
+export interface PeerActionSetStartPause extends PeerActionBase {
+  type: 'set_start_pause'
+  value: 'start' | 'pause'
+}
+export interface PeerActionSetScreenOff extends PeerActionBase {
+  type: 'set_screen_off'
+  value: boolean
+}
+export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff
