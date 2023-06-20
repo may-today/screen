@@ -27,8 +27,8 @@ export default () => {
                   {song => (
                     <div
                     class={[
-                      'flex items-center h-10 px-3 rounded hv-base hover:bg-base-100',
-                      song.slug === currentSongId() ? 'bg-base-100' : ''
+                      'flex items-center h-10 px-3 rounded hv-base',
+                      song.slug === currentSongId() ? 'fg-primary font-bold bg-primary hover:bg-primary' : 'hover:bg-base-200'
                     ].join(' ')}
                     onClick={() => handleSongClick(song.slug)}
                   >

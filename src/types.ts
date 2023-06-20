@@ -20,3 +20,9 @@ export interface SongGroup {
   key: string
   list: SongMeta[]
 }
+
+export interface TimelineData {
+  startTime: number
+  data: LyricLine
+  duration: number
+}
