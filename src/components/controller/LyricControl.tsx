@@ -25,6 +25,7 @@ export default () => {
     sendDataToPresenter({ type: 'set_id', value: songId })
     const timeline = parseLyricTimeline(currentSongData()!.detail)
     setCurrentLyricTimeline(timeline)
+    console.log(timeline)
   }))
   createEffect(on(currentTime, time => {
     if (!currentLyricTimeline()) return
@@ -42,10 +43,12 @@ export default () => {
     sendDataToPresenter({ type: 'set_time', value: time })
     timeController.start()
     sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
+    setIsScreenOff(false)
+    sendDataToPresenter({ type: 'set_screen_off', value: false })
   }
   const handleSetScreenOff = () => {
     setIsScreenOff(!isScreenOff())
-    sendDataToPresenter({ type: 'set_screen_off', value: !isScreenOff() })
+    sendDataToPresenter({ type: 'set_screen_off', value: isScreenOff() })
   }
   const handleStartPause = () => {
     if (timeController.isRunning()) {

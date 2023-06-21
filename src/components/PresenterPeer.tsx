@@ -39,6 +39,6 @@ export default () => {
   }[connectStatus()])
 
   return (
-    <div class={`absolute bottom-2 left-2 h-1 w-1 rounded-full ${dotClass()}`} />
+    <div class={`absolute bottom-2 left-2 h-1 w-1 rounded-full z-10 ${dotClass()}`} />
   )
 }

@@ -14,7 +14,7 @@ export default () => {
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricLineItem, setCurrentLyricLineItem] = createSignal<LyricLine | null>(null)
-  const [isScreenOff, setIsScreenOff] = createSignal(true)
+  const [isScreenOff, setIsScreenOff] = createSignal(false)
 
   createEffect(on(presenterConnect, conn => {
     if (!conn) return
@@ -53,8 +53,9 @@ export default () => {
 
   return (
     <div class="h-full">
+      <div class={`absolute inset-0 bg-black z-5 transition-opacity duration-600 ${isScreenOff() ? 'op-100' : 'op-0'}`} />
       <Show when={currentLyricLineItem()}>
-        <p class="text-[190px] leading-tight text-center">{currentLyricLineItem()?.text}</p>
+        <p class="text-[190px] leading-tight text-center font-bold">{currentLyricLineItem()?.text}</p>
       </Show>
     </div>
   )
