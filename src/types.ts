@@ -2,6 +2,7 @@ export interface SongMeta {
   title: string
   slug: string
   meta: {
+    year?: number
     banlam?: boolean
   }
   content: string
@@ -35,7 +36,7 @@ export interface PeerActionBase {
 }
 export interface PeerActionSetId extends PeerActionBase {
   type: 'set_id'
-  value: string
+  value: string | null
 }
 export interface PeerActionSetTime extends PeerActionBase {
   type: 'set_time'
@@ -49,4 +50,8 @@ export interface PeerActionSetScreenOff extends PeerActionBase {
   type: 'set_screen_off'
   value: boolean
 }
-export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff
+export interface PeerActionSetText extends PeerActionBase {
+  type: 'set_text'
+  value: string
+}
+export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff | PeerActionSetText

@@ -15,6 +15,7 @@ export default () => {
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricLineItem, setCurrentLyricLineItem] = createSignal<LyricLine | null>(null)
   const [isScreenOff, setIsScreenOff] = createSignal(false)
+  const [currentText, setCurrentText] = createSignal('')
 
   createEffect(on(presenterConnect, conn => {
     if (!conn) return
@@ -32,13 +33,21 @@ export default () => {
         }
       } else if (data.type === 'set_screen_off') {
         setIsScreenOff(data.value)
+      } else if (data.type === 'set_text') {
+        setCurrentText(data.value)
       }
     })
   }))
   createEffect(on(currentSongId, songId => {
     timeController.clear()
     setCurrentSongData(getDataById(songId))
-    if (!currentSongData()) return
+    if (!currentSongData()) {
+      setCurrentLyricTimeline(null)
+      setCurrentLyricLineItem(null)
+      setCurrentLyricTimeline(null)
+      timeController.clear()
+      return
+    }
     const timeline = parseLyricTimeline(currentSongData()!.detail)
     setCurrentLyricTimeline(timeline)
   }))
@@ -53,7 +62,19 @@ export default () => {
 
   return (
     <div class="h-full">
-      <div class={`absolute inset-0 bg-black z-5 transition-opacity duration-600 ${isScreenOff() ? 'op-100' : 'op-0'}`} />
+      <div class={[
+        'absolute inset-0 bg-black z-5 transition-opacity duration-600',
+        'text-[190px] leading-tight text-center font-bold',
+        (isScreenOff() || currentText()) ? 'op-100' : 'op-0',
+      ].join(' ')}>
+        {currentText()}
+      </div>
+      <Show when={currentSongData() && !currentLyricLineItem()}>
+        <Show when={currentSongData()!.meta?.year}>
+          <p class="text-[120px] leading-tight mx-4">{currentSongData()!.meta.year}</p>
+        </Show>
+        <p class="text-[220px] leading-tight font-bold">{currentSongData()!.title}</p>
+      </Show>
       <Show when={currentLyricLineItem()}>
         <p class="text-[190px] leading-tight text-center font-bold">{currentLyricLineItem()?.text}</p>
       </Show>

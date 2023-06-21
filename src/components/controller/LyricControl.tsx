@@ -16,15 +16,23 @@ export default () => {
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)
   const [isScreenOff, setIsScreenOff] = createSignal(false)
+  const [currentText, setCurrentText] = createSignal('')
 
   createEffect(on(currentSongId, songId => {
-    if (!songId) return
     timeController.clear()
-    setCurrentSongData(getDataById(songId))
-    if (!currentSongData()) return
     sendDataToPresenter({ type: 'set_id', value: songId })
+    const data = getDataById(songId)
+    setCurrentSongData(data)
+    if (!data) {
+      setCurrentLyricTimeline(null)
+      setCurrentLyricStartTime(-1)
+      setCurrentLyricTimeline(null)
+      timeController.clear()
+      return
+    }
     const timeline = parseLyricTimeline(currentSongData()!.detail)
     setCurrentLyricTimeline(timeline)
+    console.log(data)
     console.log(timeline)
   }))
   createEffect(on(currentTime, time => {
@@ -51,6 +59,7 @@ export default () => {
     sendDataToPresenter({ type: 'set_screen_off', value: isScreenOff() })
   }
   const handleStartPause = () => {
+    if (!currentLyricTimeline()) return
     if (timeController.isRunning()) {
       timeController.pause()
       sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
@@ -59,6 +68,15 @@ export default () => {
       sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
     }
   }
+  const handleSetText = () => {
+    const text = prompt('Send text', currentText() || '') || ''
+    setCurrentText(text)
+    sendDataToPresenter({ type: 'set_text', value: text })
+  }
+  const handleClearSong = () => {
+    $currentSongId.set(null)
+  }
+
 
   return (
     <div class="flex flex-col h-full">
@@ -96,7 +114,11 @@ export default () => {
         </Show>
       </div>
       <div class="shrink-0 flex items-center justify-between gap-2 h-14 px-4 border-t border-base">
-        <Button icon="i-ph-list" onClick={() => $sidebarOpen.set(!$sidebarOpen.get())} />
+        <div class="flex items-center gap-2">
+          <Button icon="i-ph-list" onClick={() => $sidebarOpen.set(!$sidebarOpen.get())} />
+          <Button icon="i-ph-x" onClick={handleClearSong} />
+          <div class="text-xs op-50 font-mono">{currentSongData()?.title}</div>
+        </div>
         <div class="flex items-center gap-2">
           <div class="text-xs op-50 font-mono">{parseTime(currentTime())}</div>
           <Button icon={timeController.isRunning() ? 'i-ph:pause' : 'i-ph:play'} onClick={handleStartPause} />
@@ -104,6 +126,11 @@ export default () => {
             class={isScreenOff() ? 'bg-red/40 hover:bg-red/50 text-red-800 dark:text-red-400' : ''}
             icon={isScreenOff() ? 'i-ph:eye-closed' : 'i-ph:eye'}
             onClick={handleSetScreenOff}
+          />
+          <Button
+            class={currentText() ? 'bg-sky/40 hover:bg-sky/50 text-sky-800 dark:text-sky-400' : ''}
+            icon="i-ph:text-t"
+            onClick={handleSetText}
           />
         </div>
       </div>
