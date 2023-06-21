@@ -54,4 +54,8 @@ export interface PeerActionSetText extends PeerActionBase {
   type: 'set_text'
   value: string
 }
-export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff | PeerActionSetText
+export interface PeerActionSetImage extends PeerActionBase {
+  type: 'set_image'
+  value: number
+}
+export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff | PeerActionSetText | PeerActionSetImage

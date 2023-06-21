@@ -5,6 +5,7 @@ import { $currentSongId } from '@/stores/ui'
 import { $presenterConnect } from '@/stores/peer'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
+import img1 from '@/assets/1.png'
 import type { SongMeta, TimelineData, LyricLine, PeerAction } from '@/types'
 
 export default () => {
@@ -16,6 +17,7 @@ export default () => {
   const [currentLyricLineItem, setCurrentLyricLineItem] = createSignal<LyricLine | null>(null)
   const [isScreenOff, setIsScreenOff] = createSignal(false)
   const [currentText, setCurrentText] = createSignal('')
+  const [currentImage, setCurrentImage] = createSignal(0)
 
   createEffect(on(presenterConnect, conn => {
     if (!conn) return
@@ -35,6 +37,8 @@ export default () => {
         setIsScreenOff(data.value)
       } else if (data.type === 'set_text') {
         setCurrentText(data.value)
+      } else if (data.type === 'set_image') {
+        setCurrentImage(data.value)
       }
     })
   }))
@@ -65,9 +69,14 @@ export default () => {
       <div class={[
         'absolute inset-0 bg-black z-5 transition-opacity duration-600',
         'text-[190px] leading-tight text-center font-bold',
-        (isScreenOff() || currentText()) ? 'op-100' : 'op-0',
+        (isScreenOff() || currentText() || currentImage()) ? 'op-100' : 'op-0',
       ].join(' ')}>
-        {currentText()}
+        <Show when={currentText()}>
+          {currentText()}
+        </Show>
+        <Show when={!currentText() && currentImage()}>
+          <img src={img1} />
+        </Show>
       </div>
       <Show when={currentSongData() && !currentLyricLineItem()}>
         <Show when={currentSongData()!.meta?.year}>

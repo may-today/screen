@@ -17,6 +17,7 @@ export default () => {
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)
   const [isScreenOff, setIsScreenOff] = createSignal(false)
   const [currentText, setCurrentText] = createSignal('')
+  const [currentImage, setCurrentImage] = createSignal(0)
 
   createEffect(on(currentSongId, songId => {
     timeController.clear()
@@ -67,6 +68,12 @@ export default () => {
       timeController.start()
       sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
     }
+  }
+  const handleSetImage = () => {
+    const text = prompt('Send image', currentImage().toString() || '') || ''
+    const selectImage = parseInt(text) || 0
+    setCurrentImage(selectImage)
+    sendDataToPresenter({ type: 'set_image', value: selectImage })
   }
   const handleSetText = () => {
     const text = prompt('Send text', currentText() || '') || ''
@@ -126,6 +133,11 @@ export default () => {
             class={isScreenOff() ? 'bg-red/40 hover:bg-red/50 text-red-800 dark:text-red-400' : ''}
             icon={isScreenOff() ? 'i-ph:eye-closed' : 'i-ph:eye'}
             onClick={handleSetScreenOff}
+          />
+          <Button
+            class={currentImage() ? 'bg-sky/40 hover:bg-sky/50 text-sky-800 dark:text-sky-400' : ''}
+            icon="i-ph:image"
+            onClick={handleSetImage}
           />
           <Button
             class={currentText() ? 'bg-sky/40 hover:bg-sky/50 text-sky-800 dark:text-sky-400' : ''}
