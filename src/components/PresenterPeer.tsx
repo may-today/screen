@@ -3,16 +3,19 @@ import { Peer } from 'peerjs'
 import { $presenterConnect } from '@/stores/peer'
 import type { ConnectState } from '@/types'
 
-const defaultServerOptions = {
-  host: '119.28.66.56',
-  port: 9000,
-}
+// {
+//   host: '119.28.66.56',
+//   port: 9000,
+// }
 
 export default () => {
   const urlSearchParams = new URLSearchParams(window.location.search)
   const params = Object.fromEntries(urlSearchParams.entries())
   const [connectStatus, setConnectStatus] = createSignal<ConnectState>('none')
-  const serverOptions = params.server ? undefined : defaultServerOptions
+  const serverOptions = params.server ? undefined : {
+    host: '192.168.67.112',
+    port: 9000,
+  }
   const peer = new Peer('ddiu-peer-presenter', serverOptions)
 
   peer.on('connection', (conn) => {

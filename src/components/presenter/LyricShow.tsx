@@ -45,11 +45,12 @@ export default () => {
   createEffect(on(currentSongId, songId => {
     timeController.clear()
     setCurrentSongData(getDataById(songId))
+    setCurrentLyricTimeline(null)
+    setCurrentLyricLineItem(null)
+    setCurrentLyricTimeline(null)
+    timeController.clear()
+    console.log('currentLyricLineItem', currentLyricLineItem())
     if (!currentSongData()) {
-      setCurrentLyricTimeline(null)
-      setCurrentLyricLineItem(null)
-      setCurrentLyricTimeline(null)
-      timeController.clear()
       return
     }
     const timeline = parseLyricTimeline(currentSongData()!.detail)
@@ -57,10 +58,11 @@ export default () => {
   }))
   createEffect(on(currentTime, time => {
     if (!currentLyricTimeline()) return
-    if (currentLyricTimeline()!.has(time)) {
+    if (currentLyricTimeline()!.has(time) && time !== 0) {
       const line = currentLyricTimeline()!.get(time)
       console.log(line)
       setCurrentLyricLineItem(line!.data)
+      console.log('currentLyricLineItem', currentLyricLineItem())
     }
   }, { defer: true }))
 

@@ -24,11 +24,10 @@ export default () => {
     sendDataToPresenter({ type: 'set_id', value: songId })
     const data = getDataById(songId)
     setCurrentSongData(data)
+    setCurrentLyricTimeline(null)
+    setCurrentLyricStartTime(-1)
+    setCurrentLyricTimeline(null)
     if (!data) {
-      setCurrentLyricTimeline(null)
-      setCurrentLyricStartTime(-1)
-      setCurrentLyricTimeline(null)
-      timeController.clear()
       return
     }
     const timeline = parseLyricTimeline(currentSongData()!.detail)
