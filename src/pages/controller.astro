@@ -9,7 +9,7 @@ import ControllerPeer from '@/components/ControllerPeer'
 <Layout>
   <DataLayer client:only />
 	<div class="w-screen h-100dvh overflow-hidden">
-    <SongList client:load />
+    <SongList client:only />
     <main class="w-screen h-full overflow-hidden">
       <ControllerPeer client:only />
       <LyricControl client:load />
