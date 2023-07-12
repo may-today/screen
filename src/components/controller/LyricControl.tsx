@@ -7,11 +7,11 @@ import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import { parseTime } from '@/logic/time'
 import Button from '../ui/Button'
-import type { SongMeta, TimelineData } from '@/types'
+import type { SongDetail, TimelineData } from '@/types'
 
 export default () => {
   const currentSongId = useStore($currentSongId)
-  const [currentSongData, setCurrentSongData] = createSignal<SongMeta | null>(null)
+  const [currentSongData, setCurrentSongData] = createSignal<SongDetail | null>(null)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)

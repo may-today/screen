@@ -8,7 +8,7 @@ export default () => {
   const params = Object.fromEntries(urlSearchParams.entries())
   const [connectStatus, setConnectStatus] = createSignal<ConnectState>('none')
   const serverOptions = params.server ? undefined : {
-    host: '192.168.67.112',
+    host: 'peer.ddiu.io',
     port: 9000,
   }
   const peer = new Peer('ddiu-peer-controller', serverOptions)

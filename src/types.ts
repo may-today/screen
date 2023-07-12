@@ -3,9 +3,15 @@ export interface SongMeta {
   slug: string
   meta: {
     year?: number
-    banlam?: boolean
+    album?: string
+    banlam: boolean
+    length?: number
+    light: boolean
   }
-  content: string
+}
+
+export type SongDetail = SongMeta & {
+  index: string
   detail: LyricLine[]
 }
 
@@ -17,9 +23,12 @@ export interface LyricLine {
   toneText2?: string
 }
 
-export interface SongGroup {
-  key: string
-  list: SongMeta[]
+export interface SearchItem {
+  slug: string
+  data: SongMeta
+  matchType: 'title' | 'lyric'
+  matchLines: string
+  highlightLines: string
 }
 
 export interface TimelineData {

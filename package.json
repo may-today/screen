@@ -10,7 +10,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "^2.3.0",
     "@astrojs/prefetch": "^0.2.3",
     "@astrojs/solid-js": "^2.2.0",
     "@nanostores/solid": "^0.4.2",

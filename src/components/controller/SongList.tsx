@@ -1,24 +1,18 @@
 import { For, createSignal, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $groupData, $allData } from '@/stores/data'
+import { $groupMetaList, $allDataDict, searchByString } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
 import Button from '../ui/Button'
-import type { SongMeta } from '@/types'
-
-interface SearchItem {
-  data: SongMeta
-  matchLine: string[]
-  highlightLine: string[]
-}
+import type { SearchItem } from '@/types'
 
 export default () => {
-  const groupData = useStore($groupData)
-  const allData = useStore($allData)
+  const groupMetaList = useStore($groupMetaList)
+  const allDataDict = useStore($allDataDict)
   const sidebarOpen = useStore($sidebarOpen)
   const currentSongId = useStore($currentSongId)
   let inputRef: HTMLInputElement
   const [inputText, setInputText] = createSignal<string>('')
-  const [searchData, setSearchData] = createSignal<SearchItem[]>([])
+  const [filteredList, setFilteredList] = createSignal<SearchItem[]>([])
 
   const sidebarClass = () => sidebarOpen() ? 'translate-x-0' : '-translate-x-full'
 
@@ -30,28 +24,20 @@ export default () => {
   const handleInput = () => {
     const input = inputRef.value
     setInputText(input)
-    const allList = Object.values(allData())
-    const filteredList = allList.filter(song => {
-      return song.title.toLowerCase().includes(input.toLowerCase()) || song.content.toLowerCase().includes(input.toLowerCase())
-    }).map(song => ({
-      data: song,
-      matchLine: song.detail.filter(line => line.text.toLowerCase().includes(input.toLowerCase())).map(line => line.text),
-      highlightLine: song.detail.filter(line => line.isHighlight).map(line => line.text)
-    }))
-    setSearchData(filteredList)
-    console.log(filteredList)
+    const filtered = searchByString(input, Object.values(allDataDict()))
+    setFilteredList(filtered)
   }
 
   return (
-    <aside class={`fixed flex flex-col top-0 left-0 bottom-0 w-[70vw] border-r border-base bg-base z-10 overflow-hidden transition-all ${sidebarClass()}`}>
+    <aside class={`fixed flex flex-col top-0 left-0 bottom-0 w-[70vw] max-w-[300px] border-r border-base bg-base z-10 overflow-hidden transition-all ${sidebarClass()}`}>
       <Show when={!inputText()}>
         <div class="flex-1 py-4 px-2 overflow-auto">
-          <For each={groupData()}>
-            {group => (
+          <For each={Object.entries(groupMetaList())}>
+            {([key, list]) => (
               <>
-                <h1 class="px-3 py-1 fg-primary font-bold">{group.key}</h1>
+                <h1 class="px-3 py-1 fg-primary font-bold">{key}</h1>
                 <div>
-                  <For each={group.list}>
+                  <For each={list}>
                     {song => (
                       <div
                         class={[
@@ -72,7 +58,7 @@ export default () => {
       </Show>
       <Show when={inputText()}>
         <div class="flex-1 py-4 px-2 overflow-auto">
-          <For each={searchData()}>
+          <For each={filteredList()}>
             {song => (
               <div
                 class={[
@@ -82,9 +68,8 @@ export default () => {
                 onClick={() => handleSongClick(song.data.slug)}
               >
                 <div>{ song.data.title }</div>
-                <div class="text-xs line-clamp-5 op-50">{ song.matchLine.join(',') }</div>
-                <div class="text-xs line-clamp-5 op-50 fg-primary">{ song.highlightLine.join('/') }</div>
-                <div class="text-xs line-clamp-5 op-50">{ song.data.detail.map(item => item.text).join('/') }</div>
+                <div class="text-xs line-clamp-5 op-50">{ song.matchLines }</div>
+                <div class="text-xs line-clamp-5 op-50 fg-primary">{ song.highlightLines }</div>
               </div>
             )}
           </For>
