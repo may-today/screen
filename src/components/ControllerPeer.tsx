@@ -42,7 +42,7 @@ export default () => {
 
   const dotClass = () => ({
     'none': 'bg-gray',
-    'connected': 'bg-green',
+    'connected': 'bg-green-700',
     'error': 'bg-red',
   }[connectStatus()])
 

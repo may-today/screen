@@ -1,17 +1,18 @@
 import { Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { getDataById } from '@/stores/data'
+import { getDataById, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId } from '@/stores/ui'
 import { $presenterConnect } from '@/stores/peer'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import img1 from '@/assets/1.png'
-import type { SongMeta, TimelineData, LyricLine, PeerAction } from '@/types'
+import img2 from '@/assets/2.png'
+import type { SongDetail, TimelineData, LyricLine, PeerAction } from '@/types'
 
 export default () => {
   const currentSongId = useStore($currentSongId)
   const presenterConnect = useStore($presenterConnect)
-  const [currentSongData, setCurrentSongData] = createSignal<SongMeta | null>(null)
+  const [currentSongData, setCurrentSongData] = createSignal<SongDetail | null>(null)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricLineItem, setCurrentLyricLineItem] = createSignal<LyricLine | null>(null)
@@ -26,7 +27,10 @@ export default () => {
       if (data.type === 'set_id') {
         $currentSongId.set(data.value)
       } else if (data.type === 'set_time') {
+        timeController.pause()
         setCurrentTime(data.value)
+        timeController.start()
+        setIsScreenOff(false)
       } else if (data.type === 'set_start_pause') {
         if (data.value === 'start') {
           timeController.start()
@@ -39,6 +43,8 @@ export default () => {
         setCurrentText(data.value)
       } else if (data.type === 'set_image') {
         setCurrentImage(data.value)
+      } else if (data.type === 'update_data') {
+        fetchAndUpdateData()
       }
     })
   }))
@@ -60,9 +66,7 @@ export default () => {
     if (!currentLyricTimeline()) return
     if (currentLyricTimeline()!.has(time) && time !== 0) {
       const line = currentLyricTimeline()!.get(time)
-      console.log(line)
       setCurrentLyricLineItem(line!.data)
-      console.log('currentLyricLineItem', currentLyricLineItem())
     }
   }, { defer: true }))
 
@@ -77,7 +81,8 @@ export default () => {
           {currentText()}
         </Show>
         <Show when={!currentText() && currentImage()}>
-          <img src={img1} />
+          {currentImage() === 1 && <img src={img1} />}
+          {currentImage() === 2 && <img src={img2} />}
         </Show>
       </div>
       <Show when={currentSongData() && !currentLyricLineItem()}>

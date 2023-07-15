@@ -1,15 +1,39 @@
-import { map } from 'nanostores'
+import { atom, map } from 'nanostores'
 import type { SongMeta, SongDetail, SearchItem } from '@/types'
 
 export const $allDataDict = map<Record<string, SongDetail>>({})
+export const $updateTime = atom<string | null>(null)
 export const $groupMetaList = map<Record<string, SongMeta[]>>({})
+
+export const loadStorageData = () => {
+  const allSongData = localStorage.getItem('allSongData')
+  const lastUpdateTime = localStorage.getItem('lastUpdateTime')
+  if (!allSongData) {
+    return
+  }
+  const allSongDataParsed = JSON.parse(allSongData)
+  saveAndParseDetailList(allSongDataParsed, lastUpdateTime)
+}
+
+export const fetchAndUpdateData = async () => {
+  const allSongData: SongDetail[] = await (await fetch('https://mayday.blue/api/v1/detail-list')).json()
+  if (allSongData) {
+    const currentUpdateTime = new Date().toISOString()
+    saveAndParseDetailList(allSongData, currentUpdateTime)
+    localStorage.setItem('allSongData', JSON.stringify(allSongData))
+    localStorage.setItem('lastUpdateTime', currentUpdateTime)
+  }
+}
 
 export const getDataById = (id: string | null) => {
   if (!id) return null
   return $allDataDict.get()[id]
 }
 
-export const saveAndParseDetailList = (list: SongDetail[]) => {
+export const saveAndParseDetailList = (list: SongDetail[], updateTime: string | null) => {
+  if (updateTime) {
+    $updateTime.set(updateTime)
+  }
   const dict = generateDataDict(list)
   $allDataDict.set(dict)
   const group = generateMetaGroupList(list)

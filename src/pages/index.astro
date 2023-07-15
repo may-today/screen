@@ -5,10 +5,10 @@ import PresenterPeer from '@/components/PresenterPeer'
 import LyricShow from '@/components/presenter/LyricShow'
 ---
 
-<Layout>
+<Layout title="Presenter">
   <DataLayer client:only />
 	<PresenterPeer client:only />
-	<div class="w-screen h-100dvh overflow-hidden">
+	<div class="bg-black text-white w-screen h-100dvh overflow-hidden">
     <LyricShow client:load />
   </div>
 </Layout>

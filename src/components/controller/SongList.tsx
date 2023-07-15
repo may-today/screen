@@ -1,13 +1,15 @@
 import { For, createSignal, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $groupMetaList, $allDataDict, searchByString } from '@/stores/data'
+import { $groupMetaList, $allDataDict, $updateTime, searchByString, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
+import { sendDataToPresenter } from '@/stores/peer'
 import Button from '../ui/Button'
 import type { SearchItem } from '@/types'
 
 export default () => {
   const groupMetaList = useStore($groupMetaList)
   const allDataDict = useStore($allDataDict)
+  const updateTime = useStore($updateTime)
   const sidebarOpen = useStore($sidebarOpen)
   const currentSongId = useStore($currentSongId)
   let inputRef: HTMLInputElement
@@ -36,6 +38,11 @@ export default () => {
     setInputText('')
     inputRef.value = ''
     setFilteredList([])
+  }
+
+  const handleUpdateData = () => {
+    fetchAndUpdateData()
+    sendDataToPresenter({ type: 'update_data', value: null })
   }
 
   return (
@@ -85,10 +92,17 @@ export default () => {
           </For>
         </div>
       </Show>
-      <div class="flex items-center h-14 border-t border-base px-4">
+      <div class="flex items-center gap-2 h-14 border-t border-base px-4">
         <div class="flex-1">
-          <input class="bg-transparent focus:(ring-0 outline-none)" type="text" ref={inputRef!} onInput={handleInput} />
+          <input
+            class="bg-transparent ring-0 h-14 outline-none text-sm placeholder:op-50 dark:placeholder:op-30"
+            type="text"
+            ref={inputRef!}
+            onInput={handleInput}
+            placeholder={ updateTime() || 'No data' }
+          />
         </div>
+        <Button icon="i-ph:arrows-clockwise" onClick={handleUpdateData} />
         <Button icon="i-ph:x" onClick={handleClose} />
       </div>
     </aside>

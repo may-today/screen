@@ -25,7 +25,7 @@ export interface LyricLine {
 
 export interface SearchItem {
   slug: string
-  data: SongMeta
+  data: SongDetail
   matchType: 'title' | 'lyric'
   matchLines: string
   highlightLines: string
@@ -53,7 +53,7 @@ export interface PeerActionSetTime extends PeerActionBase {
 }
 export interface PeerActionSetStartPause extends PeerActionBase {
   type: 'set_start_pause'
-  value: 'start' | 'pause'
+  value: 'start' | 'pause' | 'start_pause'
 }
 export interface PeerActionSetScreenOff extends PeerActionBase {
   type: 'set_screen_off'
@@ -67,4 +67,14 @@ export interface PeerActionSetImage extends PeerActionBase {
   type: 'set_image'
   value: number
 }
-export type PeerAction = PeerActionSetId | PeerActionSetTime | PeerActionSetStartPause | PeerActionSetScreenOff | PeerActionSetText | PeerActionSetImage
+export interface PeerActionUpdateData extends PeerActionBase {
+  type: 'update_data'
+  value: null
+}
+export type PeerAction = PeerActionSetId
+  | PeerActionSetTime
+  | PeerActionSetStartPause
+  | PeerActionSetScreenOff 
+  | PeerActionSetText 
+  | PeerActionSetImage 
+  | PeerActionUpdateData

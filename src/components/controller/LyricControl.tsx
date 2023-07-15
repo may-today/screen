@@ -20,13 +20,12 @@ export default () => {
   const [currentImage, setCurrentImage] = createSignal(0)
 
   createEffect(on(currentSongId, songId => {
-    timeController.clear()
     sendDataToPresenter({ type: 'set_id', value: songId })
+    timeController.clear()
     const data = getDataById(songId)
     setCurrentSongData(data)
     setCurrentLyricTimeline(null)
     setCurrentLyricStartTime(-1)
-    setCurrentLyricTimeline(null)
     if (!data) {
       return
     }
@@ -45,14 +44,11 @@ export default () => {
   }, { defer: true }))
 
   const handleSetTime = (time: number) => {
-    timeController.pause()
-    sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
-    setCurrentTime(time)
     sendDataToPresenter({ type: 'set_time', value: time })
+    timeController.pause()
+    setCurrentTime(time)
     timeController.start()
-    sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
     setIsScreenOff(false)
-    sendDataToPresenter({ type: 'set_screen_off', value: false })
   }
   const handleSetScreenOff = () => {
     setIsScreenOff(!isScreenOff())
@@ -61,11 +57,11 @@ export default () => {
   const handleStartPause = () => {
     if (!currentLyricTimeline()) return
     if (timeController.isRunning()) {
-      timeController.pause()
       sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
+      timeController.pause()
     } else {
-      timeController.start()
       sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
+      timeController.start()
     }
   }
   const handleSetImage = () => {
@@ -82,7 +78,6 @@ export default () => {
   const handleClearSong = () => {
     $currentSongId.set(null)
   }
-
 
   return (
     <div class="flex flex-col h-full">
