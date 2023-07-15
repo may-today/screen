@@ -19,6 +19,9 @@ export default () => {
   const handleSongClick = (songId: string) => {
     $currentSongId.set(songId)
     $sidebarOpen.set(false)
+    setInputText('')
+    inputRef.value = ''
+    setFilteredList([])
   }
 
   const handleInput = () => {
@@ -26,6 +29,13 @@ export default () => {
     setInputText(input)
     const filtered = searchByString(input, Object.values(allDataDict()))
     setFilteredList(filtered)
+  }
+
+  const handleClose = () => {
+    $sidebarOpen.set(false)
+    setInputText('')
+    inputRef.value = ''
+    setFilteredList([])
   }
 
   return (
@@ -79,7 +89,7 @@ export default () => {
         <div class="flex-1">
           <input class="bg-transparent focus:(ring-0 outline-none)" type="text" ref={inputRef!} onInput={handleInput} />
         </div>
-        <Button icon="i-ph:x" onClick={() => $sidebarOpen.set(false)} />
+        <Button icon="i-ph:x" onClick={handleClose} />
       </div>
     </aside>
   )
