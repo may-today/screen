@@ -4,10 +4,9 @@ import { $presenterConnect } from '@/stores/peer'
 import type { ConnectState } from '@/types'
 
 export default () => {
-  const urlSearchParams = new URLSearchParams(window.location.search)
-  const params = Object.fromEntries(urlSearchParams.entries())
+  const connectServerType = localStorage.getItem('server') || 'local'
   const [connectStatus, setConnectStatus] = createSignal<ConnectState>('none')
-  const serverOptions = params.server === 'online' ? {
+  const serverOptions = connectServerType === 'online' ? {
     host: 'peer.ddiu.io',
     port: window.location.protocol === 'https:' ? 443 : 80,
   } : {
@@ -48,20 +47,19 @@ export default () => {
   }[connectStatus()])
 
   const handleClick = () => {
-    const promptAnswer = prompt('local/online', params.server || 'local')
-    const currentUrl = new URL(window.location.href)
+    const promptAnswer = prompt('local/online', connectServerType)
     if (!promptAnswer) {
       return
     }
     if (promptAnswer.toLowerCase() === 'o' || promptAnswer.toLowerCase() === 'online') {
-      if (!params.server || params.server === 'local') {
-        currentUrl.searchParams.set('server', 'online')
-        location.replace(currentUrl.toString())
+      localStorage.setItem('server', 'online')
+      if (!connectServerType || connectServerType === 'local') {
+        location.reload()
       }
     } else if (promptAnswer.toLowerCase() === 'l' || promptAnswer.toLowerCase() === 'local') {
-      if (params.server === 'online') {
-        currentUrl.searchParams.set('server', 'local')
-        location.replace(currentUrl.toString())
+      localStorage.setItem('server', 'local')
+      if (connectServerType === 'online') {
+        location.reload()
       }
     }
   }
