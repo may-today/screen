@@ -80,7 +80,7 @@ export default () => {
   }
 
   return (
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-[-webkit-fill-available]">
       <div class="flex-1 overflow-auto">
         <Show when={currentLyricTimeline()}>
           <For each={Array.from(currentLyricTimeline()!.values())}>

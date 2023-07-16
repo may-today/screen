@@ -7,7 +7,10 @@ export default () => {
   const urlSearchParams = new URLSearchParams(window.location.search)
   const params = Object.fromEntries(urlSearchParams.entries())
   const [connectStatus, setConnectStatus] = createSignal<ConnectState>('none')
-  const serverOptions = {
+  const serverOptions = params.server === 'online' ? {
+    host: 'peer.ddiu.io',
+    port: 80,
+  } : {
     host: '192.168.0.200',
     port: 9000,
   }
@@ -46,7 +49,31 @@ export default () => {
     'error': 'bg-red',
   }[connectStatus()])
 
+  const handleClick = () => {
+    const promptAnswer = prompt('local/online', params.server || 'local')
+    const currentUrl = new URL(window.location.href)
+    if (!promptAnswer) {
+      return
+    }
+    if (promptAnswer.toLowerCase() === 'o' || promptAnswer.toLowerCase() === 'online') {
+      if (!params.server || params.server === 'local') {
+        currentUrl.searchParams.set('server', 'online')
+        location.replace(currentUrl.toString())
+      }
+    } else if (promptAnswer.toLowerCase() === 'l' || promptAnswer.toLowerCase() === 'local') {
+      if (params.server === 'online') {
+        currentUrl.searchParams.set('server', 'local')
+        location.replace(currentUrl.toString())
+      }
+    }
+  }
+
   return (
-    <div class={`absolute bottom-2 left-2 h-1 w-1 rounded-full ${dotClass()}`} />
+    <div
+      class="absolute flex items-center justify-center bottom-0 left-0 h-5 w-5 z-10"
+      onClick={handleClick}
+    >
+      <div class={`h-1 w-1 rounded-full z-10 ${dotClass()}`} />
+    </div>
   )
 }
