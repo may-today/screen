@@ -9,7 +9,7 @@ export default () => {
   const [connectStatus, setConnectStatus] = createSignal<ConnectState>('none')
   const serverOptions = params.server === 'online' ? {
     host: 'peer.ddiu.io',
-    port: 80,
+    port: window.location.protocol === 'https:' ? 443 : 80,
   } : {
     host: '192.168.0.200',
     port: 9000,
