@@ -1,5 +1,13 @@
 import { createSignal } from 'solid-js'
 import { Peer } from 'peerjs'
+import {
+  Slider,
+  SliderLabel,
+  SliderControl,
+  SliderThumb,
+  SliderTrack,
+  SliderRange,
+} from '@ark-ui/solid'
 import { $presenterConnect } from '@/stores/peer'
 import type { ConnectState } from '@/types'
 
@@ -66,10 +74,19 @@ export default () => {
 
   return (
     <div
-      class="absolute flex items-center justify-center bottom-0 left-0 h-8 w-8 z-10"
+      class="absolute flex items-center justify-center bottom-0 left-0 p-4 z-10"
       onClick={handleClick}
     >
       <div class={`h-1 w-1 rounded-full z-10 ${dotClass()}`} />
+      <Slider>
+        <SliderLabel>Label</SliderLabel>
+        <SliderControl>
+          <SliderTrack>
+            <SliderRange />
+          </SliderTrack>
+          <SliderThumb />
+        </SliderControl>
+      </Slider>
     </div>
   )
 }

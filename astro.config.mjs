@@ -7,6 +7,9 @@ import solid from '@astrojs/solid-js'
 
 // https://astro.build/config
 export default defineConfig({
+  server: {
+    port: 3001,
+  },
   integrations: [
     solid(),
     UnoCSS({
@@ -17,9 +20,9 @@ export default defineConfig({
         presetIcons(),
       ],
       shortcuts: [{
-        'bg-base': 'bg-light-50 dark:bg-black',
-        'bg-base-100': 'bg-light-400 dark:bg-dark-500',
-        'bg-base-200': 'bg-light-600 dark:bg-dark-200',
+        'bg-base': 'bg-light-50 dark:bg-[#0A0A0A]',
+        'bg-base-100': 'bg-light-400 dark:bg-dark-700',
+        'bg-base-200': 'bg-light-600 dark:bg-dark-500',
         'fg-base': 'text-neutral-700 dark:text-neutral-300',
         'fg-lighter': 'text-neutral-400 dark:text-neutral-500',
         'fg-emphasis': 'text-dark-900 dark:text-light-900',

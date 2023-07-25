@@ -2,14 +2,15 @@
 import { pwaInfo } from 'virtual:pwa-info'
 import '@unocss/reset/tailwind-compat.css'
 import '@/global.css'
+import '@/ark.css'
 
 export interface Props {
 	title?: string
+	class?: string
 }
 
-const { title } = Astro.props
-
-const pageTitle = title
+const pageTitle = Astro.props.title
+const pageClass= Astro.props.class || 'bg-base fg-base pb-[env(safe-area-inset-bottom)]'
 ---
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@ const pageTitle = title
 		<script src="/src/pwa.ts"></script>
     { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
 	</head>
-	<body class="bg-base fg-base pb-[env(safe-area-inset-bottom)]">
+	<body class={pageClass}>
 		<slot />
 	</body>
 </html>

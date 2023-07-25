@@ -1,15 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import DataLayer from '@/components/DataLayer'
-import PresenterPeer from '@/components/PresenterPeer'
-import LyricShow from '@/components/presenter/LyricShow'
+import WelcomeBox from '@/components/WelcomeBox'
 ---
 
-<Layout title="Presenter">
-  <DataLayer client:only />
-	<PresenterPeer client:only />
-	<div class="bg-black text-white w-screen h-100dvh overflow-hidden">
-    <LyricShow client:load />
-  </div>
+<Layout title="Mayday Teleprompter">
+  <main class="fcc m-6">
+    <WelcomeBox client:load />
+  </main>
 </Layout>
-
