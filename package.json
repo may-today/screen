@@ -3,30 +3,32 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@ark-ui/solid": "^0.8.1",
-    "@astrojs/solid-js": "^2.2.0",
+    "@ark-ui/solid": "^0.9.0",
+    "@astrojs/solid-js": "^3.0.0",
     "@nanostores/solid": "^0.4.2",
-    "@unocss/reset": "^0.53.6",
-    "astro": "^2.9.2",
+    "@unocss/reset": "^0.55.4",
+    "astro": "^3.0.4",
+    "clsx": "^2.0.0",
     "limax": "^4.1.0",
+    "lucide-solid": "^0.274.0",
     "nanostores": "^0.9.3",
     "peerjs": "^1.4.7",
-    "solid-js": "^1.7.8",
+    "solid-js": "^1.7.11",
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
-    "@iconify-json/ph": "^1.1.5",
-    "@unocss/preset-icons": "^0.53.6",
-    "@unocss/preset-web-fonts": "^0.53.6",
+    "@iconify-json/ph": "^1.1.6",
+    "@unocss/preset-icons": "^0.55.4",
+    "@unocss/preset-web-fonts": "^0.55.4",
     "@vite-pwa/astro": "^0.1.1",
-    "unocss": "^0.53.6",
+    "unocss": "^0.55.4",
     "vite-plugin-pwa": "^0.16.4"
   }
 }

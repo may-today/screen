@@ -3,8 +3,9 @@ import Layout from '@/layouts/Layout.astro'
 import WelcomeBox from '@/components/WelcomeBox'
 ---
 
-<Layout title="Mayday Teleprompter">
-  <main class="fcc m-6">
+<Layout title="Mayday Screen">
+  <main class="flex flex-col justify-center max-w-lg h-full mx-auto p-6">
+    <h1 class="my-6 px-2">Mayday <span class="fg-primary">Screen</span></h1>
     <WelcomeBox client:load />
   </main>
 </Layout>
