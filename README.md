@@ -1,4 +1,4 @@
-# Mayday.blue Teleprompter
+# MayScreen
 
 ## License
 
