@@ -2,12 +2,14 @@
 import Layout from '@/layouts/Layout.astro'
 import DataLayer from '@/components/DataLayer'
 import PresenterPeer from '@/components/PresenterPeer'
+import Page from '@/components/presenter/Page'
 import LyricShow from '@/components/presenter/LyricShow'
 ---
 
-<Layout title="Presenter" class="bg-black text-white w-screen h-100dvh overflow-hidden">
+<Layout title="Presenter" class="bg-black text-white w-screen h-screen">
   <DataLayer client:only />
 	<PresenterPeer client:only />
-  <LyricShow client:load />
+  <Page client:only />
+  <!-- <LyricShow client:load /> -->
 </Layout>
 

@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js'
 import { Peer } from 'peerjs'
-import { $presenterConnect } from '@/stores/peer'
+import { $peerConnect, $roomId } from '@/stores/connect'
 import type { ConnectState } from '@/types'
 
 export default () => {
@@ -9,11 +9,16 @@ export default () => {
     host: 'peer.ddiu.io',
     port: window.location.protocol === 'https:' ? 443 : 80,
   }
-  const peer = new Peer('ddiu-peer-presenter', serverOptions)
+  const peer = new Peer(serverOptions)
+  
+  peer.on('open', id => {
+    console.log('peer open', id)
+    $roomId.set(id)
+  })
 
-  peer.on('connection', (conn) => {
+  peer.on('connection', conn => {
     console.log('conn connection', conn)
-    $presenterConnect.set(conn)
+    $peerConnect.set(conn)
     conn.on('open', () => {
       console.log('conn open')
       setConnectStatus('connected')

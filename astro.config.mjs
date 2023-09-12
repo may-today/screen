@@ -8,7 +8,7 @@ import solid from '@astrojs/solid-js'
 // https://astro.build/config
 export default defineConfig({
   server: {
-    port: 3001,
+    port: 3000,
   },
   integrations: [
     solid(),
