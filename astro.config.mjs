@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config'
 import UnoCSS from 'unocss/astro'
 
 import { presetUno, presetIcons } from 'unocss'
+import transformerDirectives from '@unocss/transformer-directives'
 import AstroPWA from '@vite-pwa/astro'
 import solid from '@astrojs/solid-js'
 
@@ -19,9 +20,12 @@ export default defineConfig({
         }),
         presetIcons(),
       ],
+      transformers: [
+        transformerDirectives(),
+      ],
       shortcuts: [{
         'bg-base': 'bg-light-50 dark:bg-[#0A0A0A]',
-        'bg-base-100': 'bg-light-400 dark:bg-dark-100',
+        'bg-base-100': 'bg-light-400 dark:bg-dark-400',
         'bg-base-200': 'bg-light-600 dark:bg-dark-500',
         'fg-base': 'text-neutral-700 dark:text-neutral-300',
         'fg-lighter': 'text-neutral-400 dark:text-neutral-500',
@@ -51,8 +55,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'Teleprompter',
-        short_name: 'MayTel',
-        description: 'Mayday Teleprompter',
+        short_name: 'MayScreen',
+        description: 'Mayday Screen',
         theme_color: '#ffffff',
         icons: [
           {

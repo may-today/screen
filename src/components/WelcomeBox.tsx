@@ -27,7 +27,7 @@ export default () => {
         ])}
       >
         <MousePointer2 size={28} strokeWidth={1.5} />
-        <div>控制器</div>
+        <div>遥控器</div>
       </a>
     </div>
   )
