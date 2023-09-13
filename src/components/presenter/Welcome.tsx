@@ -7,9 +7,10 @@ import { Peer } from 'peerjs'
 import { $peerConnect, $roomId } from '@/stores/connect'
 
 export default () => {
+  const [showDialog, setShowDialog] = createSignal(false)
   const roomId = useStore($roomId)
   return (
-    <Dialog>
+    <Dialog open={showDialog()} onClose={() => setShowDialog(false)}>
       <DialogTrigger>
         <button>Open Dialog</button>
       </DialogTrigger>
@@ -19,14 +20,11 @@ export default () => {
           <DialogContent>
             <div class="flex flex-col space-y-1.5 p-6">
               <DialogTitle>连接到遥控器</DialogTitle>
-              <DialogDescription>正在等待新的连接...</DialogDescription>
+              <DialogDescription>请在遥控端输入 ID 进行连接</DialogDescription>
             </div>
-            <div class="p-6 pt-0">
-              <p>{roomId()}</p>
+            <div class="fcc p-6 pt-0">
+              <p class="text-4xl font-semibold">{roomId()}</p>
             </div>
-            <DialogCloseTrigger>
-              <button>Close</button>
-            </DialogCloseTrigger>
           </DialogContent>
         </DialogContainer>
       </Portal>

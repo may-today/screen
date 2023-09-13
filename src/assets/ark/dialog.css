@@ -1,23 +1,15 @@
 [data-scope='dialog'][data-part='backdrop'] {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.5);
+  @apply fixed inset-0 z-200;
+  --at-apply: 'bg-black/70';
 }
 
 [data-scope='dialog'][data-part='container'] {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply fcc fixed inset-0 z-200;
 }
 
 [data-scope='dialog'][data-part='content'] {
-  @apply w-full max-w-md;
-  @apply rounded-xl border border-dark;
-  background: theme('colors.black');
+  @apply w-full max-w-md bg-black;
+  @apply rounded-xl border border-dark outline-0;
 }
 
 [data-scope='dialog'][data-part='content'][data-state='open'] {
@@ -33,6 +25,10 @@
 }
 
 [data-scope='dialog'][data-part='description'] {
+  @apply text-sm fg-lighter;
+}
+
+[data-scope='dialog'][data-part='trigger'] {
   @apply text-sm fg-lighter;
 }
 
