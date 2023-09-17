@@ -29,18 +29,18 @@
   background-color: var(--c-scroll-hover);
 }
 
-.anim-bar {
-  background-color: var(--c-primary);
-  animation-iteration-count: infinite;
-  animation-name: progress-bar-loop;
-  animation-timing-function: linear;
+.anim-text-out {
+  animation: text-out 400ms ease-out;
+  animation-fill-mode: forwards;
 }
 
-@keyframes progress-bar-loop {
+@keyframes text-out {
   from {
-    width: 0;
+    transform: translateX(0);
+    opacity: 1;
   }
   to {
-    width: 100%;
+    transform: translateX(-6px);
+    opacity: 0;
   }
 }

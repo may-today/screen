@@ -16,7 +16,7 @@ export const loadStorageData = () => {
 }
 
 export const fetchAndUpdateData = async () => {
-  const allSongData: SongDetail[] = await (await fetch('https://mayday.blue/api/v1/detail-list')).json()
+  const allSongData: SongDetail[] = await fetch('https://mayday.blue/api/v1/detail-list').then(res => res.json()).catch(() => null)
   if (allSongData) {
     const currentUpdateTime = new Date().toISOString()
     saveAndParseDetailList(allSongData, currentUpdateTime)

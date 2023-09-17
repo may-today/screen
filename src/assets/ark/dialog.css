@@ -1,15 +1,19 @@
 [data-scope='dialog'][data-part='backdrop'] {
-  @apply fixed inset-0 z-200;
+  @apply fixed inset-0 z-20;
   --at-apply: 'bg-black/70';
 }
 
 [data-scope='dialog'][data-part='container'] {
-  @apply fcc fixed inset-0 z-200;
+  @apply fcc fixed inset-0 z-20;
 }
 
 [data-scope='dialog'][data-part='content'] {
-  @apply w-full max-w-md bg-black;
+  @apply w-full max-w-md mx-4 bg-base;
   @apply rounded-xl border border-dark outline-0;
+}
+
+[data-scope='dialog'][data-part='content'].black {
+  @apply bg-black;
 }
 
 [data-scope='dialog'][data-part='content'][data-state='open'] {

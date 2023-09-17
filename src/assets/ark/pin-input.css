@@ -1,0 +1,17 @@
+
+[data-scope='pin-input'] {
+  @apply z-30;
+}
+
+[data-scope='pin-input'][data-part='control'] {
+  @apply fcc gap-1;
+}
+
+[data-scope='pin-input'][data-part='input'] {
+  @apply w-10 h-10 rounded-md border border-dark bg-transparent text-center transition-colors ring-0;
+  --at-apply: 'placeholder:fg-lighter-200';
+  --at-apply: 'focus-visible:outline-0';
+  --at-apply: 'focus:outline-0 focus:border-white';
+  --at-apply: 'disabled:cursor-not-allowed disabled:opacity-50';
+}
+

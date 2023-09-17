@@ -2,7 +2,7 @@ import { Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { getDataById, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId } from '@/stores/ui'
-import { $presenterConnect } from '@/stores/peer'
+import { $peerConnect } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import img1 from '@/assets/1.png'
@@ -11,7 +11,7 @@ import type { SongDetail, TimelineData, LyricLine, PeerAction } from '@/types'
 
 export default () => {
   const currentSongId = useStore($currentSongId)
-  const presenterConnect = useStore($presenterConnect)
+  const peerConnect = useStore($peerConnect)
   const [currentSongData, setCurrentSongData] = createSignal<SongDetail | null>(null)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
@@ -20,10 +20,11 @@ export default () => {
   const [currentText, setCurrentText] = createSignal('')
   const [currentImage, setCurrentImage] = createSignal(0)
 
-  createEffect(on(presenterConnect, conn => {
+  createEffect(on(peerConnect, conn => {
     if (!conn) return
     conn.on('data', rawData => {
       const data = rawData as PeerAction
+      console.log('receive data', data)
       if (data.type === 'set_id') {
         $currentSongId.set(data.value)
       } else if (data.type === 'set_time') {
@@ -50,7 +51,9 @@ export default () => {
   }))
   createEffect(on(currentSongId, songId => {
     timeController.clear()
-    setCurrentSongData(getDataById(songId))
+    const data = getDataById(songId)
+    console.log('data', data)
+    setCurrentSongData(data)
     setCurrentLyricTimeline(null)
     setCurrentLyricLineItem(null)
     setCurrentLyricTimeline(null)

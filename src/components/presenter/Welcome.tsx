@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@ark-ui/solid'
+import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@ark-ui/solid'
 import { Portal } from 'solid-js/web'
 import clsx from 'clsx'
 import { Peer } from 'peerjs'
@@ -10,7 +10,12 @@ export default () => {
   const [showDialog, setShowDialog] = createSignal(false)
   const roomId = useStore($roomId)
   return (
-    <Dialog open={showDialog()} onClose={() => setShowDialog(false)}>
+    <Dialog
+      open={showDialog()}
+      onClose={() => setShowDialog(false)}
+      closeOnEsc={false}
+      closeOnOutsideClick={false}
+    >
       <DialogTrigger>
         <button>Open Dialog</button>
       </DialogTrigger>

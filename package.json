@@ -6,7 +6,7 @@
     "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "astro preview --host",
     "astro": "astro"
   },
   "dependencies": {
@@ -15,7 +15,7 @@
     "@motionone/solid": "^10.16.2",
     "@nanostores/solid": "^0.4.2",
     "@unocss/reset": "^0.55.7",
-    "astro": "^3.0.13",
+    "astro": "^3.1.0",
     "clsx": "^2.0.0",
     "limax": "^4.1.0",
     "lucide-solid": "^0.276.0",

@@ -4,16 +4,18 @@ import DataLayer from '@/components/DataLayer'
 import SongList from '@/components/controller/SongList'
 import LyricControl from '@/components/controller/LyricControl'
 import ControllerPeer from '@/components/ControllerPeer'
+import ConnectStatusBar from '@/components/controller/ConnectStatusBar'
 ---
 
 <Layout title="Controller">
   <DataLayer client:only />
-	<div class="relative w-screen h-[-webkit-fill-available] overflow-hidden">
+	<main class="flex flex-col w-screen h-full">
     <SongList client:only />
-    <main class="w-screen h-full overflow-hidden">
-      <ControllerPeer client:only />
+    <div class="flex-1 overflow-hidden">
+      <!-- <ControllerPeer client:only /> -->
       <LyricControl client:load />
-    </main>
-  </div>
+    </div>
+    <ConnectStatusBar client:only />
+  </main>
 </Layout>
 

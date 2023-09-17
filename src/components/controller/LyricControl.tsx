@@ -2,7 +2,7 @@ import { For, Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { getDataById } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
-import { sendDataToPresenter } from '@/stores/peer'
+import { sendData } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import { parseTime } from '@/logic/time'
@@ -20,7 +20,7 @@ export default () => {
   const [currentImage, setCurrentImage] = createSignal(0)
 
   createEffect(on(currentSongId, songId => {
-    sendDataToPresenter({ type: 'set_id', value: songId })
+    sendData({ type: 'set_id', value: songId })
     timeController.clear()
     const data = getDataById(songId)
     setCurrentSongData(data)
@@ -44,7 +44,7 @@ export default () => {
   }, { defer: true }))
 
   const handleSetTime = (time: number) => {
-    sendDataToPresenter({ type: 'set_time', value: time })
+    sendData({ type: 'set_time', value: time })
     timeController.pause()
     setCurrentTime(time)
     timeController.start()
@@ -52,15 +52,15 @@ export default () => {
   }
   const handleSetScreenOff = () => {
     setIsScreenOff(!isScreenOff())
-    sendDataToPresenter({ type: 'set_screen_off', value: isScreenOff() })
+    sendData({ type: 'set_screen_off', value: isScreenOff() })
   }
   const handleStartPause = () => {
     if (!currentLyricTimeline()) return
     if (timeController.isRunning()) {
-      sendDataToPresenter({ type: 'set_start_pause', value: 'pause' })
+      sendData({ type: 'set_start_pause', value: 'pause' })
       timeController.pause()
     } else {
-      sendDataToPresenter({ type: 'set_start_pause', value: 'start' })
+      sendData({ type: 'set_start_pause', value: 'start' })
       timeController.start()
     }
   }
@@ -68,19 +68,19 @@ export default () => {
     const text = prompt('Send image', currentImage().toString() || '') || ''
     const selectImage = parseInt(text) || 0
     setCurrentImage(selectImage)
-    sendDataToPresenter({ type: 'set_image', value: selectImage })
+    sendData({ type: 'set_image', value: selectImage })
   }
   const handleSetText = () => {
     const text = prompt('Send text', currentText() || '') || ''
     setCurrentText(text)
-    sendDataToPresenter({ type: 'set_text', value: text })
+    sendData({ type: 'set_text', value: text })
   }
   const handleClearSong = () => {
     $currentSongId.set(null)
   }
 
   return (
-    <div class="flex flex-col h-[-webkit-fill-available]">
+    <div class="flex flex-col h-full">
       <div class="flex-1 overflow-auto">
         <Show when={currentLyricTimeline()}>
           <For each={Array.from(currentLyricTimeline()!.values())}>

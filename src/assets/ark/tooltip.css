@@ -1,0 +1,20 @@
+[data-scope='tooltip'] {
+  @apply z-30;
+}
+
+[data-scope='tooltip'][data-part='trigger'] {
+  @apply bg-transparent;
+}
+
+[data-scope='tooltip'][data-part='content'] {
+  @apply text-xs text-white bg-black rounded-lg px-2 py-1 border border-dark max-w-sm;
+}
+
+[data-scope='tooltip'][data-part='content'][data-state='open'] {
+  animation: anim-in 200ms ease-out;
+}
+ 
+[data-scope='tooltip'][data-part='content'][data-state='closed'] {
+  animation: anim-out 200ms ease-in;
+}
+

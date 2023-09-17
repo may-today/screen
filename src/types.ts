@@ -37,7 +37,7 @@ export interface TimelineData {
   duration: number
 }
 
-export type ConnectState = 'none' | 'connected' | 'error'
+export type ConnectStatus = 'not-ready' | 'ready' | 'connecting' | 'connected' | 'error'
 
 export interface PeerActionBase {
   type: string

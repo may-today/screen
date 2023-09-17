@@ -2,7 +2,7 @@ import { For, createSignal, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { $groupMetaList, $allDataDict, $updateTime, searchByString, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
-import { sendDataToPresenter } from '@/stores/peer'
+import { sendData } from '@/stores/connect'
 import Button from '../ui/Button'
 import type { SearchItem } from '@/types'
 
@@ -42,7 +42,7 @@ export default () => {
 
   const handleUpdateData = () => {
     fetchAndUpdateData()
-    sendDataToPresenter({ type: 'update_data', value: null })
+    sendData({ type: 'update_data', value: null })
   }
 
   return (
