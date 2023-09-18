@@ -5,18 +5,14 @@ import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2 } from 'lucide-solid'
-import { $peerConnect, $roomId, $connectStatus, handlePeer } from '@/stores/connect'
+import { $peerConnect, $roomId, $connectStatus, serverOptions, handlePeer } from '@/stores/connect'
 import Logo from './Logo'
 
 export default () => {
   const [showDialog, setShowDialog] = createSignal(true)
   const connectStatus = useStore($connectStatus)
-  const serverOptions = {
-    host: 'peer.ddiu.io',
-    port: window.location.protocol === 'https:' ? 443 : 80,
-  }
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
-  const peer = new Peer(uuid, serverOptions)
+  const peer = new Peer(uuid, serverOptions())
   let noticeTextDom: HTMLDivElement
 
   createEffect(on(connectStatus, (v) => {
@@ -61,6 +57,13 @@ export default () => {
       setShowDialog(false)
       $roomId.set(conn.peer)
     })
+    conn.on('close', () => {
+      $connectStatus.set('ready')
+    })
+    conn.on('error', (err) => {
+      console.log('conn error', err)
+      $connectStatus.set('error')
+    })
   }
 
   return (
@@ -94,10 +97,11 @@ export default () => {
                     </PinInputControl>
                   </PinInput>
                 </Show>
-                <Show when={connectStatus() === 'connecting'}>
+                <Show when={connectStatus() === 'not-ready' || connectStatus() === 'connecting'}>
                   <div class="fcc gap-2">
                     <Loader2 class="animate-spin" />
-                    <div class="text-sm">正在连接...</div>
+                    {connectStatus() === 'not-ready' && <div class="text-sm">正在准备...</div>}
+                    {connectStatus() === 'connecting' && <div class="text-sm">正在连接...</div>}
                   </div>
                 </Show>
                 <Show when={connectStatus() === 'error'}>

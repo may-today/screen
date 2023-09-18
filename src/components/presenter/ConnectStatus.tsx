@@ -5,7 +5,7 @@ import { Peer, type DataConnection } from 'peerjs'
 import clsx from 'clsx'
 import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { Tooltip, TooltipContent, TooltipPositioner, TooltipTrigger } from '@ark-ui/solid'
-import { $peerConnect, $roomId, $connectStatus, handlePeer } from '@/stores/connect'
+import { $peerConnect, $roomId, $connectStatus, serverOptions, handlePeer } from '@/stores/connect'
 import { X, HelpCircle } from 'lucide-solid'
 
 export default () => {
@@ -13,12 +13,8 @@ export default () => {
   const roomId = useStore($roomId)
   const connectStatus = useStore($connectStatus)
 
-  const serverOptions = {
-    host: 'peer.ddiu.io',
-    port: window.location.protocol === 'https:' ? 443 : 80,
-  }
   const sessionRoomId = sessionStorage.getItem('roomId')
-  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
+  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions()) : new Peer(serverOptions())
 
   peer.on('open', (id) => {
     $roomId.set(id)
@@ -28,8 +24,6 @@ export default () => {
   handlePeer(peer)
 
   peer.on('connection', (conn) => {
-    $peerConnect.set(conn)
-    setShowDialog(false)
     handleConnection(conn)
   })
 
@@ -44,6 +38,8 @@ export default () => {
   const handleConnection = (conn: DataConnection) => {
     conn.on('open', () => {
       $connectStatus.set('connected')
+      $peerConnect.set(conn)
+      setShowDialog(false)
     })
     conn.on('close', () => {
       $connectStatus.set('ready')
