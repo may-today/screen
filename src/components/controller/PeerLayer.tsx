@@ -20,7 +20,11 @@ export default () => {
   handlePeer(peer)
 
   const handleInputDone = (e: { valueAsString: string }) => {
-    const conn = peer.connect(e.valueAsString)
+    handleConnectToPeer(e.valueAsString)
+  }
+
+  const handleConnectToPeer = (roomId: string) => {
+    const conn = peer.connect(roomId)
     setConnectStatus('connecting')
     handleConnection(conn)
   }
@@ -34,10 +38,16 @@ export default () => {
     })
     conn.on('close', () => {
       setConnectStatus('ready')
+      const lastRoomId = $roomId.get()
+      if (lastRoomId) {
+        setTimeout(() => {
+          handleConnectToPeer(lastRoomId)
+        }, 3000)
+      }
     })
     conn.on('error', (err) => {
       console.log('conn error', err)
-      setConnectStatus('error')
+      setShowDialog(true)
     })
   }
 

@@ -55,7 +55,7 @@ export default defineConfig({
       ],
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Teleprompter',
+        name: 'MayScreen',
         short_name: 'MayScreen',
         description: 'MayScreen',
         theme_color: '#ffffff',

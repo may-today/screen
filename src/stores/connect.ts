@@ -57,7 +57,7 @@ export const serverOptions = () =>({
 
 export const sendData = (data: PeerAction) => {
   const connect = $peerConnect.get()
-  if (connect) {
+  if (connect && connect.open) {
     connect.send(data)
   }
 }
