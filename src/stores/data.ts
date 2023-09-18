@@ -1,11 +1,17 @@
-import { atom, map, action } from 'nanostores'
-import { $statusText } from './ui'
+import { atom, map, action, computed } from 'nanostores'
+import { $currentSongId, $statusText } from './ui'
 import type { SongMeta, SongDetail, SearchItem, DataDownloadStatus } from '@/types'
 
 export const $allDataDict = map<Record<string, SongDetail>>({})
 export const $updateTime = atom<string | null>(null)
 export const $groupMetaList = map<Record<string, SongMeta[]>>({})
 export const $dataDownloadStatus = atom<DataDownloadStatus>('ready')
+
+export const $currentSongData = computed([$currentSongId, $allDataDict], (songId, dict) => {
+  if (!songId) return null
+  console.log('dict', dict[songId])
+  return dict[songId] || null
+})
 
 export const loadStorageData = () => {
   const allSongData = localStorage.getItem('allSongData')
@@ -44,11 +50,6 @@ const getStatusTextByStatus = (status: DataDownloadStatus) => {
     done: '歌词数据下载完成',
     error: '歌词数据下载失败',
   }[status]
-}
-
-export const getDataById = (id: string | null) => {
-  if (!id) return null
-  return $allDataDict.get()[id]
 }
 
 export const saveAndParseDetailList = (list: SongDetail[], updateTime: string | null) => {

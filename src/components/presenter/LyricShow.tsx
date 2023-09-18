@@ -1,6 +1,6 @@
 import { Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { getDataById, fetchAndUpdateData } from '@/stores/data'
+import { $currentSongData, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId } from '@/stores/ui'
 import { $peerConnect } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
@@ -12,7 +12,7 @@ import type { SongDetail, TimelineData, LyricLine, PeerAction } from '@/types'
 export default () => {
   const currentSongId = useStore($currentSongId)
   const peerConnect = useStore($peerConnect)
-  const [currentSongData, setCurrentSongData] = createSignal<SongDetail | null>(null)
+  const currentSongData = useStore($currentSongData)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricLineItem, setCurrentLyricLineItem] = createSignal<LyricLine | null>(null)
@@ -49,11 +49,9 @@ export default () => {
       }
     })
   }))
-  createEffect(on(currentSongId, songId => {
+  createEffect(on(currentSongData, songData => {
+    if (!songData) return
     timeController.clear()
-    const data = getDataById(songId)
-    console.log('data', data)
-    setCurrentSongData(data)
     setCurrentLyricTimeline(null)
     setCurrentLyricLineItem(null)
     setCurrentLyricTimeline(null)

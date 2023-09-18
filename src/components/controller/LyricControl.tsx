@@ -1,17 +1,17 @@
 import { For, Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { getDataById } from '@/stores/data'
+import { $currentSongData } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
 import { sendData } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import { parseTime } from '@/logic/time'
 import Button from '../ui/Button'
-import type { SongDetail, TimelineData } from '@/types'
+import type { TimelineData } from '@/types'
 
 export default () => {
   const currentSongId = useStore($currentSongId)
-  const [currentSongData, setCurrentSongData] = createSignal<SongDetail | null>(null)
+  const currentSongData = useStore($currentSongData)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
   const [currentTime, setCurrentTime, timeController] = useTimeServer()
   const [currentLyricStartTime, setCurrentLyricStartTime] = createSignal(-1)
@@ -19,19 +19,14 @@ export default () => {
   const [currentText, setCurrentText] = createSignal('')
   const [currentImage, setCurrentImage] = createSignal(0)
 
-  createEffect(on(currentSongId, songId => {
-    sendData({ type: 'set_id', value: songId })
+  createEffect(on(currentSongData, songData => {
+    if (!songData) return
+    sendData({ type: 'set_id', value: currentSongId() })
     timeController.clear()
-    const data = getDataById(songId)
-    setCurrentSongData(data)
     setCurrentLyricTimeline(null)
     setCurrentLyricStartTime(-1)
-    if (!data) {
-      return
-    }
-    const timeline = parseLyricTimeline(currentSongData()!.detail)
+    const timeline = parseLyricTimeline(songData.detail)
     setCurrentLyricTimeline(timeline)
-    console.log(data)
     console.log(timeline)
   }))
   createEffect(on(currentTime, time => {
