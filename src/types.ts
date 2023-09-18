@@ -38,6 +38,7 @@ export interface TimelineData {
 }
 
 export type ConnectStatus = 'not-ready' | 'ready' | 'connecting' | 'connected' | 'error'
+export type DataDownloadStatus = 'ready' | 'downloading' | 'done' | 'error'
 
 export interface PeerActionBase {
   type: string

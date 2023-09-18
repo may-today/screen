@@ -1,15 +1,18 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import DataLayer from '@/components/DataLayer'
-import ConnectStatus from '@/components/presenter/ConnectStatus'
+import DataLayer from '@/components/common/DataLayer'
+import PeerLayer from '@/components/presenter/PeerLayer'
+import StatusView from '@/components/common/StatusView'
 import Page from '@/components/presenter/Page'
 import LyricShow from '@/components/presenter/LyricShow'
 ---
 
-<Layout title="Presenter" class="bg-black text-white w-screen h-screen">
+<Layout title="屏幕" class="bg-black text-white w-screen h-screen">
   <DataLayer client:only />
-	<ConnectStatus client:only />
+	<PeerLayer client:only />
+  <div class="absolute flex items-center justify-center gap-1 bottom-1 left-1 bg-transparent p-2 z-10">
+    <StatusView client:load />
+  </div>
   <Page client:load />
   <LyricShow client:load />
 </Layout>
-

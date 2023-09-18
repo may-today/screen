@@ -1,4 +1,3 @@
-import { createSignal } from 'solid-js'
 import clsx from 'clsx'
 import { Presentation, MousePointer2 } from 'lucide-solid'
 

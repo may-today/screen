@@ -57,7 +57,7 @@ export default defineConfig({
       manifest: {
         name: 'Teleprompter',
         short_name: 'MayScreen',
-        description: 'Mayday Screen',
+        description: 'MayScreen',
         theme_color: '#ffffff',
         icons: [
           {

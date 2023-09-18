@@ -1,8 +1,9 @@
 import { onMount } from 'solid-js'
-import { loadStorageData } from '@/stores/data'
+import { loadStorageData, fetchAndUpdateData } from '@/stores/data'
 
 export default () => {
   onMount(async () => {
     loadStorageData()
+    await fetchAndUpdateData()
   })
 }

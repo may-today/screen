@@ -1,21 +1,24 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import DataLayer from '@/components/DataLayer'
+import DataLayer from '@/components/common/DataLayer'
+import PeerLayer from '@/components/controller/PeerLayer'
 import SongList from '@/components/controller/SongList'
 import LyricControl from '@/components/controller/LyricControl'
-import ControllerPeer from '@/components/ControllerPeer'
-import ConnectStatusBar from '@/components/controller/ConnectStatusBar'
+import StatusView from '@/components/common/StatusView'
+import Logo from '@/components/common/Logo'
 ---
 
-<Layout title="Controller">
+<Layout title="遥控器">
   <DataLayer client:only />
+  <PeerLayer client:only />
 	<main class="flex flex-col w-screen h-full">
     <SongList client:only />
     <div class="flex-1 overflow-hidden">
-      <!-- <ControllerPeer client:only /> -->
       <LyricControl client:load />
     </div>
-    <ConnectStatusBar client:only />
+    <div class="flex items-center justify-between h-10 px-4 border-t border-base">
+      <StatusView client:load />
+      <Logo client:only />
+    </div>
   </main>
 </Layout>
-

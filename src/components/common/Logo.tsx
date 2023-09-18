@@ -1,4 +1,4 @@
-import { Show, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { X } from 'lucide-solid'
@@ -8,14 +8,14 @@ export default () => {
 
   return (
     <>
-      <div class="text-sm" onClick={() => setShowDialog(true)}>Mayday <span class="fg-primary">Screen</span></div>
-      <Dialog open={showDialog()} onClose={() => setShowDialog(false)} closeOnEsc={false} closeOnOutsideClick={false} trapFocus={false}>
+      <div class="text-sm p-1 cursor-pointer" onClick={() => setShowDialog(true)}>May<span class="fg-primary">Screen</span></div>
+      <Dialog open={showDialog()} onClose={() => setShowDialog(false)} trapFocus={false}>
         <Portal>
           <DialogBackdrop />
           <DialogContainer>
             <DialogContent class="relative">
               <div class="flex flex-col space-y-1.5 p-6 pb-3">
-                <DialogTitle>Mayday Screen</DialogTitle>
+                <DialogTitle>MayScreen</DialogTitle>
                 <DialogDescription>五月天云端提词器</DialogDescription>
               </div>
               <div class="p-6 pt-3">

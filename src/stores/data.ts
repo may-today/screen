@@ -1,9 +1,11 @@
-import { atom, map } from 'nanostores'
-import type { SongMeta, SongDetail, SearchItem } from '@/types'
+import { atom, map, action } from 'nanostores'
+import { $statusText } from './ui'
+import type { SongMeta, SongDetail, SearchItem, DataDownloadStatus } from '@/types'
 
 export const $allDataDict = map<Record<string, SongDetail>>({})
 export const $updateTime = atom<string | null>(null)
 export const $groupMetaList = map<Record<string, SongMeta[]>>({})
+export const $dataDownloadStatus = atom<DataDownloadStatus>('ready')
 
 export const loadStorageData = () => {
   const allSongData = localStorage.getItem('allSongData')
@@ -16,13 +18,32 @@ export const loadStorageData = () => {
 }
 
 export const fetchAndUpdateData = async () => {
+  setDataDownloadStatus('downloading')
   const allSongData: SongDetail[] = await fetch('https://mayday.blue/api/v1/detail-list').then(res => res.json()).catch(() => null)
   if (allSongData) {
+    setDataDownloadStatus('done')
     const currentUpdateTime = new Date().toISOString()
     saveAndParseDetailList(allSongData, currentUpdateTime)
     localStorage.setItem('allSongData', JSON.stringify(allSongData))
     localStorage.setItem('lastUpdateTime', currentUpdateTime)
+  } else {
+    setDataDownloadStatus('error')
   }
+}
+
+export const setDataDownloadStatus = action($dataDownloadStatus, 'setDataDownloadStatus', (store, status: DataDownloadStatus) => {
+  store.set(status)
+  const statusText = getStatusTextByStatus(status)
+  $statusText.set(statusText)
+})
+
+const getStatusTextByStatus = (status: DataDownloadStatus) => {
+  return {
+    ready: '',
+    downloading: '正在下载歌词数据',
+    done: '歌词数据下载完成',
+    error: '歌词数据下载失败',
+  }[status]
 }
 
 export const getDataById = (id: string | null) => {
