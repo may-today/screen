@@ -20,8 +20,8 @@ export default () => {
               </div>
               <div class="p-6 pt-3">
                 <p class="text-sm leading-relaxed fg-lighter">本工具为非官方软件，与相信音乐并无关联。</p>
-                <p class="text-sm leading-relaxed fg-lighter">歌词由 <a class="fg-base" href="https://ddiu.io">Diu</a> 于 <a class="fg-base" href="https://mayday.blue">mayday.blue</a> 整理</p>
-                <p class="text-sm leading-relaxed fg-lighter">源代码: <a class="fg-base" href="https://github.com/may-today/screen">may-today/screen</a></p>
+                <p class="text-sm leading-relaxed fg-lighter">歌词由 <a class="fg-base" target="_blank" href="https://ddiu.io">Diu</a> 于 <a class="fg-base" target="_blank" href="https://mayday.blue">mayday.blue</a> 整理</p>
+                <p class="text-sm leading-relaxed fg-lighter">源代码: <a class="fg-base" target="_blank" href="https://github.com/may-today/screen">may-today/screen</a></p>
               </div>
               <DialogCloseTrigger class="absolute top-2 right-2 fcc w-8 h-8 bg-transparent">
                 <X size={20} />
