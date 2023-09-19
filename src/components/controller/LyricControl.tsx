@@ -6,7 +6,7 @@ import { sendData } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import { parseTime } from '@/logic/time'
-import Button from '../ui/Button'
+import Button from '@/components/common/Button'
 import type { TimelineData } from '@/types'
 
 export default () => {

@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/solid'
 import { $groupMetaList, $allDataDict, $updateTime, searchByString, fetchAndUpdateData } from '@/stores/data'
 import { $currentSongId, $sidebarOpen } from '@/stores/ui'
 import { sendData } from '@/stores/connect'
-import Button from '../ui/Button'
+import Button from '@/components/common/Button'
 import type { SearchItem } from '@/types'
 
 export default () => {

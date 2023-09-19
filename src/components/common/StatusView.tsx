@@ -14,7 +14,7 @@ export default () => {
     }, 2000)
   })
 
-  const statusDotClass = () =>({
+  const statusDotClass = () => ({
     'not-ready': 'bg-gray/40',
     ready: 'bg-gray',
     connecting: 'bg-yellow-500',
