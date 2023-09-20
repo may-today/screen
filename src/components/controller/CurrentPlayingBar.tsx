@@ -1,7 +1,8 @@
 import { Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { $currentSongData } from '@/stores/data'
-import { $currentSongId, $sidebarOpen } from '@/stores/ui'
+import { $sidebarOpen } from '@/stores/ui'
+import { $mainState } from '@/composables'
 import { Menu, X } from 'lucide-solid'
 import Button from '@/components/common/Button'
 
@@ -18,7 +19,7 @@ export default () => {
           </Show>
         </h3>
         <Show when={currentSongData()}>
-          <Button size="small" variant="outline" class="pr-2" onClick={() => $currentSongId.set(null)}>
+          <Button size="small" variant="outline" class="pr-2" onClick={() => $mainState.handleAction({ type: 'set_id', payload: null })}>
             <X size={16} strokeWidth={1} />
             <span>清除</span>
           </Button>

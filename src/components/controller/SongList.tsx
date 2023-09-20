@@ -1,8 +1,9 @@
 import { For, createSignal, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $groupMetaList, $allDataDict, $updateTime, searchByString, fetchAndUpdateData } from '@/stores/data'
-import { $currentSongId, $sidebarOpen } from '@/stores/ui'
-import { sendData } from '@/stores/connect'
+import { $groupMetaList, $allDataDict, $updateTime } from '@/stores/data'
+import { searchByString } from '@/logic/data'
+import { $sidebarOpen } from '@/stores/ui'
+import { $currentSongId } from '@/stores/mainState'
 import Button from '@/components/common/Button'
 import type { SearchItem } from '@/types'
 
@@ -38,11 +39,6 @@ export default () => {
     setInputText('')
     inputRef.value = ''
     setFilteredList([])
-  }
-
-  const handleUpdateData = () => {
-    fetchAndUpdateData()
-    sendData({ type: 'update_data', value: null })
   }
 
   return (
@@ -102,7 +98,6 @@ export default () => {
             placeholder={ updateTime() || 'No data' }
           />
         </div>
-        <Button icon="i-ph:arrows-clockwise" onClick={handleUpdateData} />
         <Button icon="i-ph:x" onClick={handleClose} />
       </div>
     </aside>

@@ -3,13 +3,13 @@ import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
-import { Popover, PopoverArrow, PopoverCloseTrigger, PopoverContent, PopoverDescription, PopoverArrowTip, PopoverPositioner, PopoverTitle, PopoverTrigger } from '@ark-ui/solid'
-import { $peerConnect, $roomId, setConnectStatus, serverOptions, handlePeer } from '@/stores/connect'
+import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
 import { X, HelpCircle } from 'lucide-solid'
+import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
+import { serverOptions, handlePeer } from '@/logic/connect'
 
 export default () => {
   const [showDialog, setShowDialog] = createSignal(true)
-  const [showTooltip, setShowTooltip] = createSignal(false)
   const roomId = useStore($roomId)
 
   const sessionRoomId = sessionStorage.getItem('roomId')

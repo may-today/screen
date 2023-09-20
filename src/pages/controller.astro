@@ -4,7 +4,7 @@ import DataLayer from '@/components/common/DataLayer'
 import ControllerPeerLayer from '@/components/controller/ControllerPeerLayer'
 import SongList from '@/components/controller/SongList'
 import CurrentPlayingBar from '@/components/controller/CurrentPlayingBar'
-import LyricControl from '@/components/controller/LyricControl'
+import LyricListView from '@/components/controller/LyricListView'
 import StatusView from '@/components/common/StatusView'
 import Logo from '@/components/common/Logo'
 ---
@@ -15,7 +15,7 @@ import Logo from '@/components/common/Logo'
 	<main class="flex flex-col w-screen h-full">
     <SongList client:only />
     <div class="flex-1 overflow-hidden">
-      <LyricControl client:load />
+      <LyricListView client:load />
     </div>
     <CurrentPlayingBar client:only />
     <div class="flex items-center justify-between h-10 px-4 border-t border-base">

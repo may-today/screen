@@ -1,16 +1,15 @@
 import { Show, createEffect, createSignal, on } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $currentSongData, fetchAndUpdateData } from '@/stores/data'
-import { $currentSongId } from '@/stores/ui'
+import { $currentSongData } from '@/stores/data'
+import { $currentSongId } from '@/stores/mainState'
 import { $peerConnect } from '@/stores/connect'
 import { useTimeServer } from '@/composables'
 import { parseLyricTimeline } from '@/logic/lyric'
 import img1 from '@/assets/1.png'
 import img2 from '@/assets/2.png'
-import type { SongDetail, TimelineData, LyricLine, PeerAction } from '@/types'
+import type { SongDetail, TimelineData, LyricLine, StateAction } from '@/types'
 
 export default () => {
-  const currentSongId = useStore($currentSongId)
   const peerConnect = useStore($peerConnect)
   const currentSongData = useStore($currentSongData)
   const [currentLyricTimeline, setCurrentLyricTimeline] = createSignal<Map<number, TimelineData> | null>(null)
@@ -23,29 +22,27 @@ export default () => {
   createEffect(on(peerConnect, conn => {
     if (!conn) return
     conn.on('data', rawData => {
-      const data = rawData as PeerAction
+      const data = rawData as StateAction
       console.log('receive data', data)
       if (data.type === 'set_id') {
-        $currentSongId.set(data.value)
+        $currentSongId.set(data.payload)
       } else if (data.type === 'set_time') {
         timeController.pause()
-        setCurrentTime(data.value)
+        setCurrentTime(data.payload)
         timeController.start()
         setIsScreenOff(false)
       } else if (data.type === 'set_start_pause') {
-        if (data.value === 'start') {
+        if (data.payload === 'start') {
           timeController.start()
-        } else if (data.value === 'pause') {
+        } else if (data.payload === 'pause') {
           timeController.pause()
         }
       } else if (data.type === 'set_screen_off') {
-        setIsScreenOff(data.value)
+        setIsScreenOff(data.payload)
       } else if (data.type === 'set_text') {
-        setCurrentText(data.value)
+        setCurrentText(data.payload)
       } else if (data.type === 'set_image') {
-        setCurrentImage(data.value)
-      } else if (data.type === 'update_data') {
-        fetchAndUpdateData()
+        setCurrentImage(data.payload)
       }
     })
   }))

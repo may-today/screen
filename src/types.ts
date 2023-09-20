@@ -40,42 +40,37 @@ export interface TimelineData {
 export type ConnectStatus = 'not-ready' | 'ready' | 'connecting' | 'connected' | 'error'
 export type DataDownloadStatus = 'ready' | 'downloading' | 'done' | 'error'
 
-export interface PeerActionBase {
+export type ExtraView = {
+  type: 'image' | 'text'
+  data: string
+} | null
+
+export interface StateActionBase {
   type: string
-  value: any
+  payload: any
 }
-export interface PeerActionSetId extends PeerActionBase {
+export interface StateActionSetId extends StateActionBase {
   type: 'set_id'
-  value: string | null
+  payload: string | null
 }
-export interface PeerActionSetTime extends PeerActionBase {
+export interface StateActionSetTime extends StateActionBase {
   type: 'set_time'
-  value: number
+  payload: number
 }
-export interface PeerActionSetStartPause extends PeerActionBase {
+export interface StateActionSetStartPause extends StateActionBase {
   type: 'set_start_pause'
-  value: 'start' | 'pause' | 'start_pause'
+  payload: 'start' | 'pause'
 }
-export interface PeerActionSetScreenOff extends PeerActionBase {
+export interface StateActionSetScreenOff extends StateActionBase {
   type: 'set_screen_off'
-  value: boolean
+  payload: boolean
 }
-export interface PeerActionSetText extends PeerActionBase {
-  type: 'set_text'
-  value: string
+export interface StateActionSetExtraView extends StateActionBase {
+  type: 'set_extra'
+  payload: ExtraView
 }
-export interface PeerActionSetImage extends PeerActionBase {
-  type: 'set_image'
-  value: number
-}
-export interface PeerActionUpdateData extends PeerActionBase {
-  type: 'update_data'
-  value: null
-}
-export type PeerAction = PeerActionSetId
-  | PeerActionSetTime
-  | PeerActionSetStartPause
-  | PeerActionSetScreenOff 
-  | PeerActionSetText 
-  | PeerActionSetImage 
-  | PeerActionUpdateData
+export type StateAction = StateActionSetId
+  | StateActionSetTime
+  | StateActionSetStartPause
+  | StateActionSetScreenOff 
+  | StateActionSetExtraView

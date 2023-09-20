@@ -5,7 +5,8 @@ import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2 } from 'lucide-solid'
-import { $peerConnect, $roomId, $connectStatus, setConnectStatus, serverOptions, handlePeer } from '@/stores/connect'
+import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
+import { serverOptions, handlePeer } from '@/logic/connect'
 
 export default () => {
   const [showDialog, setShowDialog] = createSignal(true)
