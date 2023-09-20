@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import DataLayer from '@/components/common/DataLayer'
-import PeerLayer from '@/components/screen/PeerLayer'
+import ScreenPeerLayer from '@/components/screen/ScreenPeerLayer'
 import StatusView from '@/components/common/StatusView'
 import Page from '@/components/screen/Page'
 import LyricShow from '@/components/screen/LyricShow'
@@ -9,7 +9,7 @@ import LyricShow from '@/components/screen/LyricShow'
 
 <Layout title="屏幕" class="bg-black text-white w-screen h-screen">
   <DataLayer client:only />
-	<PeerLayer client:only />
+	<ScreenPeerLayer client:only />
   <div class="absolute flex items-center justify-center gap-1 bottom-1 left-1 bg-transparent p-2 z-10">
     <StatusView client:load />
   </div>

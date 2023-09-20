@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import DataLayer from '@/components/common/DataLayer'
+import ControllerPeerLayer from '@/components/controller/ControllerPeerLayer'
 import SongList from '@/components/controller/SongList'
 import CurrentPlayingBar from '@/components/controller/CurrentPlayingBar'
 import LyricControl from '@/components/controller/LyricControl'
@@ -10,7 +11,7 @@ import Logo from '@/components/common/Logo'
 
 <Layout title="遥控器">
   <DataLayer client:only />
-  <!-- <PeerLayer client:only /> -->
+  <!-- <ControllerPeerLayer client:only /> -->
 	<main class="flex flex-col w-screen h-full">
     <SongList client:only />
     <div class="flex-1 overflow-hidden">
