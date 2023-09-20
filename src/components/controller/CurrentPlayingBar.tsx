@@ -2,6 +2,7 @@ import { Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import { $currentSongData } from '@/stores/data'
 import { $sidebarOpen } from '@/stores/ui'
+import { Menu, X } from 'lucide-solid'
 import Button from '@/components/common/Button'
 
 export default () => {
@@ -9,14 +10,21 @@ export default () => {
 
   return (
     <div class="flex items-center justify-between h-12 px-4 border-t border-base">
-      <h3 class="flex items-center gap-1 truncate cursor-pointer" onClick={() => $sidebarOpen.set(true)}>
-        <div class="i-ph-list" />
-        <Show when={currentSongData()} fallback={<div class="text-sm op-50">当前无歌曲</div>}>
-          <span class="text-sm">{currentSongData()!.title}</span>
-          <span class="text-xs op-50">{currentSongData()!.meta?.year}</span>
+      <div class="flex items-center gap-2">
+        <h3 class="flex items-center gap-1 truncate cursor-pointer" onClick={() => $sidebarOpen.set(true)}>
+          <Menu size={16} strokeWidth={1} class="fg-base" />
+          <Show when={currentSongData()} fallback={<div class="text-sm op-50">当前无歌曲</div>}>
+            <span class="text-sm">{currentSongData()!.title}</span>
+          </Show>
+        </h3>
+        <Show when={currentSongData()}>
+          <Button size="small" variant="outline" class="pr-2" onClick={() => $sidebarOpen.set(true)}>
+            <X size={16} strokeWidth={1} />
+            <span>清除</span>
+          </Button>
         </Show>
-      </h3>
-      <div>
+      </div>
+      <div class="flex items-center">
         <div class="text-sm op-50">歌词滚动</div>
       </div>
     </div>
