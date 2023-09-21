@@ -2,7 +2,8 @@ import { useStore } from '@nanostores/solid'
 import { Play, Asterisk } from 'lucide-solid'
 import { $autoPlay } from '@/stores/mainState'
 import { parseTime } from '@/logic/time'
-import { $timeServer, $mainState } from '@/composables'
+import { $timeServer } from '@/composables/useTimeServer'
+import { $mainState } from '@/composables/useMainState'
 import { Show } from 'solid-js'
 
 export default () => {
