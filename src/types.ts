@@ -47,7 +47,6 @@ export type ExtraView = {
 
 export interface StateActionBase {
   type: string
-  payload: any
 }
 export interface StateActionSetId extends StateActionBase {
   type: 'set_id'
@@ -61,8 +60,16 @@ export interface StateActionSetStartPause extends StateActionBase {
   type: 'set_start_pause'
   payload: 'start' | 'pause'
 }
+export interface StateActionShowNextLine extends StateActionBase {
+  type: 'show_next_line'
+  payload: null
+}
 export interface StateActionSetScreenOff extends StateActionBase {
   type: 'set_screen_off'
+  payload: boolean
+}
+export interface StateActionSetAutoPlay extends StateActionBase {
+  type: 'set_auto_play'
   payload: boolean
 }
 export interface StateActionSetExtraView extends StateActionBase {
@@ -72,5 +79,7 @@ export interface StateActionSetExtraView extends StateActionBase {
 export type StateAction = StateActionSetId
   | StateActionSetTime
   | StateActionSetStartPause
-  | StateActionSetScreenOff 
+  | StateActionShowNextLine
+  | StateActionSetScreenOff
+  | StateActionSetAutoPlay
   | StateActionSetExtraView

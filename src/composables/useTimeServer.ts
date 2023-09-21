@@ -1,43 +1,32 @@
-export const useTimeServer = () => {
-  let currentTime = 0
-  let isRunning = false
-  let interval: NodeJS.Timer | 0
-  let onUpdate: ((time: number) => void) | null = null
+import { $currentTime, $isTimerRunning } from '@/stores/mainState'
 
-  const setCurrentTime = (time: number) => {
-    currentTime = time
-    if (onUpdate) onUpdate(currentTime)
-  }
+export const useTimeServer = () => {
+  let interval: NodeJS.Timer | 0
+
   const start = () => {
-    if (isRunning) return
+    if ($isTimerRunning.get()) return
     interval = setInterval(() => {
-      currentTime++
-      if (onUpdate) onUpdate(currentTime)
+      $currentTime.set($currentTime.get() + 1)
     }, 1000)
-    isRunning = true
+    $isTimerRunning.set(true)
   }
   const pause = () => {
-    if (!isRunning) return
+    if (!$isTimerRunning.get()) return
     clearInterval(interval)
     interval = 0
-    isRunning = false
+    $isTimerRunning.set(false)
   }
   const clear = () => {
     pause()
-    currentTime = 0
-  }
-  const setOnUpdate = (callback: ((time: number) => void) | null) => {
-    onUpdate = callback
+    $currentTime.set(0)
   }
 
   return {
-    currentTime,
-    setCurrentTime,
-    isRunning,
+    $currentTime,
+    $isTimerRunning,
     start,
     pause,
     clear,
-    setOnUpdate,
   }
 }
 
