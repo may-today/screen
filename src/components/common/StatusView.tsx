@@ -1,6 +1,8 @@
 import { useStore } from '@nanostores/solid'
 import { $connectStatus } from '@/stores/connect'
-import { $statusText } from '@/stores/ui'
+import { $statusText, $connectionDialogOpen } from '@/stores/ui'
+import Button from './Button'
+import { Show } from 'solid-js'
 
 export default () => {
   const connectStatus = useStore($connectStatus)
@@ -25,6 +27,9 @@ export default () => {
   return (
     <div class="flex items-center gap-1.5 px-1">
       <div class={`h-2 w-2 rounded-full ${statusDotClass()}`} />
+      <Show when={connectStatus() !== 'connected'}>
+        <Button size="small" variant="outline" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
+      </Show>
       <div class="text-sm fg-lighter" ref={noticeTextDom!}>{statusText()}</div>
     </div>
   )

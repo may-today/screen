@@ -1,4 +1,4 @@
-import { Show, createSignal } from 'solid-js'
+import { Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
@@ -6,11 +6,12 @@ import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescripti
 import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2 } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
+import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
 
 export default () => {
-  const [showDialog, setShowDialog] = createSignal(true)
   const connectStatus = useStore($connectStatus)
+  const connectionDialogOpen = useStore($connectionDialogOpen)
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
   const peer = new Peer(uuid, serverOptions())
 
@@ -34,7 +35,7 @@ export default () => {
     conn.on('open', function () {
       setConnectStatus('connected')
       $peerConnect.set(conn)
-      setShowDialog(false)
+      $connectionDialogOpen.set(false)
       $roomId.set(conn.peer)
     })
     conn.on('close', () => {
@@ -48,12 +49,12 @@ export default () => {
     })
     conn.on('error', (err) => {
       console.log('conn error', err)
-      setShowDialog(true)
+      $connectionDialogOpen.set(true)
     })
   }
 
   return (
-    <Dialog open={showDialog()} onClose={() => setShowDialog(false)} trapFocus={false}>
+    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} trapFocus={false}>
       <Portal>
         <DialogBackdrop />
         <DialogContainer>
