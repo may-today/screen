@@ -21,10 +21,7 @@ export default () => {
       <Portal>
         <MenuPositioner>
           <MenuContent>
-            <MenuItem id="edit">Edit</MenuItem>
-            <MenuItem id="delete">Delete</MenuItem>
-            <MenuItem id="export">Export</MenuItem>
-            <MenuItem id="duplicate">Duplicate</MenuItem>
+            <MenuItem id="menu_id">Menu</MenuItem>
           </MenuContent>
         </MenuPositioner>
       </Portal>

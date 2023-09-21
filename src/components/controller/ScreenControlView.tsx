@@ -10,7 +10,7 @@ export default () => {
   const blackScreen = useStore($blackScreen)
 
   const handleToggleBlackScreen = () => {
-    $mainState.handleAction({ type: 'set_screen_off', payload: !blackScreen() })
+    $mainState.triggerAction({ type: 'set_screen_off', payload: !blackScreen() })
   }
 
   return (

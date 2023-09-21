@@ -22,7 +22,7 @@ export default () => {
   const sidebarClass = () => sidebarOpen() ? 'translate-x-0' : '-translate-x-full'
 
   const handleSongClick = (songId: string) => {
-    $mainState.handleAction({ type: 'set_id', payload: songId })
+    $mainState.triggerAction({ type: 'set_id', payload: songId })
     $sidebarOpen.set(false)
     setInputText('')
     inputRef.value = ''

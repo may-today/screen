@@ -13,9 +13,9 @@ export default () => {
 
   const handleStartOrPauseTimer = () => {
     if (isTimerRunning()) {
-      $mainState.handleAction({ type: 'set_start_pause', payload: 'pause' })
+      $mainState.triggerAction({ type: 'set_start_pause', payload: 'pause' })
     } else {
-      $mainState.handleAction({ type: 'set_start_pause', payload: 'start' })
+      $mainState.triggerAction({ type: 'set_start_pause', payload: 'start' })
     }
   }
 

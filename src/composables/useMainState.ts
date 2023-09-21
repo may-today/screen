@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js'
 import { $currentSongId, $blackScreen, $autoPlay, $extraView } from '@/stores/mainState'
-import { $currentTimelineData } from '@/stores/data'
+import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
 import type { StateAction, ExtraView, TimelineData } from '@/types'
@@ -16,11 +16,14 @@ export const useMainState = () => {
       console.log(line)
       setCurrentLyricLine(line!)
     }
+    const allSongLength = $currentSongData.get()?.meta?.length || Number(Array.from(timeline.keys()).pop()) + 20
+    if (time >= allSongLength!) {
+      $timeServer.clear()
+    }
   })
 
   const handleAction = (action: StateAction) => {
     console.log('handleAction', action.type, action.payload)
-    sendAction(action)
     switch (action.type) {
       case 'set_id':
         setSongId(action.payload)
@@ -44,6 +47,15 @@ export const useMainState = () => {
         setExtraView(action.payload)
         break
     }
+  }
+
+  const triggerAction = (action: StateAction) => {
+    sendAction(action)
+    handleAction(action)
+  }
+
+  const receiveAction = (action: StateAction) => {
+    handleAction(action)
   }
 
   const setSongId = (id: string | null) => {
@@ -114,7 +126,8 @@ export const useMainState = () => {
 
   return {
     currentLyricLine,
-    handleAction,
+    triggerAction,
+    receiveAction,
   } as const
 }
 

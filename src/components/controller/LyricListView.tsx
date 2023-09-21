@@ -6,7 +6,7 @@ import { $currentTimelineData } from '@/stores/data'
 import { parseTime } from '@/logic/time'
 
 export default () => {
-  const { currentLyricLine, handleAction } = $mainState
+  const { currentLyricLine, triggerAction } = $mainState
   const currentTimelineData = useStore($currentTimelineData)
 
   return (
@@ -16,7 +16,7 @@ export default () => {
             {(line) => (
               <div
                 class="relative flex items-start gap-2 px-6 py-2 border-b border-base hv-base"
-                onClick={() => { handleAction({ type: 'set_time', payload: line.startTime}) }}
+                onClick={() => { triggerAction({ type: 'set_time', payload: line.startTime}) }}
               >
                 <div
                   class={clsx([

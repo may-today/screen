@@ -24,13 +24,13 @@ export default () => {
       type: 'text',
       data: textarea.value
     }
-    $mainState.handleAction({ type: 'set_extra', payload: extraView })
+    $mainState.triggerAction({ type: 'set_extra', payload: extraView })
     setShowDialog(false)
   }
 
   const handleClearExtraView = () => {
     textarea.value = ''
-    $mainState.handleAction({ type: 'set_extra', payload: null })
+    $mainState.triggerAction({ type: 'set_extra', payload: null })
     setShowDialog(false)
   }
 
@@ -51,7 +51,12 @@ export default () => {
               <DialogDescription>投射到屏幕(目前仅支持文字)</DialogDescription>
             </div>
             <div class="p-6 pt-3">
-              <textarea ref={textarea!} value={extraText()} class="flex min-h-[60px] w-full rounded-md border border-base bg-transparent px-3 py-2 text-sm shadow-sm ring-light/50 placeholder:fg-lighter-200 focus-visible:outline-none focus-visible:ring-1" placeholder="Type your message here."></textarea>
+              <textarea
+                ref={textarea!}
+                value={extraText()}
+                class="flex min-h-[60px] w-full rounded-md border border-base bg-transparent px-3 py-2 text-sm shadow-sm ring-light/50 placeholder:fg-lighter-200 focus-visible:outline-none focus-visible:ring-1"
+                placeholder="要发送的文字内容"
+              />
               <div class="mt-3 flex gap-2">
                 <Button class="flex-[1]" variant="outline" onClick={handleClearExtraView}>清空</Button>
                 <Button class="flex-[2]" onClick={handleSetExtraView}>发送</Button>

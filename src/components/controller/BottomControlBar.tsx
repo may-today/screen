@@ -17,7 +17,7 @@ export default () => {
       </section>
       <section
         class="fcc w-24 border-l border-base hv-base"
-        onClick={() => $mainState.handleAction({ type: 'show_next_line', payload: null })}
+        onClick={() => $mainState.triggerAction({ type: 'show_next_line', payload: null })}
       >
         <ArrowDown size={40} strokeWidth={1} />
       </section>

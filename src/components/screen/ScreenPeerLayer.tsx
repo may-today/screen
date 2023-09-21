@@ -7,6 +7,8 @@ import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark
 import { X, HelpCircle } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { serverOptions, handlePeer } from '@/logic/connect'
+import { $mainState } from '@/composables'
+import type { StateAction } from '@/types'
 
 export default () => {
   const [showDialog, setShowDialog] = createSignal(true)
@@ -38,6 +40,11 @@ export default () => {
     conn.on('error', (err) => {
       console.log('conn error', err)
       setConnectStatus('error')
+    })
+    conn.on('data', (data) => {
+      const action: StateAction = data as StateAction
+      console.log('conn data', action)
+      $mainState.receiveAction(action)
     })
   }
 
