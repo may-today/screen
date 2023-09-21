@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro'
 import DataLayer from '@/components/common/DataLayer'
 import ControllerPeerLayer from '@/components/controller/ControllerPeerLayer'
-import SongList from '@/components/controller/SongList'
+import SongListSidebar from '@/components/controller/SongListSidebar'
 import CurrentPlayingBar from '@/components/controller/CurrentPlayingBar'
 import BottomControlBar from '@/components/controller/BottomControlBar'
 import LyricListView from '@/components/controller/LyricListView'
@@ -14,7 +14,7 @@ import Logo from '@/components/common/Logo'
   <DataLayer client:only />
   <!-- <ControllerPeerLayer client:only /> -->
 	<main class="flex flex-col w-screen h-full">
-    <SongList client:only />
+    <SongListSidebar client:only />
     <div class="flex-1 overflow-hidden">
       <LyricListView client:load />
     </div>

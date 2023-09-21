@@ -17,12 +17,12 @@ export default () => {
   }
 
   return (
-    <div class="flex items-stretch justify-between h-12 border-t border-base overflow-hidden">
+    <div class="flex items-stretch justify-between h-14 border-t border-base overflow-hidden">
       <div class="flex-1 flex items-center gap-2 px-4 border-r border-base">
-        <h3 class="flex-1 flex items-center gap-1 truncate cursor-pointer" onClick={() => $sidebarOpen.set(true)}>
+        <h3 class="flex items-center gap-1 cursor-pointer" onClick={() => $sidebarOpen.set(true)}>
           <Menu size={16} strokeWidth={1} class="fg-base shrink-0" />
           <Show when={currentSongData()} fallback={<div class="text-sm op-50">当前无歌曲</div>}>
-            <span class="text-sm truncate shrink-1">{currentSongData()!.title}</span>
+            <span class="text-sm line-clamp-2">{currentSongData()!.title}</span>
           </Show>
         </h3>
         <Show when={currentSongData()}>

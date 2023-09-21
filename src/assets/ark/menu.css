@@ -1,0 +1,25 @@
+[data-scope='menu'][data-part='content'] {
+  @apply p-4 bg-base;
+  @apply border border-base rounded-md;
+}
+
+[data-scope='menu'][data-part='content'].black {
+  @apply bg-black;
+}
+
+[data-scope='menu'][data-part='content'] {
+  @apply p-1 bg-base;
+  @apply border border-base;
+}
+
+[data-scope='menu'][data-part='item'] {
+  @apply px-3 py-2 bg-base;
+  @apply hv-base rounded-md;
+}
+
+[data-scope='menu'][data-part='trigger'] {
+  --at-apply: 'focus-visible:outline-0';
+  --at-apply: 'focus:outline-0 focus:border-white';
+  --at-apply: 'disabled:cursor-not-allowed disabled:opacity-50';
+}
+

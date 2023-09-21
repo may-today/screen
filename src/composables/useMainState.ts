@@ -76,6 +76,9 @@ export const useMainState = () => {
 
   const setScreenOff = (status: boolean) => {
     $blackScreen.set(status)
+    if (status) {
+      $extraView.set(null)
+    }
   }
 
   const setAutoPlay = (status: boolean) => {
@@ -92,6 +95,9 @@ export const useMainState = () => {
 
   const setExtraView = (view: ExtraView) => {
     $extraView.set(view)
+    if (!!view) {
+      $blackScreen.set(false)
+    }
   }
 
   const showNextLineLyric = () => {

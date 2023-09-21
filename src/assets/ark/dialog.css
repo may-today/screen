@@ -8,12 +8,27 @@
 }
 
 [data-scope='dialog'][data-part='content'] {
-  @apply w-full max-w-md mx-4 bg-base;
+  @apply w-full max-w-md max-h-90vh mx-4 bg-base overflow-hidden;
   @apply rounded-xl border border-dark outline-0;
 }
 
 [data-scope='dialog'][data-part='content'].black {
   @apply bg-black;
+}
+
+[data-scope='dialog'][data-part='content'].sidebar {
+  @apply fixed top-0 left-0 bottom-0 w-70vw max-w-300px max-h-100vh m-0;
+  @apply flex flex-col border-0 border-r border-base bg-base rounded-0;
+  @apply overflow-hidden transition-all;
+  animation: none !important;
+}
+
+[data-scope='dialog'][data-part='content'][data-state='open'].sidebar {
+  @apply translate-x-0;
+}
+
+[data-scope='dialog'][data-part='content'][data-state='closed'].sidebar {
+  @apply -translate-x-full;
 }
 
 [data-scope='dialog'][data-part='content'][data-state='open'] {
@@ -33,6 +48,6 @@
 }
 
 [data-scope='dialog'][data-part='trigger'] {
-  @apply text-sm fg-lighter;
+  @apply text-sm;
 }
 

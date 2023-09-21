@@ -1,8 +1,7 @@
 import { For, Show } from 'solid-js'
+import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
 import { $mainState } from '@/composables'
-
-import { useStore } from '@nanostores/solid'
 import { $currentTimelineData } from '@/stores/data'
 import { parseTime } from '@/logic/time'
 

@@ -1,12 +1,12 @@
 import { useStore } from '@nanostores/solid'
 import { EyeOff } from 'lucide-solid'
 import { $blackScreen } from '@/stores/mainState'
-import { parseTime } from '@/logic/time'
-import { $timeServer, $mainState } from '@/composables'
+import { $mainState } from '@/composables'
 import ToggleButton from '@/components/common/ToggleButton'
+import ExtraViewButtonView from './ExtraViewButtonView'
+// import TextControlView from './TextControlView'
 
 export default () => {
-  const currentTime = useStore($timeServer.$currentTime)
   const blackScreen = useStore($blackScreen)
 
   const handleToggleBlackScreen = () => {
@@ -15,11 +15,8 @@ export default () => {
 
   return (
     <div class="flex items-stretch h-full">
-      <div
-        class="flex-1 flex items-center gap-1 px-4 border-r border-base hv-base select-none"
-        onClick={handleToggleBlackScreen}
-      >
-        <div class="text-sm font-mono">{parseTime(currentTime())}</div>
+      <div class="flex-1 h-full border-r border-base">
+        <ExtraViewButtonView />
       </div>
       <ToggleButton toggle={blackScreen()} onClick={handleToggleBlackScreen}>
         <EyeOff size={16} />

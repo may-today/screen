@@ -9,14 +9,14 @@ export interface Props {
 }
 
 const pageTitle = Astro.props.title ? `${Astro.props.title} - MayScreen` : 'MayScreen'
-const pageClass= Astro.props.class || 'h-screen bg-base fg-base pb-[env(safe-area-inset-bottom)]'
+const pageClass= Astro.props.class || 'h-[100svh] bg-base fg-base'
 ---
 
 <!DOCTYPE html>
 <html lang="zh-CN" class="dark">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 		<link rel="icon" href="/favicon.ico">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 		<link rel="mask-icon" href="/mask-icon.svg" color="#fdfdfd">
