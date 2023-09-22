@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/solid'
 import { $mainState } from '@/composables'
 import { $currentSongData } from '@/stores/data'
 import { $extraView, $blackScreen } from '@/stores/mainState'
+import { Motion, Presence } from '@motionone/solid'
 import SongCoverScreenView from './SongCoverScreenView'
 import LyricScreenView from './LyricScreenView'
 import ExtraViewScreenView from './ExtraViewScreenView'
@@ -15,19 +16,25 @@ export default () => {
 
   return (
     <div class="w-screen h-[100svh] p-6 text-[30vmin]">
-      <Switch>
-        <Match when={blackScreen()}>
-        </Match>
-        <Match when={extraView()}>
-          <ExtraViewScreenView view={extraView()} />
-        </Match>
-        <Match when={currentLyricLine()}>
-          <LyricScreenView lyric={currentLyricLine()!.data} />
-        </Match>
-        <Match when={currentSongData()}>
-          <SongCoverScreenView detail={currentSongData()!} />
-        </Match>
-      </Switch>
+      <Presence exitBeforeEnter>
+        <Switch>
+          <Match when={blackScreen()}>
+          </Match>
+          <Match when={extraView()}>
+            <Motion animate={{ opacity: [0, 1] }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>
+              <ExtraViewScreenView view={extraView()} />
+            </Motion>
+          </Match>
+          <Match when={currentLyricLine()}>
+            <LyricScreenView lyric={currentLyricLine()!.data} />
+          </Match>
+          <Match when={currentSongData()}>
+            <Motion animate={{ opacity: [0, 1] }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>
+              <SongCoverScreenView detail={currentSongData()!} />
+            </Motion>
+          </Match>
+        </Switch>
+      </Presence>
     </div>
   )
 }
