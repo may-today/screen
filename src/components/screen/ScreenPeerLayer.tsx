@@ -1,4 +1,3 @@
-import { createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
@@ -6,13 +5,14 @@ import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogCont
 import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
 import { X, HelpCircle } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
+import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
 import { $mainState } from '@/composables'
 import type { StateAction } from '@/types'
 
 export default () => {
-  const [showDialog, setShowDialog] = createSignal(true)
   const roomId = useStore($roomId)
+  const connectionDialogOpen = useStore($connectionDialogOpen)
 
   const sessionRoomId = sessionStorage.getItem('roomId')
   const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions()) : new Peer(serverOptions())
@@ -32,7 +32,7 @@ export default () => {
     conn.on('open', () => {
       setConnectStatus('connected')
       $peerConnect.set(conn)
-      setShowDialog(false)
+      $connectionDialogOpen.set(false)
     })
     conn.on('close', () => {
       setConnectStatus('ready')
@@ -49,7 +49,7 @@ export default () => {
   }
 
   return (
-    <Dialog open={showDialog()} onClose={() => setShowDialog(false)} closeOnEsc={false} closeOnOutsideClick={false} trapFocus={false}>
+    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} closeOnEsc={false} closeOnOutsideClick={false} trapFocus={false}>
       <Portal>
         <DialogBackdrop />
         <DialogContainer>
