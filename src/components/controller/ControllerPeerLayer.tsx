@@ -13,7 +13,7 @@ export default () => {
   const connectStatus = useStore($connectStatus)
   const connectionDialogOpen = useStore($connectionDialogOpen)
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
-  const peer = new Peer(uuid, serverOptions())
+  const peer = new Peer(uuid)
 
   peer.on('open', (id) => {
     setConnectStatus('ready')
