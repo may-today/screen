@@ -15,7 +15,8 @@ export default () => {
   const connectionDialogOpen = useStore($connectionDialogOpen)
 
   const sessionRoomId = sessionStorage.getItem('roomId')
-  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions()) : new Peer(serverOptions())
+  const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
+  const peer = sessionRoomId ? new Peer(sessionRoomId) : new Peer(generatePin())
 
   peer.on('open', (id) => {
     $roomId.set(id)
