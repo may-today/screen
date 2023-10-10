@@ -3,7 +3,7 @@ import { loadStorageData, fetchAndUpdateData } from '@/logic/data'
 
 export default () => {
   onMount(async () => {
-    loadStorageData()
+    await loadStorageData()
     await fetchAndUpdateData()
   })
 }

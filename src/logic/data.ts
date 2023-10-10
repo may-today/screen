@@ -35,7 +35,7 @@ const generateMetaGroupList = (list: SongDetail[]) => {
   return indexGroup
 }
 
-export const loadStorageData = () => {
+export const loadStorageData = async () => {
   const allSongData = localStorage.getItem('allSongData')
   const lastUpdateTime = localStorage.getItem('lastUpdateTime')
   if (!allSongData) {
