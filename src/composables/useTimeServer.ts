@@ -1,4 +1,4 @@
-import { $currentTime, $isTimerRunning } from '@/stores/mainState'
+import { $currentTime, $isTimerRunning } from '@/stores/coreState'
 
 export const useTimeServer = () => {
   let interval: NodeJS.Timer | 0

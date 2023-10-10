@@ -1,6 +1,6 @@
 import { atom, map, action, computed } from 'nanostores'
 import { $statusText } from './ui'
-import { $currentSongId } from './mainState'
+import { $currentSongId } from './coreState'
 import { parseLyricTimeline } from '@/logic/lyric'
 import type { SongMeta, SongDetail, DataDownloadStatus } from '@/types'
 

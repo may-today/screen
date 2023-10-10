@@ -3,10 +3,10 @@ import { useStore } from '@nanostores/solid'
 import { Keyboard, X } from 'lucide-solid'
 import { Portal } from 'solid-js/web'
 import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@ark-ui/solid'
-import { $extraView } from '@/stores/mainState'
+import { $extraView } from '@/stores/coreState'
 import ToggleButton from '@/components/common/ToggleButton'
 import Button from '@/components/common/Button'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 import type { ExtraView } from '@/types'
 
 export default () => {
@@ -24,13 +24,13 @@ export default () => {
       type: 'text',
       data: textarea.value
     }
-    $mainState.triggerAction({ type: 'set_extra', payload: extraView })
+    $coreState.triggerAction({ type: 'set_extra', payload: extraView })
     setShowDialog(false)
   }
 
   const handleClearExtraView = () => {
     textarea.value = ''
-    $mainState.triggerAction({ type: 'set_extra', payload: null })
+    $coreState.triggerAction({ type: 'set_extra', payload: null })
     setShowDialog(false)
   }
 

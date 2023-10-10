@@ -1,11 +1,11 @@
 import { createSignal } from 'solid-js'
-import { $currentSongId, $blackScreen, $autoPlay, $extraView } from '@/stores/mainState'
+import { $currentSongId, $blackScreen, $autoPlay, $extraView } from '@/stores/coreState'
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
 import type { StateAction, ExtraView, TimelineData } from '@/types'
 
-export const useMainState = () => {
+export const useCoreState = () => {
   const [currentLyricLine, setCurrentLyricLine] = createSignal<TimelineData | null>(null)
 
   $timeServer.$currentTime.subscribe((time) => {
@@ -131,4 +131,4 @@ export const useMainState = () => {
   } as const
 }
 
-export const $mainState = useMainState()
+export const $coreState = useCoreState()

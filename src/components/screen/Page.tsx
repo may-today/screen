@@ -1,8 +1,8 @@
 import { Switch, Match } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 import { $currentSongData } from '@/stores/data'
-import { $extraView, $blackScreen } from '@/stores/mainState'
+import { $extraView, $blackScreen } from '@/stores/coreState'
 import { Motion, Presence } from '@motionone/solid'
 import SongCoverScreenView from './SongCoverScreenView'
 import LyricScreenView from './LyricScreenView'
@@ -10,7 +10,7 @@ import ExtraViewScreenView from './ExtraViewScreenView'
 
 export default () => {
   const currentSongData = useStore($currentSongData)
-  const currentLyricLine = $mainState.currentLyricLine
+  const currentLyricLine = $coreState.currentLyricLine
   const extraView = useStore($extraView)
   const blackScreen = useStore($blackScreen)
 

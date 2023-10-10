@@ -1,9 +1,9 @@
 import { Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $autoPlay } from '@/stores/mainState'
+import { $autoPlay } from '@/stores/coreState'
 import { $currentSongData } from '@/stores/data'
 import { $sidebarOpen } from '@/stores/ui'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 import { Menu, X, AlarmClockOff, AlarmClock } from 'lucide-solid'
 import Button from '@/components/common/Button'
 import ToggleButton from '@/components/common/ToggleButton'
@@ -13,7 +13,7 @@ export default () => {
   const autoPlay = useStore($autoPlay)
 
   const handleToggleAutoPlay = () => {
-    $mainState.triggerAction({ type: 'set_auto_play', payload: !autoPlay() })
+    $coreState.triggerAction({ type: 'set_auto_play', payload: !autoPlay() })
   }
 
   return (
@@ -26,7 +26,7 @@ export default () => {
           </Show>
         </h3>
         <Show when={currentSongData()}>
-          <Button size="small" variant="outline" class="pr-2" onClick={() => $mainState.triggerAction({ type: 'set_id', payload: null })}>
+          <Button size="small" variant="outline" class="pr-2" onClick={() => $coreState.triggerAction({ type: 'set_id', payload: null })}>
             <X size={16} strokeWidth={1} />
             <span>清除</span>
           </Button>

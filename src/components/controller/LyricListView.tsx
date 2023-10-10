@@ -1,12 +1,12 @@
 import { For, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 import { $currentTimelineData } from '@/stores/data'
 import { parseTime } from '@/logic/time'
 
 export default () => {
-  const { currentLyricLine, triggerAction } = $mainState
+  const { currentLyricLine, triggerAction } = $coreState
   const currentTimelineData = useStore($currentTimelineData)
 
   return (

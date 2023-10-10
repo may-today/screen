@@ -7,7 +7,7 @@ import { X, HelpCircle } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 import type { StateAction } from '@/types'
 
 export default () => {
@@ -45,7 +45,7 @@ export default () => {
     conn.on('data', (data) => {
       const action: StateAction = data as StateAction
       console.log('conn data', action)
-      $mainState.receiveAction(action)
+      $coreState.receiveAction(action)
     })
   }
 

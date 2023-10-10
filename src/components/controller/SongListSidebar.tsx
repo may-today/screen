@@ -6,9 +6,9 @@ import { Dialog, DialogBackdrop, DialogContainer, DialogContent } from '@ark-ui/
 import { $groupMetaList, $allDataDict } from '@/stores/data'
 import { searchByString } from '@/logic/data'
 import { $sidebarOpen } from '@/stores/ui'
-import { $currentSongId } from '@/stores/mainState'
+import { $currentSongId } from '@/stores/coreState'
 import type { SearchItem } from '@/types'
-import { $mainState } from '@/composables'
+import { $coreState } from '@/composables'
 
 export default () => {
   const groupMetaList = useStore($groupMetaList)
@@ -22,7 +22,7 @@ export default () => {
   const sidebarClass = () => sidebarOpen() ? 'translate-x-0' : '-translate-x-full'
 
   const handleSongClick = (songId: string) => {
-    $mainState.triggerAction({ type: 'set_id', payload: songId })
+    $coreState.triggerAction({ type: 'set_id', payload: songId })
     $sidebarOpen.set(false)
     setInputText('')
     inputRef.value = ''

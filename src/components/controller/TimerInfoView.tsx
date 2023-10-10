@@ -1,22 +1,22 @@
 import { useStore } from '@nanostores/solid'
 import { Play, Asterisk } from 'lucide-solid'
-import { $autoPlay } from '@/stores/mainState'
+import { $autoPlay } from '@/stores/coreState'
 import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
-import { $mainState } from '@/composables/useMainState'
+import { $coreState } from '@/composables/useCoreState'
 import { Show } from 'solid-js'
 
 export default () => {
   const currentTime = useStore($timeServer.$currentTime)
-  const currentLyricLine = $mainState.currentLyricLine
+  const currentLyricLine = $coreState.currentLyricLine
   const isTimerRunning = useStore($timeServer.$isTimerRunning)
   const autoPlay = useStore($autoPlay)
 
   const handleStartOrPauseTimer = () => {
     if (isTimerRunning()) {
-      $mainState.triggerAction({ type: 'set_start_pause', payload: 'pause' })
+      $coreState.triggerAction({ type: 'set_start_pause', payload: 'pause' })
     } else {
-      $mainState.triggerAction({ type: 'set_start_pause', payload: 'start' })
+      $coreState.triggerAction({ type: 'set_start_pause', payload: 'start' })
     }
   }
 
