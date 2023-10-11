@@ -98,6 +98,7 @@ export const useCoreState = () => {
     })
     $autoPlay.set(state.autoPlay)
     $extraView.set(state.extraView)
+    setStateTime(snapshot.time)
   }
 
   const setSongId = (id: string | null) => {
