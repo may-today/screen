@@ -8,6 +8,7 @@ import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
 import { $coreState } from '@/composables'
+import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
 
 export default () => {
@@ -77,6 +78,11 @@ export default () => {
                   </Portal>
                 </Popover>
               </div>
+            </div>
+            <div class="flex justify-end px-6 pb-6">
+              <Button size="large" variant="secondary" class="px-4" onClick={() => $connectionDialogOpen.set(false)}>
+                暂不连接
+              </Button>
             </div>
             <DialogCloseTrigger class="absolute top-2 right-2 fcc w-8 h-8 bg-transparent">
               <X size={20} />
