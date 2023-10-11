@@ -7,7 +7,16 @@
 }
 
 [data-scope='popover'][data-part='content'] {
-  @apply text-xs text-white bg-black rounded-lg px-2 py-1 border border-dark max-w-sm;
+  @apply p-4 bg-base;
+  @apply border border-base rounded-md;
+}
+
+[data-scope='popover'][data-part='content'].black {
+  @apply bg-black;
+}
+
+[data-scope='popover'][data-part='content'].sm {
+  @apply text-xs px-2 py-1 border border-dark max-w-sm;
 }
 
 [data-scope='popover'][data-part='content'][data-state='open'] {

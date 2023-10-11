@@ -19,8 +19,6 @@ export default () => {
   const [inputText, setInputText] = createSignal<string>('')
   const [filteredList, setFilteredList] = createSignal<SearchItem[]>([])
 
-  const sidebarClass = () => sidebarOpen() ? 'translate-x-0' : '-translate-x-full'
-
   const handleSongClick = (songId: string) => {
     $coreState.triggerAction({ type: 'set_id', payload: songId })
     $sidebarOpen.set(false)
@@ -36,15 +34,9 @@ export default () => {
     setFilteredList(filtered)
   }
 
-  const handleClose = () => {
-    $sidebarOpen.set(false)
-    setInputText('')
-    inputRef.value = ''
-    setFilteredList([])
-  }
-
   const SongList = () => (
     <div class="flex-1 p-4 overflow-y-auto">
+      <p>aaaaaa</p>
       <For each={Object.entries(groupMetaList())}>
         {([key, list]) => (
           <>

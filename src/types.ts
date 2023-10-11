@@ -64,9 +64,9 @@ export interface StateActionSetStartPause extends StateActionBase {
   type: 'set_start_pause'
   payload: 'start' | 'pause'
 }
-export interface StateActionShowNextLine extends StateActionBase {
-  type: 'show_next_line'
-  payload: null
+export interface StateActionShowPrevNextLine extends StateActionBase {
+  type: 'show_prev_next_line'
+  payload: 'prev' | 'next'
 }
 export interface StateActionSetScreenOff extends StateActionBase {
   type: 'set_screen_off'
@@ -84,7 +84,7 @@ export type StateAction = StateActionSyncState
   | StateActionSetId
   | StateActionSetTime
   | StateActionSetStartPause
-  | StateActionShowNextLine
+  | StateActionShowPrevNextLine
   | StateActionSetScreenOff
   | StateActionSetAutoPlay
   | StateActionSetExtraView

@@ -5,7 +5,7 @@ export default () => {
   return (
     <div class="flex flex-col sm:flex-row w-full gap-4 p-6 rounded-xl border border-base">
       <a
-        href="screen"
+        href="/screen"
         class={clsx([
           'flex-1 flex-row sm:flex-col gap-2 fcc rounded-md p-4 text-sm',
           'border border-base shadow-sm',
@@ -17,7 +17,7 @@ export default () => {
         <div>屏幕</div>
       </a>
       <a
-        href="controller"
+        href="/controller"
         class={clsx([
           'flex-1 flex-row sm:flex-col gap-2 fcc rounded-md p-4 text-sm',
           'border border-base shadow-sm',

@@ -2,7 +2,8 @@ import type { Peer, PeerOptions } from 'peerjs'
 import { $peerConnect, setConnectStatus } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
-export const serverOptions = {
+export const serverOptions = undefined as PeerOptions | undefined
+export const serverOptions1 = {
   host: 'peer.ddiu.site',
   port: 443,
   // config: {

@@ -41,8 +41,8 @@ export const useCoreState = () => {
       case 'set_start_pause':
         setStartPause(action.payload)
         break
-      case 'show_next_line':
-        showNextLineLyric()
+      case 'show_prev_next_line':
+        showPrevNextLineLyric(action.payload)
         break
       case 'set_screen_off':
         setScreenOff(action.payload)
@@ -155,13 +155,18 @@ export const useCoreState = () => {
     }
   }
 
-  const showNextLineLyric = () => {
-    const timeline = $currentTimelineData.get() || new Map()
+  const showPrevNextLineLyric = (type: 'prev' | 'next') => {
+    const timeline = $currentTimelineData.get() || new Map() as Map<number, TimelineData>
     const timelineTimeList = Array.from(timeline.keys())
     const currentTime = $timeServer.$currentTime.get()
-    const nextTime = timelineTimeList.find((time) => time > currentTime)
-    if (nextTime) {
-      setTime(nextTime)
+    let targetTime: number | undefined = -1
+    if (type === 'prev') {
+      targetTime = timelineTimeList.reverse().find((time) => time < currentTime)
+    } else {
+      targetTime = timelineTimeList.find((time) => time > currentTime)
+    }
+    if (targetTime) {
+      setTime(targetTime)
     } else {
       $timeServer.clear()
     }

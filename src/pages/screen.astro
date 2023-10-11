@@ -4,6 +4,7 @@ import DataLayer from '@/components/common/DataLayer'
 import ScreenPeerLayer from '@/components/screen/ScreenPeerLayer'
 import StatusView from '@/components/common/StatusView'
 import Page from '@/components/screen/Page'
+import FloatControlBar from '@/components/screen/FloatControlBar'
 ---
 
 <Layout title="屏幕" class="bg-black text-white w-screen h-screen">
@@ -13,4 +14,7 @@ import Page from '@/components/screen/Page'
     <StatusView client:load />
   </div>
   <Page client:load />
+  <div class="absolute bottom-2 right-2 z-10">
+    <FloatControlBar client:only />
+  </div>
 </Layout>
