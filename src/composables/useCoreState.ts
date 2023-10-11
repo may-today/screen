@@ -3,10 +3,11 @@ import { $currentSongId, $blackScreen, $autoPlay, $extraView } from '@/stores/co
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
-import type { StateAction, ExtraView, TimelineData } from '@/types'
+import type { StateAction, ExtraView, TimelineData, StateSnapshot } from '@/types'
 
 export const useCoreState = () => {
   const [currentLyricLine, setCurrentLyricLine] = createSignal<TimelineData | null>(null)
+  const [stateTime, setStateTime] = createSignal(0)
 
   $timeServer.$currentTime.subscribe((time) => {
     const timeline = $currentTimelineData.get()
@@ -24,7 +25,13 @@ export const useCoreState = () => {
 
   const handleAction = (action: StateAction) => {
     console.log('handleAction', action.type, action.payload)
+    if (action.type !== 'sync_state') {
+      setStateTime(Date.now())
+    }
     switch (action.type) {
+      case 'sync_state':
+        pullSnapShot(action.payload)
+        break
       case 'set_id':
         setSongId(action.payload)
         break
@@ -56,6 +63,41 @@ export const useCoreState = () => {
 
   const receiveAction = (action: StateAction) => {
     handleAction(action)
+  }
+
+  const pushSnapShot = () => {
+    const currentSnapshot: StateSnapshot = {
+      time: stateTime(),
+      state: {
+        currentSongId: $currentSongId.get(),
+        currentTime: $timeServer.$currentTime.get(),
+        isTimerRunning: $timeServer.$isTimerRunning.get(),
+        blackScreen: $blackScreen.get(),
+        autoPlay: $autoPlay.get(),
+        extraView: $extraView.get(),
+      }
+    }
+    sendAction({
+      type: 'sync_state',
+      payload: currentSnapshot,
+    })
+  }
+
+  const pullSnapShot = (snapshot: StateSnapshot) => {
+    const currentStateTime = stateTime()
+    console.log(`pullSnapShot current: ${currentStateTime} remote: ${snapshot.time}`)
+    if (stateTime() >= snapshot.time) {
+      return
+    }
+    const state = snapshot.state
+    $currentSongId.set(state.currentSongId)
+    $blackScreen.set(state.blackScreen)
+    $timeServer.restoreStste({
+      currentTime: state.currentTime,
+      isTimerRunning: state.isTimerRunning,
+    })
+    $autoPlay.set(state.autoPlay)
+    $extraView.set(state.extraView)
   }
 
   const setSongId = (id: string | null) => {
@@ -128,6 +170,8 @@ export const useCoreState = () => {
     currentLyricLine,
     triggerAction,
     receiveAction,
+    pushSnapShot,
+    pullSnapShot,
   } as const
 }
 

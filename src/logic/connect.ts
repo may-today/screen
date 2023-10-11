@@ -2,9 +2,9 @@ import type { Peer, PeerOptions } from 'peerjs'
 import { $peerConnect, setConnectStatus } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
-export const serverOptions = () =>({
+export const serverOptions = {
   host: 'peer.ddiu.site',
-  port: window.location.protocol === 'https:' ? 443 : 80,
+  port: 443,
   // config: {
   //   iceServers: [
   //     {
@@ -32,7 +32,7 @@ export const serverOptions = () =>({
   //     },
   //   ],
   // },
-} as PeerOptions)
+} as PeerOptions
 
 export const sendAction = (action: StateAction) => {
   const connect = $peerConnect.get()

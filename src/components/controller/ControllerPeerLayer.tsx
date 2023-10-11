@@ -8,12 +8,14 @@ import { X, Loader2 } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
+import { $coreState } from '@/composables'
+import type { StateAction } from '@/types'
 
 export default () => {
   const connectStatus = useStore($connectStatus)
   const connectionDialogOpen = useStore($connectionDialogOpen)
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
-  const peer = new Peer(uuid, serverOptions())
+  const peer = new Peer(uuid, serverOptions)
 
   peer.on('open', (id) => {
     setConnectStatus('ready')
@@ -37,6 +39,7 @@ export default () => {
       $peerConnect.set(conn)
       $connectionDialogOpen.set(false)
       $roomId.set(conn.peer)
+      $coreState.pushSnapShot()
     })
     conn.on('close', () => {
       setConnectStatus('ready')
@@ -50,6 +53,11 @@ export default () => {
     conn.on('error', (err) => {
       console.log('conn error', err)
       $connectionDialogOpen.set(true)
+    })
+    conn.on('data', (data) => {
+      const action = data as StateAction
+      console.log('conn data', action)
+      $coreState.receiveAction(action)
     })
   }
 

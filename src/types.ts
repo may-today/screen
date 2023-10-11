@@ -48,6 +48,10 @@ export type ExtraView = {
 export interface StateActionBase {
   type: string
 }
+export interface StateActionSyncState extends StateActionBase {
+  type: 'sync_state'
+  payload: StateSnapshot
+}
 export interface StateActionSetId extends StateActionBase {
   type: 'set_id'
   payload: string | null
@@ -76,10 +80,23 @@ export interface StateActionSetExtraView extends StateActionBase {
   type: 'set_extra'
   payload: ExtraView
 }
-export type StateAction = StateActionSetId
+export type StateAction = StateActionSyncState
+  | StateActionSetId
   | StateActionSetTime
   | StateActionSetStartPause
   | StateActionShowNextLine
   | StateActionSetScreenOff
   | StateActionSetAutoPlay
   | StateActionSetExtraView
+
+export interface StateSnapshot {
+  time: number
+  state: {
+    currentSongId: string | null
+    blackScreen: boolean
+    autoPlay: boolean
+    extraView: ExtraView
+    currentTime: number
+    isTimerRunning: boolean
+  }
+}

@@ -16,7 +16,7 @@ export default () => {
 
   const sessionRoomId = sessionStorage.getItem('roomId')
   const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
-  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions()) : new Peer(serverOptions())
+  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
 
   peer.on('open', (id) => {
     $roomId.set(id)
@@ -34,6 +34,7 @@ export default () => {
       setConnectStatus('connected')
       $peerConnect.set(conn)
       $connectionDialogOpen.set(false)
+      $coreState.pushSnapShot()
     })
     conn.on('close', () => {
       setConnectStatus('ready')
@@ -43,7 +44,7 @@ export default () => {
       setConnectStatus('error')
     })
     conn.on('data', (data) => {
-      const action: StateAction = data as StateAction
+      const action = data as StateAction
       console.log('conn data', action)
       $coreState.receiveAction(action)
     })
