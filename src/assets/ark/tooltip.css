@@ -11,10 +11,10 @@
 }
 
 [data-scope='tooltip'][data-part='content'][data-state='open'] {
-  animation: anim-in 200ms ease-out;
+  animation: anim-scale-in 200ms ease-out;
 }
  
 [data-scope='tooltip'][data-part='content'][data-state='closed'] {
-  animation: anim-out 200ms ease-in;
+  animation: anim-scale-out 200ms ease-in;
 }
 

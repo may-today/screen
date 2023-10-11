@@ -9,12 +9,12 @@ export default () => {
     <Popover>
       <PopoverTrigger>
         <Button size="large" variant="outline">
-          <MenuIcon />
+          <MenuIcon class="op-25" />
         </Button>
       </PopoverTrigger>
       <Portal>
         <PopoverPositioner>
-          <PopoverContent>
+          <PopoverContent class="bottom-in bg-blur">
             <FloatControllerMenuPanel />
           </PopoverContent>
         </PopoverPositioner>

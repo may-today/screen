@@ -1,5 +1,5 @@
 [data-scope='popover'] {
-  @apply z-30;
+  @apply z-20;
 }
 
 [data-scope='popover'][data-part='trigger'] {
@@ -7,8 +7,12 @@
 }
 
 [data-scope='popover'][data-part='content'] {
-  @apply p-4 bg-base;
-  @apply border border-base rounded-md;
+  @apply bg-base;
+  @apply border border-base rounded-md overflow-hidden;
+}
+
+[data-scope='popover'][data-part='content'].bg-blur {
+  @apply bg-blur;
 }
 
 [data-scope='popover'][data-part='content'].black {
@@ -20,10 +24,18 @@
 }
 
 [data-scope='popover'][data-part='content'][data-state='open'] {
-  animation: anim-in 200ms ease-out;
+  animation: anim-scale-in 200ms ease-out;
 }
  
 [data-scope='popover'][data-part='content'][data-state='closed'] {
-  animation: anim-out 200ms ease-in;
+  animation: anim-scale-out 200ms ease-in;
+}
+
+[data-scope='popover'][data-part='content'][data-state='open'].bottom-in {
+  animation: anim-bottom-in 200ms ease-out;
+}
+ 
+[data-scope='popover'][data-part='content'][data-state='closed'].bottom-in {
+  animation: anim-bottom-out 200ms ease-in;
 }
 

@@ -8,7 +8,7 @@ export default () => {
 
   return (
     <>
-      <div class="text-sm p-1 cursor-pointer" onClick={() => setShowDialog(true)}>May<span class="fg-primary">Screen</span></div>
+      <span class="text-sm p-1 cursor-pointer" onClick={() => setShowDialog(true)}>May<span class="fg-primary">Screen</span></span>
       <Dialog open={showDialog()} onClose={() => setShowDialog(false)} trapFocus={false}>
         <Portal>
           <DialogBackdrop />

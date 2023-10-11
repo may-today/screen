@@ -72,7 +72,7 @@ export default () => {
                   </PopoverTrigger>
                   <Portal>
                     <PopoverPositioner>
-                      <PopoverContent class="black sm z-50">我们将使用 WebRTC 连接。为保证最好的连接效果，请尽量让设备连接到同一个网络。</PopoverContent>
+                      <PopoverContent class="black sm z-50 p-4">我们将使用 WebRTC 连接。为保证最好的连接效果，请尽量让设备连接到同一个网络。</PopoverContent>
                     </PopoverPositioner>
                   </Portal>
                 </Popover>
