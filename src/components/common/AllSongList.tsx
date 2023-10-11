@@ -6,6 +6,7 @@ import { $coreState } from '@/composables'
 
 interface Props {
   class?: string
+  onClick?: (songId: string) => void
 }
 
 export default (props: Props) => {
@@ -13,6 +14,10 @@ export default (props: Props) => {
   const currentSongId = useStore($currentSongId)
 
   const handleSongClick = (songId: string) => {
+    if (props.onClick) {
+      props.onClick(songId)
+      return
+    }
     $coreState.triggerAction({ type: 'set_id', payload: songId })
   }
 

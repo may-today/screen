@@ -6,7 +6,7 @@ import FloatControllerMenuPanel from './FloatControllerMenuPanel'
 
 export default () => {
   return (
-    <Popover>
+    <Popover modal>
       <PopoverTrigger>
         <Button size="large" variant="outline">
           <MenuIcon class="op-25" />

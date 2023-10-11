@@ -69,7 +69,7 @@ export default () => {
   return (
     <div class="h-full flex flex-col">
       <Show when={!inputText()}>
-        <AllSongList class="flex-1 p-4" />
+        <AllSongList class="flex-1 p-4" onClick={handleSongClick} />
       </Show>
       <Show when={inputText()}>
         <SearchList />
