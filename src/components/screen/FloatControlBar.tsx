@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Menu } from 'lucide-solid'
+import { ChevronLeft, ChevronRight } from 'lucide-solid'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import FloatControlBarMenuButton from './FloatControlBarMenuButton'

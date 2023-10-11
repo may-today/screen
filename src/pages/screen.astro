@@ -4,6 +4,7 @@ import DataLayer from '@/components/common/DataLayer'
 import ScreenPeerLayer from '@/components/screen/ScreenPeerLayer'
 import StatusView from '@/components/common/StatusView'
 import Page from '@/components/screen/Page'
+import FullScreenControlArea from '@/components/screen/FullScreenControlArea'
 import FloatControlBar from '@/components/screen/FloatControlBar'
 ---
 
@@ -14,6 +15,7 @@ import FloatControlBar from '@/components/screen/FloatControlBar'
     <StatusView client:load />
   </div>
   <Page client:load />
+  <FullScreenControlArea client:only />
   <div class="absolute bottom-2 right-2 z-10">
     <FloatControlBar client:only />
   </div>
