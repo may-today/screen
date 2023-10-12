@@ -20,6 +20,9 @@ dependencies:
   '@solid-primitives/keyed':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.11)
+  '@solid-primitives/upload':
+    specifier: ^0.0.114
+    version: 0.0.114(solid-js@1.7.11)
   '@unocss/reset':
     specifier: ^0.55.7
     version: 0.55.7
@@ -2121,6 +2124,15 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
+      solid-js: 1.7.11
+    dev: false
+
+  /@solid-primitives/upload@0.0.114(solid-js@1.7.11):
+    resolution: {integrity: sha512-kt9EqgTvCE6cSJUZ4aaWvK5+Y6eo81AKf+tR/312SUcDIiz6zuuzBV/smZ2FmjulWMlheo41IaM7EdLBB0sehA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.11)
       solid-js: 1.7.11
     dev: false
 

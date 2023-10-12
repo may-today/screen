@@ -21,7 +21,7 @@ export default () => {
           <Match when={blackScreen()}>
           </Match>
           <Match when={extraView()}>
-            <Motion animate={{ opacity: [0, 1] }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>
+            <Motion class="fcc h-full w-full" animate={{ opacity: [0, 1] }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>
               <ExtraViewScreenView view={extraView()} />
             </Motion>
           </Match>
