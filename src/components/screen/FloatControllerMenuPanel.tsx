@@ -29,9 +29,9 @@ export default () => {
           <Tabs.Trigger value="lyric_list">歌词</Tabs.Trigger>
         </Tabs.List>
       </header>
-      <div class="flex-1 overflow-y-scroll" ref={scrollDom!}>
+      <div class="flex-1 overflow-y-scroll text-sm" ref={scrollDom!}>
         <Tabs.Content value="song_list">
-          <AllSongList class="p-2 text-sm" onClick={handleSongClick} />
+          <AllSongList class="p-2" onClick={handleSongClick} />
         </Tabs.Content>
         <Tabs.Content value="lyric_list">
           <LyricListView />
