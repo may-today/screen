@@ -45,6 +45,7 @@ export default () => {
       setConnectStatus('error')
     })
     conn.on('data', (data) => {
+      setConnectStatus('connected')
       const action = data as StateAction
       console.log('conn data', action)
       $coreState.receiveAction(action)

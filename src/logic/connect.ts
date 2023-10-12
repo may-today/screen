@@ -6,6 +6,8 @@ export const serverOptions1 = undefined as PeerOptions | undefined
 export const serverOptions = {
   host: 'peer.ddiu.site',
   port: 443,
+  secure: true,
+  // debug: 3,
   // config: {
   //   iceServers: [
   //     {
@@ -46,6 +48,11 @@ export const handlePeer = (peer: Peer) => {
   peer.on('disconnected', (err) => {
     setConnectStatus('ready')
     console.log('peer disconnected', err)
+    setTimeout(() => {
+      setConnectStatus('connecting')
+      console.log('reconnecting...')
+      peer.reconnect()
+    }, 500)
   })
   peer.on('error', (err) => {
     setConnectStatus('error')

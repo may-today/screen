@@ -85,10 +85,12 @@ export const useCoreState = () => {
 
   const pullSnapShot = (snapshot: StateSnapshot) => {
     const currentStateTime = stateTime()
-    console.log(`pullSnapShot current: ${currentStateTime} remote: ${snapshot.time}`)
+    console.log(`pullSnapShot local: ${currentStateTime} remote: ${snapshot.time}`)
     if (stateTime() >= snapshot.time) {
+      console.log('pullSnapShot useLocal')
       return
     }
+    console.log('pullSnapShot useRemote')
     const state = snapshot.state
     $currentSongId.set(state.currentSongId)
     $blackScreen.set(state.blackScreen)

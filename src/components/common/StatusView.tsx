@@ -25,10 +25,12 @@ export default () => {
   }[connectStatus()])
 
   return (
-    <div class="flex items-center gap-1.5 px-1">
-      <div class={`h-2 w-2 rounded-full ${statusDotClass()}`} />
+    <div class="flex items-center gap-1 -ml-1">
+      <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
+        <div class={`h-2 w-2 rounded-full ${statusDotClass()}`} />
+      </div>
       <Show when={connectStatus() !== 'connected'}>
-        <Button size="small" variant="outline" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
+        <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
       </Show>
       <div class="text-sm fg-lighter" ref={noticeTextDom!}>{statusText()}</div>
     </div>

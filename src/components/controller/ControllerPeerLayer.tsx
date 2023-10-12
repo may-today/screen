@@ -35,6 +35,7 @@ export default () => {
 
   const handleConnection = (conn: DataConnection) => {
     conn.on('open', function () {
+      console.log('conn open')
       setConnectStatus('connected')
       $peerConnect.set(conn)
       $connectionDialogOpen.set(false)
@@ -55,6 +56,7 @@ export default () => {
       $connectionDialogOpen.set(true)
     })
     conn.on('data', (data) => {
+      setConnectStatus('connected')
       const action = data as StateAction
       console.log('conn data', action)
       $coreState.receiveAction(action)
