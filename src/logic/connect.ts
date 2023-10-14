@@ -26,19 +26,16 @@ export const sendAction = (action: StateAction) => {
 }
 
 export const getCustomPeerHost = () => {
-  const urlSearchParams = new URLSearchParams(window.location.search)
-  const params = Object.fromEntries(urlSearchParams.entries())
-  return params.server
+  return sessionStorage.getItem('peerServer')
 }
 
 export const setCustomPeerHost = (host: string | null) => {
-  const currentUrl = new URL(window.location.href)
   if (!host) {
-    currentUrl.searchParams.delete('server')
-    location.replace(currentUrl.toString())
+    sessionStorage.removeItem('peerServer')
+    location.reload()
   } else if (host?.includes(':')) {
-    currentUrl.searchParams.set('server', host)
-    location.replace(currentUrl.toString())
+    sessionStorage.setItem('peerServer', host)
+    location.reload()
   }
 }
 
