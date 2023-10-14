@@ -9,11 +9,13 @@ import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/store
 import { $connectionDialogOpen } from '@/stores/ui'
 import { serverOptions, handlePeer } from '@/logic/connect'
 import { $coreState } from '@/composables'
+import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
 
 export default () => {
   const connectStatus = useStore($connectStatus)
   const connectionDialogOpen = useStore($connectionDialogOpen)
+  const sessionRoomId = sessionStorage.getItem('roomId')
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
   const peer = new Peer(uuid, serverOptions)
 
@@ -34,9 +36,10 @@ export default () => {
   }
 
   const handleConnection = (conn: DataConnection) => {
-    conn.on('open', function () {
-      console.log('conn open')
+    conn.on('open', () => {
+      console.log('conn open', conn.peer)
       setConnectStatus('connected')
+      sessionStorage.setItem('roomId', conn.peer)
       $peerConnect.set(conn)
       $connectionDialogOpen.set(false)
       $roomId.set(conn.peer)
@@ -85,6 +88,13 @@ export default () => {
                     <PinInputInput index={5} />
                   </PinInputControl>
                 </PinInput>
+                <Show when={sessionRoomId}>
+                  <div class="flex justify-center">
+                    <Button size="small" variant="ghost" class="inline-flex" onClick={() => handleConnectToPeer(sessionRoomId!)}>
+                      <p class="op-50">连接到上次：{sessionRoomId}</p>
+                    </Button>
+                  </div>
+                </Show>
               </Show>
               <Show when={connectStatus() === 'not-ready' || connectStatus() === 'connecting'}>
                 <div class="fcc gap-2">

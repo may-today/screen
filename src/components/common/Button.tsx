@@ -15,7 +15,7 @@ export default (props: Props) => {
       primary: 'fcc gap-1 rounded-md shrink-0 bg-white text-black hover:bg-light cursor-pointer',
       secondary: 'fcc gap-1 rounded-md shrink-0 bg-base-100 hover:bg-base-100 cursor-pointer',
       outline: 'fcc gap-1 rounded-md shrink-0 bg-transparent border border-white/20 hover:bg-base-100 cursor-pointer',
-      ghost: 'fcc',
+      ghost: 'fcc gap-1 rounded-md shrink-0 bg-transparent cursor-pointer',
     }[props.variant || 'primary']
   }
 
