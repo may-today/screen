@@ -4,10 +4,10 @@ import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
-import { X, Loader2 } from 'lucide-solid'
+import { X, Loader2, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
-import { serverOptions, handlePeer } from '@/logic/connect'
+import { getServerOptions, handlePeer, setCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
@@ -17,8 +17,11 @@ export default () => {
   const connectionDialogOpen = useStore($connectionDialogOpen)
   const sessionRoomId = sessionStorage.getItem('roomId')
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
-  const peer = new Peer(uuid, serverOptions)
+  const serverOptions = getServerOptions()
 
+  console.log('serverOptions', serverOptions)
+  
+  const peer = new Peer(uuid, serverOptions)
   peer.on('open', (id) => {
     setConnectStatus('ready')
     sessionStorage.setItem('controllerUUID', uuid)
@@ -66,6 +69,11 @@ export default () => {
     })
   }
 
+  const handleSwitchPeerHost = () => {
+    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。')
+    setCustomPeerHost(promptAnswer)
+  }
+
   return (
     <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} trapFocus={false}>
       <Portal>
@@ -109,6 +117,11 @@ export default () => {
                   <div class="text-sm">连接失败，请重试</div>
                 </div>
               </Show>
+            </div>
+            <div class="flex gap-1 absolute top-2 right-2">
+              <div class="fcc w-8 h-8 cursor-pointer" onClick={handleSwitchPeerHost}>
+                <MoreHorizontal size={20} />
+              </div>
             </div>
           </DialogContent>
         </DialogContainer>

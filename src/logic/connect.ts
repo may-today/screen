@@ -2,45 +2,40 @@ import type { Peer, PeerOptions } from 'peerjs'
 import { $peerConnect, setConnectStatus } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
-export const serverOptions1 = undefined as PeerOptions | undefined
-export const serverOptions = {
-  host: 'peer.ddiu.site',
-  port: 443,
-  secure: true,
-  // debug: 3,
-  // config: {
-  //   iceServers: [
-  //     {
-  //       urls: 'stun:stun.relay.metered.ca:80',
-  //     },
-  //     {
-  //       urls: 'turn:a.relay.metered.ca:80',
-  //       username: import.meta.env.PUBLIC_METERED_USER,
-  //       credential: import.meta.env.PUBLIC_METERED_KEY,
-  //     },
-  //     {
-  //       urls: 'turn:a.relay.metered.ca:80?transport=tcp',
-  //       username: import.meta.env.PUBLIC_METERED_USER,
-  //       credential: import.meta.env.PUBLIC_METERED_KEY,
-  //     },
-  //     {
-  //       urls: 'turn:a.relay.metered.ca:443',
-  //       username: import.meta.env.PUBLIC_METERED_USER,
-  //       credential: import.meta.env.PUBLIC_METERED_KEY,
-  //     },
-  //     {
-  //       urls: 'turn:a.relay.metered.ca:443?transport=tcp',
-  //       username: import.meta.env.PUBLIC_METERED_USER,
-  //       credential: import.meta.env.PUBLIC_METERED_KEY,
-  //     },
-  //   ],
-  // },
-} as PeerOptions
+export const getServerOptions = () => {
+  const customPeerHost = getCustomPeerHost()
+  if (customPeerHost?.includes(':')) {
+    const [host, port] = customPeerHost.split(':')
+    return {
+      host,
+      port: Number(port),
+    } as PeerOptions
+  }
+  return {
+    host: 'peer.ddiu.site',
+    port: 443,
+    secure: true,
+  } as PeerOptions
+}
 
 export const sendAction = (action: StateAction) => {
   const connect = $peerConnect.get()
   if (connect && connect.open) {
     connect.send(action)
+  }
+}
+
+export const getCustomPeerHost = () => {
+  const urlSearchParams = new URLSearchParams(window.location.search)
+  const params = Object.fromEntries(urlSearchParams.entries())
+  return params.server
+}
+
+export const setCustomPeerHost = (host: string | null) => {
+  const currentUrl = new URL(window.location.href)
+  if (host?.includes(':')) {
+    currentUrl.searchParams.set('server', host)
+    location.replace(currentUrl.toString())
   }
 }
 

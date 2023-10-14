@@ -3,10 +3,10 @@ import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
 import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
-import { X, HelpCircle } from 'lucide-solid'
+import { X, HelpCircle, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
-import { serverOptions, handlePeer } from '@/logic/connect'
+import { getServerOptions, handlePeer, setCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
@@ -17,8 +17,11 @@ export default () => {
 
   const sessionRoomId = sessionStorage.getItem('roomId')
   const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
-  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
+  const serverOptions = getServerOptions()
 
+  console.log('serverOptions', serverOptions)
+
+  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
   peer.on('open', (id) => {
     $roomId.set(id)
     setConnectStatus('ready')
@@ -50,6 +53,11 @@ export default () => {
       console.log('conn data', action)
       $coreState.receiveAction(action)
     })
+  }
+
+  const handleSwitchPeerHost = () => {
+    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。')
+    setCustomPeerHost(promptAnswer)
   }
 
   return (
@@ -85,9 +93,14 @@ export default () => {
                 暂不连接
               </Button>
             </div>
-            <DialogCloseTrigger class="absolute top-2 right-2 fcc w-8 h-8 bg-transparent">
-              <X size={20} />
-            </DialogCloseTrigger>
+            <div class="flex gap-1 absolute top-2 right-2">
+              <div class="fcc w-8 h-8 cursor-pointer" onClick={handleSwitchPeerHost}>
+                <MoreHorizontal size={20} />
+              </div>
+              <DialogCloseTrigger class="fcc w-8 h-8 bg-transparent">
+                <X size={20} />
+              </DialogCloseTrigger>
+            </div>
           </DialogContent>
         </DialogContainer>
       </Portal>
