@@ -33,7 +33,10 @@ export const getCustomPeerHost = () => {
 
 export const setCustomPeerHost = (host: string | null) => {
   const currentUrl = new URL(window.location.href)
-  if (host?.includes(':')) {
+  if (!host) {
+    currentUrl.searchParams.delete('server')
+    location.replace(currentUrl.toString())
+  } else if (host?.includes(':')) {
     currentUrl.searchParams.set('server', host)
     location.replace(currentUrl.toString())
   }

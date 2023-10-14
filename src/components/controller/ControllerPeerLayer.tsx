@@ -7,7 +7,7 @@ import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
-import { getServerOptions, handlePeer, setCustomPeerHost } from '@/logic/connect'
+import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
@@ -18,6 +18,7 @@ export default () => {
   const sessionRoomId = sessionStorage.getItem('roomId')
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
   const serverOptions = getServerOptions()
+  const customPeerHost = getCustomPeerHost()
 
   console.log('serverOptions', serverOptions)
   
@@ -70,7 +71,7 @@ export default () => {
   }
 
   const handleSwitchPeerHost = () => {
-    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。')
+    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。', customPeerHost || '')
     setCustomPeerHost(promptAnswer)
   }
 
@@ -82,7 +83,7 @@ export default () => {
           <DialogContent class="relative">
             <div class="flex flex-col space-y-1.5 p-6 pb-3">
               <DialogTitle>连接屏幕</DialogTitle>
-              <DialogDescription>请输入屏幕 ID 进行连接</DialogDescription>
+              <DialogDescription>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请输入屏幕 ID 进行连接' }</DialogDescription>
             </div>
             <div class="p-6 pt-3">
               <Show when={connectStatus() === 'ready' || connectStatus() === 'error'}>

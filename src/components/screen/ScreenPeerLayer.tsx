@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark
 import { X, HelpCircle, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
-import { getServerOptions, handlePeer, setCustomPeerHost } from '@/logic/connect'
+import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import type { StateAction } from '@/types'
@@ -18,6 +18,7 @@ export default () => {
   const sessionRoomId = sessionStorage.getItem('roomId')
   const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
   const serverOptions = getServerOptions()
+  const customPeerHost = getCustomPeerHost()
 
   console.log('serverOptions', serverOptions)
 
@@ -56,7 +57,7 @@ export default () => {
   }
 
   const handleSwitchPeerHost = () => {
-    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。')
+    const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。', customPeerHost || '')
     setCustomPeerHost(promptAnswer)
   }
 
@@ -68,7 +69,7 @@ export default () => {
           <DialogContent class="relative black">
             <div class="flex flex-col space-y-1.5 p-6 pb-3">
               <DialogTitle>连接遥控器</DialogTitle>
-              <DialogDescription>请在遥控端输入 ID 进行连接</DialogDescription>
+              <DialogDescription>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请在遥控端输入 ID 进行连接' }</DialogDescription>
             </div>
             <div class="p-6 pt-3">
               <p class="text-4xl text-center font-semibold mb-6">{roomId() || '------'}</p>
