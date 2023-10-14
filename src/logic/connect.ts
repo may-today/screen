@@ -6,9 +6,11 @@ export const getServerOptions = () => {
   const customPeerHost = getCustomPeerHost()
   if (customPeerHost?.includes(':')) {
     const [host, port] = customPeerHost.split(':')
+    const isIp = host.split('.').length === 4
     return {
       host,
       port: Number(port),
+      secure: !isIp,
     } as PeerOptions
   }
   return {
