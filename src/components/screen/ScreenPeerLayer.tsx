@@ -9,6 +9,7 @@ import { $connectionDialogOpen } from '@/stores/ui'
 import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
+import ConnectMessageDialog from '../common/ConnectMessageDialog'
 import type { StateAction } from '@/types'
 
 export default () => {
@@ -62,7 +63,7 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} closeOnEsc={false} closeOnOutsideClick={false} trapFocus={false}>
+    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} closeOnOutsideClick={false} trapFocus={false}>
       <Portal>
         <DialogBackdrop />
         <DialogContainer>
@@ -104,6 +105,7 @@ export default () => {
             </div>
           </DialogContent>
         </DialogContainer>
+        <ConnectMessageDialog />
       </Portal>
     </Dialog>
   )

@@ -10,6 +10,7 @@ import { $connectionDialogOpen } from '@/stores/ui'
 import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
+import ConnectMessageDialog from '../common/ConnectMessageDialog'
 import type { StateAction } from '@/types'
 
 export default () => {
@@ -126,6 +127,7 @@ export default () => {
             </div>
           </DialogContent>
         </DialogContainer>
+        <ConnectMessageDialog />
       </Portal>
     </Dialog>
   )

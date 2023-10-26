@@ -1,5 +1,5 @@
 import type { Peer, PeerOptions } from 'peerjs'
-import { $peerConnect, setConnectStatus } from '@/stores/connect'
+import { $peerConnect, setConnectStatus, $connectErrorMessage } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
 export const getServerOptions = () => {
@@ -43,8 +43,11 @@ export const setCustomPeerHost = (host: string | null) => {
 
 export const handlePeer = (peer: Peer) => {
   peer.on('disconnected', (err) => {
-    setConnectStatus('ready')
     console.log('peer disconnected', err)
+    if ($connectErrorMessage.get()) {
+      return
+    }
+    setConnectStatus('ready')
     setTimeout(() => {
       setConnectStatus('connecting')
       console.log('reconnecting...')
@@ -54,5 +57,18 @@ export const handlePeer = (peer: Peer) => {
   peer.on('error', (err) => {
     setConnectStatus('error')
     console.log('peer error', err)
+    const fatalErrorMessage = {
+      'browser-incompatible': '当前浏览器不支持连接功能，请尝试更换浏览器或使用单机模式。',
+      'invalid-id': null,
+      'invalid-key': null,
+      'ssl-unavailable': null,
+      'server-error': '服务器错误，请稍后再试。',
+      'socket-error': null,
+      'socket-closed': null,
+      'unavailable-id': null,
+    } as Record<string, string | null>
+    if (Object.keys(fatalErrorMessage).includes(err.type)) {
+      $connectErrorMessage.set(fatalErrorMessage[err.type] || err.message)
+    }
   })
 }

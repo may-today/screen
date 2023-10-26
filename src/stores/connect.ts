@@ -6,6 +6,7 @@ import type { ConnectStatus } from '@/types'
 export const $peerConnect = atom<DataConnection | null>(null)
 export const $roomId = atom<string | null>(null)
 export const $connectStatus = atom<ConnectStatus>('not-ready')
+export const $connectErrorMessage = atom<string | null>(null)
 
 export const setConnectStatus = action($connectStatus, 'setConnectStatus', (store, status: ConnectStatus) => {
   store.set(status)
