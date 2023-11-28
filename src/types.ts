@@ -2,16 +2,15 @@ export interface SongMeta {
   title: string
   slug: string
   meta: {
+    artist?: string
     year?: number
     album?: string
-    banlam: boolean
+    banlam?: boolean
     length?: number
-    light: boolean
   }
 }
 
 export type SongDetail = SongMeta & {
-  index: string
   detail: LyricLine[]
 }
 
@@ -80,6 +79,10 @@ export interface StateActionSetExtraView extends StateActionBase {
   type: 'set_extra'
   payload: ExtraView
 }
+export interface StateActionSetSingleLyric extends StateActionBase {
+  type: 'set_single_track'
+  payload: SongDetail | null
+}
 export type StateAction = StateActionSyncState
   | StateActionSetId
   | StateActionSetTime
@@ -88,6 +91,7 @@ export type StateAction = StateActionSyncState
   | StateActionSetScreenOff
   | StateActionSetAutoPlay
   | StateActionSetExtraView
+  | StateActionSetSingleLyric
 
 export interface StateSnapshot {
   time: number
@@ -96,6 +100,7 @@ export interface StateSnapshot {
     blackScreen: boolean
     autoPlay: boolean
     extraView: ExtraView
+    singleTrack: SingleTrackItem
     currentTime: number
     isTimerRunning: boolean
   }

@@ -1,9 +1,10 @@
 import { createSignal } from 'solid-js'
-import { $currentSongId, $blackScreen, $autoPlay, $extraView } from '@/stores/coreState'
+import { $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack } from '@/stores/coreState'
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
-import type { StateAction, ExtraView, TimelineData, StateSnapshot } from '@/types'
+import { singleTrackPlaceholderId } from '@/logic/singleTrack'
+import type { StateAction, ExtraView, TimelineData, StateSnapshot, SongDetail } from '@/types'
 
 export const useCoreState = () => {
   const [currentLyricLine, setCurrentLyricLine] = createSignal<TimelineData | null>(null)
@@ -53,6 +54,9 @@ export const useCoreState = () => {
       case 'set_extra':
         setExtraView(action.payload)
         break
+      case 'set_single_track':
+        setSingleTrack(action.payload)
+        break
     }
   }
 
@@ -75,6 +79,7 @@ export const useCoreState = () => {
         blackScreen: $blackScreen.get(),
         autoPlay: $autoPlay.get(),
         extraView: $extraView.get(),
+        singleTrack: $singleTrack.get(),
       }
     }
     sendAction({
@@ -92,6 +97,7 @@ export const useCoreState = () => {
     }
     console.log('pullSnapShot useRemote')
     const state = snapshot.state
+    $singleTrack.set(state.singleTrack)
     $currentSongId.set(state.currentSongId)
     $blackScreen.set(state.blackScreen)
     $timeServer.restoreStste({
@@ -107,6 +113,9 @@ export const useCoreState = () => {
     $currentSongId.set(id)
     $timeServer.clear()
     setCurrentLyricLine(null)
+    if (id !== singleTrackPlaceholderId) {
+      setSingleTrack(null)
+    }
   }
 
   const setTime = (time: number) => {
@@ -154,6 +163,13 @@ export const useCoreState = () => {
     $extraView.set(view)
     if (!!view) {
       $blackScreen.set(false)
+    }
+  }
+
+  const setSingleTrack = (track: SongDetail | null) => {
+    $singleTrack.set(track)
+    if (track) {
+      setSongId(singleTrackPlaceholderId)
     }
   }
 

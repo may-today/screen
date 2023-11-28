@@ -1,7 +1,8 @@
 import { atom, map, action, computed } from 'nanostores'
 import { $statusText } from './ui'
-import { $currentSongId } from './coreState'
+import { $currentSongId, $singleTrack } from './coreState'
 import { parseLyricTimeline } from '@/logic/lyric'
+import { singleTrackPlaceholderId } from '@/logic/singleTrack'
 import type { SongMeta, SongDetail, DataDownloadStatus } from '@/types'
 
 export const $allDataDict = map<Record<string, SongDetail>>({})
@@ -9,8 +10,13 @@ export const $updateTime = atom<string | null>(null)
 export const $groupMetaList = map<Record<string, SongMeta[]>>({})
 export const $dataDownloadStatus = atom<DataDownloadStatus>('ready')
 
-export const $currentSongData = computed([$currentSongId, $allDataDict], (songId, dict) => {
-  if (!songId) return null
+export const $currentSongData = computed([$currentSongId, $allDataDict, $singleTrack], (songId, dict, singleTrack) => {
+  if (songId === singleTrackPlaceholderId) {
+    return singleTrack
+  }
+  if (!songId) {
+    return null
+  }
   console.log('dict', dict[songId])
   return dict[songId] || null
 })
