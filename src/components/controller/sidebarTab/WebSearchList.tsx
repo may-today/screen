@@ -21,6 +21,7 @@ export default () => {
     const singleTrack: SongDetail = {
       title: song.name,
       slug: song.id,
+      index: '',
       meta: {
         artist: song.artists_str,
       },

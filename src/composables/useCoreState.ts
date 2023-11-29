@@ -174,19 +174,23 @@ export const useCoreState = () => {
   }
 
   const showPrevNextLineLyric = (type: 'prev' | 'next') => {
-    const timeline = $currentTimelineData.get() || new Map() as Map<number, TimelineData>
-    const timelineTimeList = Array.from(timeline.keys())
-    const currentTime = $timeServer.$currentTime.get()
-    let targetTime: number | undefined = -1
-    if (type === 'prev') {
-      targetTime = timelineTimeList.reverse().find((time) => time < currentTime)
+    const timeline = $currentTimelineData.get()
+    if (timeline) {
+      const timelineTimeList = Array.from(timeline.keys())
+      const currentTime = $timeServer.$currentTime.get()
+      let targetTime: number | undefined = -1
+      if (type === 'prev') {
+        targetTime = timelineTimeList.reverse().find((time) => time < currentTime)
+      } else {
+        targetTime = timelineTimeList.find((time) => time > currentTime)
+      }
+      if (targetTime) {
+        setTime(targetTime)
+      } else {
+        $timeServer.clear()
+      }
     } else {
-      targetTime = timelineTimeList.find((time) => time > currentTime)
-    }
-    if (targetTime) {
-      setTime(targetTime)
-    } else {
-      $timeServer.clear()
+      // TODO: use lyric values list
     }
   }
 

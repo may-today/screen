@@ -23,6 +23,9 @@ export const $currentSongData = computed([$currentSongId, $allDataDict, $singleT
 
 export const $currentTimelineData = computed([$currentSongData], (songData) => {
   if (!songData) return null
+  if (songData.detail.find((line) => line.time < 0)) {
+    return null
+  }
   return parseLyricTimeline(songData.detail)
 })
 

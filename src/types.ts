@@ -1,6 +1,7 @@
 export interface SongMeta {
   title: string
   slug: string
+  index: string
   meta: {
     artist?: string
     year?: number
@@ -100,7 +101,7 @@ export interface StateSnapshot {
     blackScreen: boolean
     autoPlay: boolean
     extraView: ExtraView
-    singleTrack: SingleTrackItem
+    singleTrack: SongDetail | null
     currentTime: number
     isTimerRunning: boolean
   }
