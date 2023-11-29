@@ -1,7 +1,7 @@
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
-import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
+import { Dialog } from '@ark-ui/solid'
 import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
 import { X, HelpCircle, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
@@ -63,14 +63,14 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} closeOnOutsideClick={false} trapFocus={false}>
+    <Dialog open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} closeOnInteractOutside={false} trapFocus={false}>
       <Portal>
-        <DialogBackdrop />
-        <DialogContainer>
-          <DialogContent class="relative black">
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content class="relative black">
             <div class="flex flex-col space-y-1.5 p-6 pb-3">
-              <DialogTitle>连接遥控器</DialogTitle>
-              <DialogDescription>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请在遥控端输入 ID 进行连接' }</DialogDescription>
+              <Dialog.Title>连接遥控器</Dialog.Title>
+              <Dialog.Description>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请在遥控端输入 ID 进行连接' }</Dialog.Description>
             </div>
             <div class="p-6 pt-3">
               <p class="text-4xl text-center font-semibold mb-6">{roomId() || '------'}</p>
@@ -99,12 +99,12 @@ export default () => {
               <div class="fcc w-8 h-8 cursor-pointer" onClick={handleSwitchPeerHost}>
                 <MoreHorizontal size={20} />
               </div>
-              <DialogCloseTrigger class="fcc w-8 h-8 bg-transparent">
+              <Dialog.CloseTrigger class="fcc w-8 h-8 bg-transparent">
                 <X size={20} />
-              </DialogCloseTrigger>
+              </Dialog.CloseTrigger>
             </div>
-          </DialogContent>
-        </DialogContainer>
+          </Dialog.Content>
+        </Dialog.Positioner>
         <ConnectMessageDialog />
       </Portal>
     </Dialog>

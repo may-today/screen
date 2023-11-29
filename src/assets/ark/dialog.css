@@ -3,7 +3,7 @@
   --at-apply: 'bg-black/70';
 }
 
-[data-scope='dialog'][data-part='container'] {
+[data-scope='dialog'][data-part='positioner'] {
   @apply fcc fixed inset-0 z-20;
 }
 
@@ -48,6 +48,6 @@
 }
 
 [data-scope='dialog'][data-part='trigger'] {
-  @apply text-sm;
+  @apply text-sm bg-transparent;
 }
 

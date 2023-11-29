@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
-import { Dialog, DialogBackdrop, DialogContainer, DialogContent, Tabs } from '@ark-ui/solid'
+import { Dialog, Tabs } from '@ark-ui/solid'
 import { $sidebarOpen } from '@/stores/ui'
 import SongList from './sidebarTab/SongList'
 import WebSearchList from './sidebarTab/WebSearchList'
@@ -12,15 +12,15 @@ export default () => {
   const sidebarOpen = useStore($sidebarOpen)
 
   return (
-    <Dialog open={sidebarOpen()} onOpen={() => $sidebarOpen.set(true)} onClose={() => $sidebarOpen.set(false)}>
+    <Dialog open={sidebarOpen()} onOpenChange={(e) => $sidebarOpen.set(e.open)}>
       <Portal>
-        <DialogBackdrop />
-        <DialogContainer>
-          <DialogContent asChild>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content class="sidebar">
             <Tabs.Root
-              class="sidebar flex flex-col"
+              class="w-full h-full flex flex-col"
               value={currentTab()}
-              onChange={(e) => setCurrentTab(e.value!)}
+              onValueChange={(e) => setCurrentTab(e.value!)}
             >
               <Tabs.Content value="local_list" class="flex-1 overflow-hidden">
                 <SongList />
@@ -37,8 +37,8 @@ export default () => {
                 <Tabs.Trigger value="upload">上传</Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
-          </DialogContent>
-        </DialogContainer>
+          </Dialog.Content>
+        </Dialog.Positioner>
       </Portal>
     </Dialog>
   )

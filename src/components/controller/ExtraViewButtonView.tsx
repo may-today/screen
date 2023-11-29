@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/solid'
 import { Keyboard, X, HardDriveUpload } from 'lucide-solid'
 import { Portal } from 'solid-js/web'
 import { createFileUploader } from '@solid-primitives/upload'
-import { Dialog, DialogBackdrop, DialogCloseTrigger, DialogContainer, DialogContent, DialogTitle, DialogTrigger } from '@ark-ui/solid'
+import { Dialog } from '@ark-ui/solid'
 import { Tabs } from '@ark-ui/solid'
 import { $extraView } from '@/stores/coreState'
 import ToggleButton from '@/components/common/ToggleButton'
@@ -66,7 +66,7 @@ export default () => {
 
   const handleClearExtraView = () => {
     $coreState.triggerAction({ type: 'set_extra', payload: null })
-    handleDialogClose()
+    handleDialogOpenChange({ open: false })
   }
 
   const handleClickUpload = async () => {
@@ -75,38 +75,39 @@ export default () => {
     })
   }
 
-  const handleDialogOpen = () => {
-    setCurrentTab(extraView()?.type || 'text')
-    setTempText(extraText() || '')
-    setTempFileSource(extraImgUrl() || '')
-    setShowDialog(true)
-  }
-
-  const handleDialogClose = () => {
-    setTempText('')
-    setTempFileSource('')
-    setShowDialog(false)
+  const handleDialogOpenChange = (e: { open: boolean }) => {
+    if (e.open) {
+      setCurrentTab(extraView()?.type || 'text')
+      setTempText(extraText() || '')
+      setTempFileSource(extraImgUrl() || '')
+      setShowDialog(true)
+    } else {
+      setTempText('')
+      setTempFileSource('')
+      setShowDialog(false)
+    }
+    
   }
 
   return (
-    <Dialog open={showDialog()} onOpen={handleDialogOpen} onClose={handleDialogClose}>
-      <DialogTrigger class="w-full h-full bg-transparent">
+    <Dialog open={showDialog()} onOpenChange={handleDialogOpenChange}>
+      <Dialog.Trigger class="w-full h-full bg-transparent">
         <ToggleButton toggle={!!extraView()} class="w-full h-full">
           <Keyboard size={16} />
           <span>图片/文字</span>
         </ToggleButton>
-      </DialogTrigger>
+      </Dialog.Trigger>
       <Portal>
-        <DialogBackdrop />
-        <DialogContainer>
-          <DialogContent class="relative">
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content class="relative">
             <div class="flex flex-col space-y-1.5 p-6 pb-3">
-              <DialogTitle>发送图片/文字</DialogTitle>
+              <Dialog.Title>发送图片/文字</Dialog.Title>
             </div>
             <div class="px-6 pb-6">
               <Tabs.Root
                 value={currentTab()}
-                onChange={(e) => setCurrentTab(e.value!)}
+                onValueChange={(e) => setCurrentTab(e.value!)}
               >
                 <header class="flex items-center py-2">
                   <Tabs.List>
@@ -142,11 +143,11 @@ export default () => {
                 <Button class="flex-[2]" onClick={handleSetExtraView}>发送</Button>
               </div>
             </div>
-            <DialogCloseTrigger class="absolute top-2 right-2 fcc w-8 h-8 bg-transparent">
+            <Dialog.CloseTrigger class="absolute top-2 right-2 fcc w-8 h-8 bg-transparent">
               <X size={20} />
-            </DialogCloseTrigger>
-          </DialogContent>
-        </DialogContainer>
+            </Dialog.CloseTrigger>
+          </Dialog.Content>
+        </Dialog.Positioner>
       </Portal>
     </Dialog>
   )

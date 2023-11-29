@@ -20,7 +20,7 @@ export default () => {
     <Tabs.Root
       class="flex flex-col w-70vw max-w-300px h-60vh overflow-hidden select-none"
       value={currentTab()}
-      onChange={(e) => setCurrentTab(e.value!)}
+      onValueChange={(e) => setCurrentTab(e.value!)}
     >
       <header class="flex items-center justify-between px-4 py-2 border-b border-base">
         <Logo />

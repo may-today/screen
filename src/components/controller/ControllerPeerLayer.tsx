@@ -2,7 +2,7 @@ import { Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
-import { Dialog, DialogBackdrop, DialogContainer, DialogContent, DialogDescription, DialogTitle } from '@ark-ui/solid'
+import { Dialog } from '@ark-ui/solid'
 import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
@@ -77,18 +77,18 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onClose={() => $connectionDialogOpen.set(false)} trapFocus={false}>
+    <Dialog open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
       <Portal>
-        <DialogBackdrop />
-        <DialogContainer>
-          <DialogContent class="relative">
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content class="relative">
             <div class="flex flex-col space-y-1.5 p-6 pb-3">
-              <DialogTitle>连接屏幕</DialogTitle>
-              <DialogDescription>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请输入屏幕 ID 进行连接' }</DialogDescription>
+              <Dialog.Title>连接屏幕</Dialog.Title>
+              <Dialog.Description>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请输入屏幕 ID 进行连接' }</Dialog.Description>
             </div>
             <div class="p-6 pt-3">
               <Show when={connectStatus() === 'ready' || connectStatus() === 'error'}>
-                <PinInput autoFocus blurOnComplete onComplete={handleInputDone} class="mb-3">
+                <PinInput autoFocus blurOnComplete onValueComplete={handleInputDone} class="mb-3">
                   <PinInputControl>
                     <PinInputInput index={0} />
                     <PinInputInput index={1} />
@@ -125,8 +125,8 @@ export default () => {
                 <MoreHorizontal size={20} />
               </div>
             </div>
-          </DialogContent>
-        </DialogContainer>
+          </Dialog.Content>
+        </Dialog.Positioner>
         <ConnectMessageDialog />
       </Portal>
     </Dialog>
