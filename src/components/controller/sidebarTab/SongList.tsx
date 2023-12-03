@@ -19,9 +19,7 @@ export default () => {
   const handleSongClick = (songId: string) => {
     $coreState.triggerAction({ type: 'set_id', payload: songId })
     $sidebarOpen.set(false)
-    setInputText('')
-    inputRef.value = ''
-    setFilteredList([])
+    clearInputState()
   }
 
   const handleInput = () => {
@@ -29,6 +27,12 @@ export default () => {
     setInputText(input)
     const filtered = searchByString(input, Object.values(allDataDict()))
     setFilteredList(filtered)
+  }
+
+  const clearInputState = () => {
+    inputRef.value = ''
+    setInputText('')
+    setFilteredList([])
   }
 
   const SearchList = () => (
@@ -61,6 +65,13 @@ export default () => {
           ref={inputRef!}
           onInput={handleInput}
           placeholder="输入歌名或歌词搜索"
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              clearInputState()
+            } else if (e.key === 'Enter') {
+              inputRef.blur()
+            }
+          }}
         />
       </div>
     </div>

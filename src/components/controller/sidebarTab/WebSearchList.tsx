@@ -30,9 +30,7 @@ export default () => {
       detail: lyricList,
     }
     $coreState.triggerAction({ type: 'set_single_track', payload: singleTrack })
-    setInputText('')
-    inputRef.value = ''
-    setFilteredList([])
+    clearInputState()
     $sidebarOpen.set(false)
   }
 
@@ -51,6 +49,12 @@ export default () => {
     setFilteredList(filteredList)
   }
   const debounceHandleSearch = debounce(handleSearch, 1000)
+
+  const clearInputState = () => {
+    inputRef.value = ''
+    setInputText('')
+    setFilteredList([])
+  }
 
   const [Toaster, toast] = createToaster({
     placement: 'top-end',
@@ -100,6 +104,13 @@ export default () => {
           type="text"
           ref={inputRef!}
           onInput={handleInput}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              clearInputState()
+            } else if (e.key === 'Enter') {
+              inputRef.blur()
+            }
+          }}
           placeholder="输入歌名搜索网络歌词"
         />
       </div>
