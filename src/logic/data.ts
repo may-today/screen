@@ -1,5 +1,6 @@
 import { $allDataDict, $groupMetaList, $updateTime, setDataDownloadStatus } from '@/stores/data'
 import type { SongMeta, SongDetail, SearchItem } from '@/types'
+import dataJj from '@/assets/data-jj'
 
 const saveAndParseDetailList = (list: SongDetail[], updateTime: string | null) => {
   if (updateTime) {
@@ -36,13 +37,15 @@ const generateMetaGroupList = (list: SongDetail[]) => {
 }
 
 export const loadStorageData = async () => {
-  const allSongData = localStorage.getItem('allSongData')
-  const lastUpdateTime = localStorage.getItem('lastUpdateTime')
-  if (!allSongData) {
-    return
-  }
-  const allSongDataParsed = JSON.parse(allSongData)
-  saveAndParseDetailList(allSongDataParsed, lastUpdateTime)
+  // const allSongData = localStorage.getItem('allSongData')
+  // const lastUpdateTime = localStorage.getItem('lastUpdateTime')
+  // if (!allSongData) {
+  //   return
+  // }
+  // const allSongDataParsed = JSON.parse(allSongData)
+  // TODO: down from server
+  const allSongDataParsed = dataJj
+  saveAndParseDetailList(allSongDataParsed, new Date().toISOString())
 }
 
 export const fetchAndUpdateData = async () => {
