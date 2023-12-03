@@ -1,5 +1,7 @@
 import { For, createSignal } from 'solid-js'
-import { Search } from 'lucide-solid'
+import { Portal } from 'solid-js/web'
+import { Toast, createToaster } from '@ark-ui/solid'
+import { Search, X } from 'lucide-solid'
 import { debounce } from '@solid-primitives/scheduled'
 import { $coreState } from '@/composables'
 import { getTrackListByKeyword, getLyricByTrackId, type WebSearchTrackItem } from '@/logic/singleTrack'
@@ -15,7 +17,7 @@ export default () => {
   const handleSongClick = async (song: WebSearchTrackItem) => {
     const lyricList = await getLyricByTrackId(song.id)
     if (!lyricList) {
-      // TODO: show error message
+      toast().create({ title: '下载失败', description: '暂时没有该歌曲的歌词' })
       return
     }
     const singleTrack: SongDetail = {
@@ -49,6 +51,22 @@ export default () => {
     setFilteredList(filteredList)
   }
   const debounceHandleSearch = debounce(handleSearch, 1000)
+
+  const [Toaster, toast] = createToaster({
+    placement: 'top-end',
+    duration: 3000,
+    render(toast) {
+      return (
+        <Toast.Root>
+          <Toast.Title>{toast().title}</Toast.Title>
+          <Toast.Description>{toast().description}</Toast.Description>
+          <Toast.CloseTrigger class="fcc w-8 h-8 bg-transparent">
+            <X size={20} />
+          </Toast.CloseTrigger>
+        </Toast.Root>
+      )
+    },
+  })
 
   const SearchList = () => (
     <div class="flex-1 p-4 overflow-y-auto">
@@ -89,9 +107,14 @@ export default () => {
   )
 
   return (
-    <div class="h-full flex flex-col">
-      <SearchList />
-      <SearchBox />
-    </div>
+    <>
+      <div class="h-full flex flex-col">
+        <SearchList />
+        <SearchBox />
+      </div>
+      <Portal>
+        <Toaster />
+      </Portal>
+    </>
   )
 }

@@ -1,0 +1,27 @@
+[data-scope='toast'][data-part='root'] {
+  @apply bg-base;
+  @apply border border-base rounded-md overflow-hidden;
+  @apply flex flex-col px-4 py-3;
+  --at-apply: 'min-w-20em max-w-80vw sm:max-w-40em';
+}
+
+[data-scope='toast'][data-part='root'][data-state='open'] {
+  animation: anim-bottom-in 200ms ease-out;
+}
+ 
+[data-scope='toast'][data-part='root'][data-state='closed'] {
+  animation: anim-bottom-out 200ms ease-in;
+}
+
+[data-scope='toast'][data-part='title'] {
+  @apply text-sm font-semibold mb-1;
+}
+
+[data-scope='toast'][data-part='description'] {
+  @apply text-sm fg-lighter;
+}
+
+[data-scope='toast'][data-part='close-trigger'] {
+  @apply absolute top-1 right-1;
+  @apply text-sm bg-transparent;
+}
