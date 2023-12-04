@@ -28,7 +28,7 @@ export default () => {
         <h3 class="flex items-center gap-1 cursor-pointer h-full p-2 -ml-2" onClick={() => $sidebarOpen.set(true)}>
           <Menu size={16} strokeWidth={1} class="fg-base shrink-0" />
           <Show when={currentSongData()} fallback={<div class="text-sm op-50">当前无歌曲</div>}>
-            <span class="text-sm line-clamp-2">{currentSongData()!.title}</span>
+            <span class="text-sm line-clamp-2">{currentSongData()!.title}{currentSongData()!.meta?.artist ? ` - ${currentSongData()!.meta.artist}` : ''}</span>
           </Show>
         </h3>
         <Show when={currentSongData()}>
