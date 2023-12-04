@@ -3,7 +3,7 @@ import { $currentSongId } from '@/stores/coreState'
 import Logo from '@/components/common/Logo'
 import LyricListView from '@/components/controller/LyricListView'
 import FloatControlBarStatusBar from '@/components/screen/FloatControlBarStatusBar'
-import SongListSidebarContent from '../controller/SongListSidebarContent'
+import SongListSidebarContent from '@/components/common/SongListSidebarContent'
 import { Tabs } from '@ark-ui/solid'
 
 export default () => {

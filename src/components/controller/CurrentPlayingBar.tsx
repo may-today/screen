@@ -12,7 +12,13 @@ export default () => {
   const currentSongData = useStore($currentSongData)
   const autoPlay = useStore($autoPlay)
 
+  const isSupportAutoPlay = () => {
+    const lyricLines = currentSongData()?.detail || []
+    return !!lyricLines.find(line => line.time >= 0)
+  }
+
   const handleToggleAutoPlay = () => {
+    if (!isSupportAutoPlay()) return
     $coreState.triggerAction({ type: 'set_auto_play', payload: !autoPlay() })
   }
 
@@ -32,7 +38,7 @@ export default () => {
           </Button>
         </Show>
       </div>
-      <ToggleButton toggle={autoPlay()} onClick={handleToggleAutoPlay}>
+      <ToggleButton toggle={autoPlay()} disabled={!isSupportAutoPlay()} onClick={handleToggleAutoPlay}>
         { autoPlay() ? <AlarmClock size={16} /> : <AlarmClockOff size={16} /> }
         <span>自动播放</span>
       </ToggleButton>

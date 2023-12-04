@@ -4,7 +4,6 @@ import { $blackScreen } from '@/stores/coreState'
 import { $coreState } from '@/composables'
 import ToggleButton from '@/components/common/ToggleButton'
 import ExtraViewButtonView from './ExtraViewButtonView'
-// import TextControlView from './TextControlView'
 
 export default () => {
   const blackScreen = useStore($blackScreen)

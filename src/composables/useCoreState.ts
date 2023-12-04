@@ -1,24 +1,43 @@
 import { createSignal } from 'solid-js'
-import { $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack } from '@/stores/coreState'
+import { useStore } from '@nanostores/solid'
+import { $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack, $currentLyricIndex } from '@/stores/coreState'
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
 import { singleTrackPlaceholderId } from '@/logic/singleTrack'
-import type { StateAction, ExtraView, TimelineData, StateSnapshot, SongDetail } from '@/types'
+import type { StateAction, ExtraView, StateSnapshot, SongDetail } from '@/types'
 
 export const useCoreState = () => {
-  const [currentLyricLine, setCurrentLyricLine] = createSignal<TimelineData | null>(null)
   const [stateTime, setStateTime] = createSignal(0)
+  const currentTimelineData = useStore($currentTimelineData)
+  const currentLyricIndex = useStore($currentLyricIndex)
+  const currentLyricLine = () => {
+    const timelineData = currentTimelineData()
+    const index = currentLyricIndex()
+    if (!timelineData || index < 0 || index >= timelineData.length) {
+      return null
+    }
+    return timelineData[index]
+  }
+  const currentLyricTimeIndexMap = () => {
+    const timelineData = currentTimelineData()
+    const map = new Map<number, number>()
+    if (!timelineData) {
+      return map
+    }
+    timelineData.forEach((line, index) => {
+      map.set(line.startTime, index)
+    })
+    return map
+  }
 
   $timeServer.$currentTime.subscribe((time) => {
-    const timeline = $currentTimelineData.get()
-    if (!timeline) return
-    if (timeline.has(time)) {
-      const line = timeline.get(time)
-      console.log(line)
-      setCurrentLyricLine(line!)
+    const timelineIndexMap = currentLyricTimeIndexMap()
+    if (timelineIndexMap.has(time)) {
+      $currentLyricIndex.set(timelineIndexMap.get(time)!)
     }
-    const allSongLength = $currentSongData.get()?.meta?.length || Number(Array.from(timeline.keys()).pop()) + 20
+    const keys = Array.from(timelineIndexMap.keys()).sort((a, b) => a - b)
+    const allSongLength = $currentSongData.get()?.meta?.length || Number(keys.pop()) + 20
     if (time >= allSongLength!) {
       $timeServer.clear()
     }
@@ -36,8 +55,8 @@ export const useCoreState = () => {
       case 'set_id':
         setSongId(action.payload)
         break
-      case 'set_time':
-        setTime(action.payload)
+      case 'set_lyric_index':
+        setLyricIndex(action.payload)
         break
       case 'set_start_pause':
         setStartPause(action.payload)
@@ -75,6 +94,7 @@ export const useCoreState = () => {
       state: {
         currentSongId: $currentSongId.get(),
         currentTime: $timeServer.$currentTime.get(),
+        currentLyricIndex: $currentLyricIndex.get(),
         isTimerRunning: $timeServer.$isTimerRunning.get(),
         blackScreen: $blackScreen.get(),
         autoPlay: $autoPlay.get(),
@@ -104,6 +124,7 @@ export const useCoreState = () => {
       currentTime: state.currentTime,
       isTimerRunning: state.isTimerRunning,
     })
+    $currentLyricIndex.set(state.currentLyricIndex)
     $autoPlay.set(state.autoPlay)
     $extraView.set(state.extraView)
     setStateTime(snapshot.time)
@@ -111,21 +132,31 @@ export const useCoreState = () => {
 
   const setSongId = (id: string | null) => {
     $currentSongId.set(id)
+    $currentLyricIndex.set(-1)
     $timeServer.clear()
-    setCurrentLyricLine(null)
+    $autoPlay.set(false)
     if (id !== singleTrackPlaceholderId) {
       setSingleTrack(null)
     }
   }
 
-  const setTime = (time: number) => {
+  const setLyricIndex = (index: number) => {
     if (!$currentSongId.get()) {
       return
     }
-    $timeServer.$currentTime.set(time)
-    if ($autoPlay.get()) {
-      $timeServer.pause()
-      $timeServer.start()
+    $currentLyricIndex.set(index)
+    if (index < 0) {
+      $timeServer.clear()
+      return
+    }
+    const timeline = $currentTimelineData.get()
+    const targetStartTime = timeline[index].startTime
+    if (targetStartTime >= 0) {
+      $timeServer.$currentTime.set(targetStartTime)
+      if ($autoPlay.get()) {
+        $timeServer.pause()
+        $timeServer.start()
+      }
     }
   }
 
@@ -175,23 +206,12 @@ export const useCoreState = () => {
 
   const showPrevNextLineLyric = (type: 'prev' | 'next') => {
     const timeline = $currentTimelineData.get()
-    if (timeline) {
-      const timelineTimeList = Array.from(timeline.keys())
-      const currentTime = $timeServer.$currentTime.get()
-      let targetTime: number | undefined = -1
-      if (type === 'prev') {
-        targetTime = timelineTimeList.reverse().find((time) => time < currentTime)
-      } else {
-        targetTime = timelineTimeList.find((time) => time > currentTime)
-      }
-      if (targetTime) {
-        setTime(targetTime)
-      } else {
-        $timeServer.clear()
-      }
-    } else {
-      // TODO: use lyric values list
+    const currentLyricIndex = $currentLyricIndex.get()
+    let targetLyricIndex = type === 'prev' ? currentLyricIndex - 1 : currentLyricIndex + 1
+    if (targetLyricIndex < -1 || targetLyricIndex >= timeline.length) {
+      targetLyricIndex = -1
     }
+    setLyricIndex(targetLyricIndex)
   }
 
   return {

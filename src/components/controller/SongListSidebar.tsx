@@ -2,7 +2,7 @@ import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Dialog } from '@ark-ui/solid'
 import { $sidebarOpen } from '@/stores/ui'
-import SongListSidebarContent from './SongListSidebarContent'
+import SongListSidebarContent from '@/components/common/SongListSidebarContent'
 
 export default () => {
   const sidebarOpen = useStore($sidebarOpen)

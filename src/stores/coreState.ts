@@ -8,4 +8,5 @@ export const $extraView = atom<ExtraView>(null)
 export const $singleTrack = atom<SongDetail | null>(null)
 
 export const $currentTime = atom<number>(0)
+export const $currentLyricIndex = atom<number>(-1)
 export const $isTimerRunning = atom<boolean>(false)

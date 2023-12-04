@@ -32,6 +32,7 @@ export interface SearchItem {
 }
 
 export interface TimelineData {
+  index: number
   startTime: number
   data: LyricLine
   duration: number
@@ -56,8 +57,8 @@ export interface StateActionSetId extends StateActionBase {
   type: 'set_id'
   payload: string | null
 }
-export interface StateActionSetTime extends StateActionBase {
-  type: 'set_time'
+export interface StateActionSetLyricLine extends StateActionBase {
+  type: 'set_lyric_index'
   payload: number
 }
 export interface StateActionSetStartPause extends StateActionBase {
@@ -86,7 +87,7 @@ export interface StateActionSetSingleLyric extends StateActionBase {
 }
 export type StateAction = StateActionSyncState
   | StateActionSetId
-  | StateActionSetTime
+  | StateActionSetLyricLine
   | StateActionSetStartPause
   | StateActionShowPrevNextLine
   | StateActionSetScreenOff
@@ -104,5 +105,6 @@ export interface StateSnapshot {
     singleTrack: SongDetail | null
     currentTime: number
     isTimerRunning: boolean
+    currentLyricIndex: number
   }
 }
