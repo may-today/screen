@@ -17,8 +17,8 @@ export default () => {
   }
 
   return (
-    <div class="flex items-stretch justify-between h-14 border-t border-base overflow-hidden">
-      <div class="flex-1 flex items-center gap-2 px-4 border-r border-base">
+    <div class="flex items-stretch justify-between h-12 border-t border-base overflow-hidden">
+      <div class="flex-1 flex items-center gap-2 pl-4 pr-3 border-r border-base">
         <h3 class="flex items-center gap-1 cursor-pointer" onClick={() => $sidebarOpen.set(true)}>
           <Show when={currentSongData()} fallback={<div class="text-sm op-50">当前无歌曲</div>}>
             <span class="text-sm line-clamp-2 op-50">{currentSongData()!.title}</span>

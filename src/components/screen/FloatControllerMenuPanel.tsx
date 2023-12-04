@@ -1,24 +1,27 @@
 import { createSignal } from 'solid-js'
-import { $coreState } from '@/composables'
+import { $currentSongId } from '@/stores/coreState'
 import Logo from '@/components/common/Logo'
-import AllSongList from '@/components/common/AllSongList'
 import LyricListView from '@/components/controller/LyricListView'
 import FloatControlBarStatusBar from '@/components/screen/FloatControlBarStatusBar'
+import SongListSidebarContent from '../controller/SongListSidebarContent'
 import { Tabs } from '@ark-ui/solid'
 
 export default () => {
   let scrollDom: HTMLDivElement
   const [currentTab, setCurrentTab] = createSignal('song_list')
 
-  const handleSongClick = (songId: string) => {
-    $coreState.triggerAction({ type: 'set_id', payload: songId })
-    setCurrentTab('lyric_list')
-    scrollDom.scrollTo({ top: 0 })
-  }
+  $currentSongId.listen((songId) => {
+    if (songId) {
+      setCurrentTab('lyric_list')
+      scrollDom.scrollTo({ top: 0 })
+    } else {
+      setCurrentTab('song_list')
+    }
+  })
 
   return (
     <Tabs.Root
-      class="flex flex-col w-70vw max-w-300px h-60vh overflow-hidden select-none"
+      class="flex flex-col w-70vw max-w-300px h-80vh sm:h-60vh overflow-hidden select-none"
       value={currentTab()}
       onValueChange={(e) => setCurrentTab(e.value!)}
     >
@@ -30,8 +33,8 @@ export default () => {
         </Tabs.List>
       </header>
       <div class="flex-1 overflow-y-scroll text-sm" ref={scrollDom!}>
-        <Tabs.Content value="song_list">
-          <AllSongList class="p-2" onClick={handleSongClick} />
+        <Tabs.Content value="song_list" class="h-full w-full overflow-hidden">
+          <SongListSidebarContent />
         </Tabs.Content>
         <Tabs.Content value="lyric_list">
           <LyricListView />

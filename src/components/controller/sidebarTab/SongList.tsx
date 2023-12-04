@@ -56,11 +56,11 @@ export default () => {
   )
 
   const SearchBox = () => (
-    <div class="flex items-center gap-2 h-14 border-t border-base px-4">
+    <div class="flex items-center gap-2 h-12 border-t border-base px-4">
       <Search size={16} class="fg-lighter" />
       <div class="flex-1">
         <input
-          class="bg-transparent ring-0 h-14 outline-none text-sm placeholder:op-50 dark:placeholder:op-30"
+          class="bg-transparent ring-0 h-12 outline-none text-sm placeholder:op-50 dark:placeholder:op-30"
           type="text"
           ref={inputRef!}
           onInput={handleInput}
@@ -80,7 +80,7 @@ export default () => {
   return (
     <div class="h-full flex flex-col">
       <Show when={!inputText()}>
-        <AllSongList class="flex-1 p-4" onClick={handleSongClick} />
+        <AllSongList class="flex-1 p-2" onClick={handleSongClick} />
       </Show>
       <Show when={inputText()}>
         <SearchList />
