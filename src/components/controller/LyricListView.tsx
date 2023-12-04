@@ -1,4 +1,4 @@
-import { For, Show, onMount, createEffect, on } from 'solid-js'
+import { For, Show, onMount } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
 import { $coreState } from '@/composables'
@@ -17,11 +17,11 @@ export default () => {
     scrollList = document.getElementById('scroll-list') as HTMLDivElement
   })
 
-  createEffect(on(currentTimelineData, (v) => {
+  $currentTimelineData.listen(() => {
     if (scrollList) {
       scrollList.scrollTop = 0
     }
-  }, { defer: true }));
+  })
 
   return (
     <div id="scroll-list" class="flex flex-col h-full overflow-y-auto">
