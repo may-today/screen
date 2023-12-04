@@ -48,3 +48,9 @@
     opacity: 0;
   }
 }
+
+@media(hover: hover) and (pointer: fine) {
+  .hv-base {
+    @apply hover:bg-base-100;
+  }
+}
