@@ -1,6 +1,6 @@
 import { $allDataDict, $groupMetaList, $updateTime, setDataDownloadStatus } from '@/stores/data'
 import type { SongMeta, SongDetail, SearchItem } from '@/types'
-import dataJj from '@/assets/data-jj'
+import { dataset } from '@/assets/dataset'
 
 const saveAndParseDetailList = (list: SongDetail[], updateTime: string | null) => {
   if (updateTime) {
@@ -37,20 +37,19 @@ const generateMetaGroupList = (list: SongDetail[]) => {
 }
 
 export const loadStorageData = async () => {
-  // const allSongData = localStorage.getItem('allSongData')
-  // const lastUpdateTime = localStorage.getItem('lastUpdateTime')
-  // if (!allSongData) {
-  //   return
-  // }
-  // const allSongDataParsed = JSON.parse(allSongData)
-  // TODO: down from server
-  const allSongDataParsed = dataJj
+  const allSongData = localStorage.getItem('allSongData')
+  if (!allSongData) {
+    return
+  }
+  const allSongDataParsed = JSON.parse(allSongData)
   saveAndParseDetailList(allSongDataParsed, new Date().toISOString())
 }
 
 export const fetchAndUpdateData = async () => {
   setDataDownloadStatus('downloading')
-  const allSongData: SongDetail[] = await fetch('https://mayday.blue/api/v1/detail-list').then(res => res.json()).catch(() => null)
+  // TODO: multi dataset
+  const jjlin_dataUrl = dataset.jjlin[0]
+  const allSongData: SongDetail[] = await fetch(jjlin_dataUrl).then(res => res.json()).catch(() => null)
   if (allSongData) {
     setDataDownloadStatus('done')
     const currentUpdateTime = new Date().toISOString()

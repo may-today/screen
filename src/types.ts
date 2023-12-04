@@ -53,6 +53,10 @@ export interface StateActionSyncState extends StateActionBase {
   type: 'sync_state'
   payload: StateSnapshot
 }
+export interface StateActionSetDataset extends StateActionBase {
+  type: 'set_dataset'
+  payload: string
+}
 export interface StateActionSetId extends StateActionBase {
   type: 'set_id'
   payload: string | null
@@ -86,6 +90,7 @@ export interface StateActionSetSingleLyric extends StateActionBase {
   payload: SongDetail | null
 }
 export type StateAction = StateActionSyncState
+  | StateActionSetDataset
   | StateActionSetId
   | StateActionSetLyricLine
   | StateActionSetStartPause
