@@ -6,7 +6,6 @@ import { singleTrackPlaceholderId } from '@/logic/singleTrack'
 import type { SongMeta, SongDetail, DataDownloadStatus } from '@/types'
 
 export const $allDataDict = atom<Record<string, SongDetail>>({})
-export const $updateTime = atom<string | null>(null)
 export const $groupMetaList = atom<Record<string, SongMeta[]>>({})
 export const $dataDownloadStatus = atom<DataDownloadStatus>('ready')
 

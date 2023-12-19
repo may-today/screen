@@ -26,7 +26,7 @@ const themeColor = Astro.props.themeColor || '#0A0A0A'
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
-		<meta name="description" content="五月天云端提词器">
+		<meta name="description" content="五迷创作的云端提词器">
 		{ import.meta.env.HEAD_SCRIPTS ? <Fragment set:html={import.meta.env.HEAD_SCRIPTS} /> : null }
 		<script src="/src/pwa.ts"></script>
     { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }

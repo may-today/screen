@@ -103,6 +103,7 @@ export type StateAction = StateActionSyncState
 export interface StateSnapshot {
   time: number
   state: {
+    dataset: string
     currentSongId: string | null
     blackScreen: boolean
     autoPlay: boolean

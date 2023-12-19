@@ -1,6 +1,7 @@
 import { atom } from 'nanostores'
 import type { ExtraView, SongDetail } from '@/types'
 
+export const $dataset = atom<string>('mayday')
 export const $currentSongId = atom<string | null>(null)
 export const $blackScreen = atom<boolean>(false)
 export const $autoPlay = atom<boolean>(false)

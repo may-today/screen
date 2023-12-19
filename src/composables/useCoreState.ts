@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack, $currentLyricIndex } from '@/stores/coreState'
+import { $dataset, $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack, $currentLyricIndex } from '@/stores/coreState'
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
@@ -52,6 +52,9 @@ export const useCoreState = () => {
       case 'sync_state':
         pullSnapShot(action.payload)
         break
+      case 'set_dataset':
+        setDataset(action.payload)
+        break
       case 'set_id':
         setSongId(action.payload)
         break
@@ -92,6 +95,7 @@ export const useCoreState = () => {
     const currentSnapshot: StateSnapshot = {
       time: stateTime(),
       state: {
+        dataset: $dataset.get(),
         currentSongId: $currentSongId.get(),
         currentTime: $timeServer.$currentTime.get(),
         currentLyricIndex: $currentLyricIndex.get(),
@@ -117,6 +121,7 @@ export const useCoreState = () => {
     }
     console.log('pullSnapShot useRemote')
     const state = snapshot.state
+    $dataset.set(state.dataset)
     $singleTrack.set(state.singleTrack)
     $currentSongId.set(state.currentSongId)
     $blackScreen.set(state.blackScreen)
@@ -128,6 +133,14 @@ export const useCoreState = () => {
     $autoPlay.set(state.autoPlay)
     $extraView.set(state.extraView)
     setStateTime(snapshot.time)
+  }
+
+  const setDataset = (dataset: string) => {
+    if (dataset === $dataset.get()) {
+      return
+    }
+    $dataset.set(dataset)
+    setSongId(null)
   }
 
   const setSongId = (id: string | null) => {

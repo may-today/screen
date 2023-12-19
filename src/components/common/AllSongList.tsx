@@ -1,5 +1,6 @@
 import { For } from 'solid-js'
 import { useStore } from '@nanostores/solid'
+import clsx from 'clsx'
 import { $groupMetaList } from '@/stores/data'
 import { $currentSongId } from '@/stores/coreState'
 import { $coreState } from '@/composables'
@@ -31,10 +32,10 @@ export default (props: Props) => {
               <For each={list}>
                 {song => (
                   <div
-                    class={[
+                    class={clsx([
                       'flex items-center px-3 py-2 rounded hv-base',
                       song.slug === currentSongId() ? 'fg-primary font-bold bg-primary hover:bg-primary' : 'hover:bg-base-200'
-                    ].join(' ')}
+                    ])}
                     onClick={() => handleSongClick(song.slug)}
                   >
                     { song.title }

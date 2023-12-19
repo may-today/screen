@@ -1,11 +1,8 @@
-import { $allDataDict, $groupMetaList, $updateTime, setDataDownloadStatus } from '@/stores/data'
+import { $allDataDict, $groupMetaList, setDataDownloadStatus } from '@/stores/data'
 import type { SongMeta, SongDetail, SearchItem } from '@/types'
-import { dataset } from '@/assets/dataset'
+import { datasetConfig } from '@/assets/dataset'
 
-const saveAndParseDetailList = (list: SongDetail[], updateTime: string | null) => {
-  if (updateTime) {
-    $updateTime.set(updateTime)
-  }
+const saveAndParseDetailList = (list: SongDetail[]) => {
   const dict = generateDataDict(list)
   $allDataDict.set(dict)
   const group = generateMetaGroupList(list)
@@ -36,29 +33,32 @@ const generateMetaGroupList = (list: SongDetail[]) => {
   return indexGroup
 }
 
-export const loadStorageData = async () => {
-  const allSongData = localStorage.getItem('allSongData')
+export const loadStorageData = async (dataset: string) => {
+  const allSongData = localStorage.getItem(`data_${dataset}`) || null
   if (!allSongData) {
+    saveAndParseDetailList([])
     return
   }
   const allSongDataParsed = JSON.parse(allSongData)
-  saveAndParseDetailList(allSongDataParsed, new Date().toISOString())
+  saveAndParseDetailList(allSongDataParsed)
 }
 
-export const fetchAndUpdateData = async () => {
+export const fetchAndUpdateData = async (dataset: string) => {
   setDataDownloadStatus('downloading')
-  // TODO: multi dataset
-  const jjlin_dataUrl = dataset.jjlin[0]
-  const allSongData: SongDetail[] = await fetch(jjlin_dataUrl).then(res => res.json()).catch(() => null)
-  if (allSongData) {
-    setDataDownloadStatus('done')
-    const currentUpdateTime = new Date().toISOString()
-    saveAndParseDetailList(allSongData, currentUpdateTime)
-    localStorage.setItem('allSongData', JSON.stringify(allSongData))
-    localStorage.setItem('lastUpdateTime', currentUpdateTime)
-  } else {
+  const datasetUrl = datasetConfig[dataset]?.downUrl || null
+  if (!datasetUrl) {
     setDataDownloadStatus('error')
+    return false
   }
+  const allSongData: SongDetail[] = await fetch(datasetUrl).then(res => res.json()).catch(() => null)
+  if (!allSongData) {
+    setDataDownloadStatus('error')
+    return false
+  }
+  setDataDownloadStatus('done')
+  saveAndParseDetailList(allSongData)
+  localStorage.setItem(`data_${dataset}`, JSON.stringify(allSongData))
+  return true
 }
 
 export const searchByString = (str: string, list: SongDetail[]) => {
