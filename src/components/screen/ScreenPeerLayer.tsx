@@ -16,7 +16,7 @@ export default () => {
   const roomId = useStore($roomId)
   const connectionDialogOpen = useStore($connectionDialogOpen)
 
-  const sessionRoomId = sessionStorage.getItem('roomId')
+  const sessionRoomId = sessionStorage.getItem('screenRoomId')
   const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
   const serverOptions = getServerOptions()
   const customPeerHost = getCustomPeerHost()
@@ -27,7 +27,7 @@ export default () => {
   peer.on('open', (id) => {
     $roomId.set(id)
     setConnectStatus('ready')
-    sessionStorage.setItem('roomId', id)
+    sessionStorage.setItem('screenRoomId', id)
   })
   handlePeer(peer)
 

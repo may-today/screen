@@ -16,7 +16,7 @@ import type { StateAction } from '@/types'
 export default () => {
   const connectStatus = useStore($connectStatus)
   const connectionDialogOpen = useStore($connectionDialogOpen)
-  const sessionRoomId = sessionStorage.getItem('roomId')
+  const sessionRoomId = sessionStorage.getItem('controllerRoomId')
   const uuid = sessionStorage.getItem('controllerUUID') || Math.random().toString(32).slice(2, 10)
   const serverOptions = getServerOptions()
   const customPeerHost = getCustomPeerHost()
@@ -44,7 +44,7 @@ export default () => {
     conn.on('open', () => {
       console.log('conn open', conn.peer)
       setConnectStatus('connected')
-      sessionStorage.setItem('roomId', conn.peer)
+      sessionStorage.setItem('controllerRoomId', conn.peer)
       $peerConnect.set(conn)
       $connectionDialogOpen.set(false)
       $roomId.set(conn.peer)
