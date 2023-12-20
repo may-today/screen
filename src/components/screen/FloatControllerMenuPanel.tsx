@@ -1,9 +1,10 @@
 import { createSignal } from 'solid-js'
 import { $currentSongId } from '@/stores/coreState'
 import Logo from '@/components/common/Logo'
-import LyricListView from '@/components/controller/LyricListView'
+import LyricListView from '@/components/common/LyricListView'
 import FloatControlBarStatusBar from '@/components/screen/FloatControlBarStatusBar'
 import SongListSidebarContent from '@/components/common/SongListSidebarContent'
+import FloatControlBarTimerInfoView from './FloatControlBarTimerInfoView'
 import { Tabs } from '@ark-ui/solid'
 
 export default () => {
@@ -36,8 +37,11 @@ export default () => {
         <Tabs.Content value="song_list" class="h-full w-full overflow-hidden">
           <SongListSidebarContent />
         </Tabs.Content>
-        <Tabs.Content value="lyric_list">
-          <LyricListView />
+        <Tabs.Content value="lyric_list" class="h-full w-full flex flex-col">
+          <div class="flex-1 overflow-hidden">
+            <LyricListView />
+          </div>
+          <FloatControlBarTimerInfoView />
         </Tabs.Content>
       </div>
       <footer>

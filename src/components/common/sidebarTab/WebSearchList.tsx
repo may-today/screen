@@ -17,7 +17,7 @@ export default () => {
   const handleSongClick = async (song: WebSearchTrackItem) => {
     const lyricList = await getLyricByTrackId(song.id)
     if (!lyricList) {
-      toast().create({ title: '下载失败', description: '暂时没有该歌曲的歌词' })
+      toast().create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
       return
     }
     const singleTrack: SongDetail = {

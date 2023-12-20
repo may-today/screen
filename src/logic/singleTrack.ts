@@ -22,6 +22,10 @@ const screenApiHost = 'https://screen-api.mayday.blue'
 
 export const getTrackListByKeyword = async (keyword: string) => {
   const res = await fetch(`${screenApiHost}/song_search?q=${keyword}`)
+  if (!res.ok) {
+    console.error(res.statusText)
+    return null
+  }
   const data = await res.json()
   if (data.error) {
     console.error(data.error)
@@ -32,6 +36,10 @@ export const getTrackListByKeyword = async (keyword: string) => {
 
 export const getLyricByTrackId = async (trackId: string) => {
   const res = await fetch(`${screenApiHost}/get_lyric?trackid=${trackId}`)
+  if (!res.ok) {
+    console.error(res.statusText)
+    return null
+  }
   const data = await res.json()
   if (data.error) {
     console.error(data.error)
