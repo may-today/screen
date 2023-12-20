@@ -1,7 +1,7 @@
 import { For, Show, createSignal } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
-import { Tabs, Menu } from '@ark-ui/solid'
+import { Tabs, Menu, Popover } from '@ark-ui/solid'
 import { ChevronsUpDown } from 'lucide-solid'
 import { $coreState } from '@/composables'
 import { $dataset } from '@/stores/coreState'
@@ -17,8 +17,8 @@ export default () => {
     datasetConfig[dataset()] || null
   )
 
-  const handleSelectDataset = ({value}: {value: string}) => {
-    $coreState.triggerAction({ type: 'set_dataset', payload: value })
+  const handleSelectDataset = (key: string) => {
+    $coreState.triggerAction({ type: 'set_dataset', payload: key })
   }
 
   return (
@@ -39,29 +39,30 @@ export default () => {
       <Tabs.List class="flex items-center px-3 h-12 border-t border-base">
         <Tabs.Trigger value="local_list">
           <Show when={currentTab() === 'local_list'} fallback={`${currentDatasetInfo().name}曲库`}>
-            <Menu.Root onSelect={handleSelectDataset} highlightedId={dataset()}>
-              <Menu.Trigger class="fcc gap-1 p-1 -m-1">
+            <Popover.Root modal>
+              <Popover.Trigger class="fcc gap-1 p-1 -m-1">
                 <span>{currentDatasetInfo().name}曲库</span>
                 <ChevronsUpDown size={16} />
-              </Menu.Trigger>
-              <Menu.Positioner>
-                <Menu.Content>
+              </Popover.Trigger>
+              <Popover.Positioner>
+                <Popover.Content class="py-1">
                   <For each={Object.keys(datasetConfig)}>
                     {(key) => (
-                      <Menu.Item
+                      <Popover.CloseTrigger
                         id={key}
                         class={clsx([
                           'flex items-center px-3 py-2 rounded hv-base',
                           key === dataset() ? 'fg-primary font-bold bg-primary hover:bg-primary' : 'hover:bg-base-200'
                         ])}
+                        onClick={() => handleSelectDataset(key)}
                       >
                         {datasetConfig[key].name}曲库
-                      </Menu.Item>
+                      </Popover.CloseTrigger>
                     )}
                   </For>
-                </Menu.Content>
-              </Menu.Positioner>
-            </Menu.Root>
+                </Popover.Content>
+              </Popover.Positioner>
+            </Popover.Root>
           </Show>
         </Tabs.Trigger>
         <Tabs.Trigger value="web_list">网络搜索</Tabs.Trigger>

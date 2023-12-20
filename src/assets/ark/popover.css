@@ -6,6 +6,10 @@
   @apply bg-transparent;
 }
 
+[data-scope='popover'][data-part='close-trigger'] {
+  @apply bg-transparent;
+}
+
 [data-scope='popover'][data-part='content'] {
   @apply bg-base;
   @apply border border-base rounded-md overflow-hidden;
