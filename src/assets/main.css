@@ -38,6 +38,18 @@
   animation-fill-mode: forwards;
 }
 
+.loading-anim::before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-image: linear-gradient(90deg, #ffffff00 0%, #ffffff66 35%, #ffffff66 65%, #ffffff00 100%);
+  width: 60%;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-name: progress-bar-loop;
+}
+
 @keyframes text-out {
   from {
     transform: translateX(0);
@@ -46,6 +58,15 @@
   to {
     transform: translateX(-6px);
     opacity: 0;
+  }
+}
+
+@keyframes progress-bar-loop {
+  from {
+    left: -60%;
+  }
+  to {
+    left: 110%;
   }
 }
 

@@ -1,5 +1,6 @@
 import { For, createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
+import clsx from 'clsx'
 import { Toast, createToaster } from '@ark-ui/solid'
 import { Search, X } from 'lucide-solid'
 import { debounce } from '@solid-primitives/scheduled'
@@ -13,10 +14,31 @@ export default () => {
   let inputRef: HTMLInputElement
   const [inputText, setInputText] = createSignal<string>('')
   const [filteredList, setFilteredList] = createSignal<WebSearchTrackItem[]>([])
+  const [isLoading, setIsLoading] = createSignal<boolean>(false)
+
+  const handleInput = () => {
+    const input = inputRef.value
+    setInputText(input)
+    if (!input) {
+      setFilteredList([])
+      return
+    }
+    debounceHandleSearch(input)
+  }
+
+  const handleSearch = async (str: string) => {
+    setIsLoading(true)
+    const filteredList = await getTrackListByKeyword(str) || []
+    setFilteredList(filteredList)
+    setIsLoading(false)
+  }
+  const debounceHandleSearch = debounce(handleSearch, 1000)
 
   const handleSongClick = async (song: WebSearchTrackItem) => {
+    setIsLoading(true)
     const lyricList = await getLyricByTrackId(song.id)
     if (!lyricList) {
+      setIsLoading(false)
       toast().create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
       return
     }
@@ -32,23 +54,8 @@ export default () => {
     $coreState.triggerAction({ type: 'set_single_track', payload: singleTrack })
     clearInputState()
     $sidebarOpen.set(false)
+    setIsLoading(false)
   }
-
-  const handleInput = () => {
-    const input = inputRef.value
-    setInputText(input)
-    if (!input) {
-      setFilteredList([])
-      return
-    }
-    debounceHandleSearch(input)
-  }
-
-  const handleSearch = async (str: string) => {
-    const filteredList = await getTrackListByKeyword(str)
-    setFilteredList(filteredList)
-  }
-  const debounceHandleSearch = debounce(handleSearch, 1000)
 
   const clearInputState = () => {
     inputRef.value = ''
@@ -96,7 +103,11 @@ export default () => {
   )
 
   const SearchBox = () => (
-    <div class="flex items-center gap-2 h-12 border-t border-base px-4">
+    <div class="relative flex items-center gap-2 h-12 border-t border-base px-4">
+      <div class={clsx([
+        'absolute top-0 left-0 right-0 h-[1px]',
+        isLoading() ? 'loading-anim' : 'bg-transparent',
+      ])} />
       <Search size={16} class="fg-lighter" />
       <div class="flex-1">
         <input
