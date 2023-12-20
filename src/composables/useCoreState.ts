@@ -144,10 +144,10 @@ export const useCoreState = () => {
   }
 
   const setSongId = (id: string | null) => {
-    $currentSongId.set(id)
     $timeServer.clear()
     $currentLyricIndex.set(-1)
     $autoPlay.set(false)
+    $currentSongId.set(id)
     if (id !== singleTrackPlaceholderId) {
       setSingleTrack(null)
     }
