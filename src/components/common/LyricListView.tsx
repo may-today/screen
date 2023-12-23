@@ -1,4 +1,4 @@
-import { For, Show, onMount } from 'solid-js'
+import { For, Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
 import { $coreState } from '@/composables'
@@ -11,20 +11,16 @@ export default () => {
   const currentTimelineData = useStore($currentTimelineData)
   const currentLyricIndex = useStore($currentLyricIndex)
 
-  let scrollList: HTMLDivElement | null = null
-
-  onMount(() => {
-    scrollList = document.getElementById('scroll-list') as HTMLDivElement
-  })
+  let scrollDiv: HTMLDivElement
 
   $currentTimelineData.listen(() => {
-    if (scrollList) {
-      scrollList.scrollTop = 0
-    }
+    setTimeout(() => {
+      scrollDiv.scrollTop = 0
+    }, 0)
   })
 
   return (
-    <div id="scroll-list" class="flex flex-col h-full overflow-y-auto">
+    <div ref={scrollDiv!} class="flex flex-col h-full overflow-y-auto">
       <For each={currentTimelineData()}>
         {(line, index) => (
           <div

@@ -3,10 +3,10 @@ import { $statusText } from './ui'
 import { $currentSongId, $singleTrack } from './coreState'
 import { parseLyricTimeline } from '@/logic/lyric'
 import { singleTrackPlaceholderId } from '@/logic/singleTrack'
-import type { SongMeta, SongDetail, DataDownloadStatus } from '@/types'
+import type { GroupListItem, SongDetail, DataDownloadStatus } from '@/types'
 
 export const $allDataDict = atom<Record<string, SongDetail>>({})
-export const $groupMetaList = atom<Record<string, SongMeta[]>>({})
+export const $metaGroupList = atom<GroupListItem[]>([])
 export const $dataDownloadStatus = atom<DataDownloadStatus>('ready')
 
 export const $currentSongData = computed([$currentSongId, $allDataDict, $singleTrack], (songId, dict, singleTrack) => {

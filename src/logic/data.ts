@@ -1,4 +1,4 @@
-import { $allDataDict, $groupMetaList, setDataDownloadStatus } from '@/stores/data'
+import { $allDataDict, $metaGroupList, setDataDownloadStatus } from '@/stores/data'
 import type { SongMeta, SongDetail, SearchItem } from '@/types'
 import { datasetConfig } from '@/assets/dataset'
 
@@ -6,7 +6,7 @@ const saveAndParseDetailList = (list: SongDetail[]) => {
   const dict = generateDataDict(list)
   $allDataDict.set(dict)
   const group = generateMetaGroupList(list)
-  $groupMetaList.set(group)
+  $metaGroupList.set(group)
 }
 
 const generateDataDict = (list: SongDetail[]) => {
@@ -30,7 +30,11 @@ const generateMetaGroupList = (list: SongDetail[]) => {
     } as SongMeta
     indexGroup[song.index].push(meta)
   })
-  return indexGroup
+  const groupList = Object.keys(indexGroup).map(index => ({
+    index,
+    list: indexGroup[index],
+  }))
+  return groupList
 }
 
 export const loadStorageData = async (dataset: string) => {

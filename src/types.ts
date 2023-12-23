@@ -11,6 +11,11 @@ export interface SongMeta {
   }
 }
 
+export interface GroupListItem {
+  index: string
+  list: SongMeta[]
+}
+
 export type SongDetail = SongMeta & {
   detail: LyricLine[]
 }

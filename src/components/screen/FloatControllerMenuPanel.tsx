@@ -8,13 +8,11 @@ import FloatControlBarTimerInfoView from './FloatControlBarTimerInfoView'
 import { Tabs } from '@ark-ui/solid'
 
 export default () => {
-  let scrollDom: HTMLDivElement
   const [currentTab, setCurrentTab] = createSignal('song_list')
 
   $currentSongId.listen((songId) => {
     if (songId) {
       setCurrentTab('lyric_list')
-      scrollDom.scrollTo({ top: 0 })
     } else {
       setCurrentTab('song_list')
     }
@@ -33,11 +31,11 @@ export default () => {
           <Tabs.Trigger value="lyric_list">歌词</Tabs.Trigger>
         </Tabs.List>
       </header>
-      <div class="flex-1 overflow-y-scroll text-sm" ref={scrollDom!}>
+      <div class="flex-1 text-sm overflow-hidden">
         <Tabs.Content value="song_list" class="h-full w-full overflow-hidden">
           <SongListSidebarContent />
         </Tabs.Content>
-        <Tabs.Content value="lyric_list" class="h-full w-full flex flex-col">
+        <Tabs.Content value="lyric_list" class="h-full w-full flex flex-col overflow-hidden">
           <div class="flex-1 overflow-hidden">
             <LyricListView />
           </div>

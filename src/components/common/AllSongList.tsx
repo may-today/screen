@@ -1,7 +1,7 @@
 import { For } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
-import { $groupMetaList } from '@/stores/data'
+import { $metaGroupList } from '@/stores/data'
 import { $currentSongId } from '@/stores/coreState'
 import { $coreState } from '@/composables'
 
@@ -11,8 +11,14 @@ interface Props {
 }
 
 export default (props: Props) => {
-  const groupMetaList = useStore($groupMetaList)
+  const metaGroupList = useStore($metaGroupList)
   const currentSongId = useStore($currentSongId)
+
+  let scrollDiv: HTMLDivElement
+
+  $metaGroupList.listen(() => {
+    scrollDiv.scrollTop = 0
+  })
 
   const handleSongClick = (songId: string) => {
     if (props.onClick) {
@@ -23,13 +29,13 @@ export default (props: Props) => {
   }
 
   return (
-    <div class={`h-full overflow-auto ${props.class || ''}`}>
-      <For each={Object.entries(groupMetaList())}>
-        {([key, list]) => (
-          <>
-            <h1 class="px-3 py-1 fg-primary font-bold">{key}</h1>
+    <div ref={scrollDiv!} class={`h-full overflow-auto ${props.class || ''}`}>
+      <For each={metaGroupList()}>
+        {(group) => (
+          <div>
+            <h1 class="px-3 py-1 fg-primary font-bold">{group.index}</h1>
             <div>
-              <For each={list}>
+              <For each={group.list}>
                 {song => (
                   <div
                     class={clsx([
@@ -43,7 +49,7 @@ export default (props: Props) => {
                 )}
               </For>
             </div>
-          </>
+          </div>
         )}
       </For>
     </div>
