@@ -23,7 +23,7 @@ export default () => {
   }
 
   return (
-    <div class="flex items-stretch justify-between h-14 border-t border-base overflow-hidden">
+    <div class="flex items-stretch justify-between shrink-0 h-14 border-t border-base overflow-hidden">
       <div class="flex-1 flex items-center gap-1 px-4 border-r border-base">
         <h3 class="flex items-center gap-1 cursor-pointer h-full p-2 -ml-2" onClick={() => $sidebarOpen.set(true)}>
           <Menu size={16} strokeWidth={1} class="fg-base shrink-0" />

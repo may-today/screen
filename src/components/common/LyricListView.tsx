@@ -20,13 +20,13 @@ export default () => {
   })
 
   return (
-    <div ref={scrollDiv!} class="flex flex-col h-full overflow-y-auto">
+    <div ref={scrollDiv!} class="flex-1 flex flex-col h-full overflow-y-auto">
       <For each={currentTimelineData()}>
         {(line, index) => (
           <div
             class={
               clsx([
-                'relative flex items-start gap-2 px-6 py-2 border-b border-base cursor-pointer',
+                'relative flex shrink-0 items-start gap-2 px-6 py-2 border-b border-base cursor-pointer',
                 currentLyricIndex() === index() ? 'bg-primary hover:bg-primary' : 'hv-base'
               ])
             }

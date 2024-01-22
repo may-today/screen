@@ -36,7 +36,7 @@ export default () => {
           <SongListSidebarContent />
         </Tabs.Content>
         <Tabs.Content value="lyric_list" class="h-full w-full flex flex-col overflow-hidden">
-          <div class="flex-1 overflow-hidden">
+          <div class="flex-1 flex flex-col items-stretch overflow-hidden">
             <LyricListView />
           </div>
           <FloatControlBarTimerInfoView />
