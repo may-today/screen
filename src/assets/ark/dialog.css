@@ -1,10 +1,10 @@
 [data-scope='dialog'][data-part='backdrop'] {
-  @apply fixed inset-0 z-20;
+  @apply fixed top-0 left-0 bottom-0 w-100vw z-20;
   --at-apply: 'bg-black/70';
 }
 
 [data-scope='dialog'][data-part='positioner'] {
-  @apply fcc fixed inset-0 z-20;
+  @apply fixed fcc top-0 left-0 bottom-0 w-100vw z-20;
 }
 
 [data-scope='dialog'][data-part='content'] {
