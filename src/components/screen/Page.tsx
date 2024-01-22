@@ -15,7 +15,7 @@ export default () => {
   const blackScreen = useStore($blackScreen)
 
   return (
-    <div class="w-screen h-[-webkit-fill-available] h-[100svh] p-[6vmin] text-[30vmin] overflow-hidden">
+    <div class="w-screen h-[100svh] p-[6vmin] text-[30vmin] overflow-hidden">
       <Presence exitBeforeEnter>
         <Switch>
           <Match when={blackScreen()}>
