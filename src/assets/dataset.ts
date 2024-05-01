@@ -11,6 +11,10 @@ export const datasetConfig = {
     name: '林俊杰',
     downUrl: 'https://wx-static.ddiu.site/dataset/jjlin.json',
   },
+  fhcq: {
+    name: '凤凰传奇',
+    downUrl: 'https://wx-static.ddiu.site/dataset/fhcq.json',
+  },
 } as Record<string, {
   name: string
   downUrl: string
