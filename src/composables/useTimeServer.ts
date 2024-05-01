@@ -20,7 +20,7 @@ export const useTimeServer = () => {
     pause()
     $currentTime.set(0)
   }
-  const restoreStste = (state: { currentTime: number; isTimerRunning: boolean }) => {
+  const restoreState = (state: { currentTime: number; isTimerRunning: boolean }) => {
     $currentTime.set(state.currentTime)
     if (state.isTimerRunning) {
       start()
@@ -35,7 +35,7 @@ export const useTimeServer = () => {
     start,
     pause,
     clear,
-    restoreStste,
+    restoreState,
   }
 }
 

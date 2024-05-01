@@ -125,7 +125,7 @@ export const useCoreState = () => {
     $singleTrack.set(state.singleTrack)
     $currentSongId.set(state.currentSongId)
     $blackScreen.set(state.blackScreen)
-    $timeServer.restoreStste({
+    $timeServer.restoreState({
       currentTime: state.currentTime,
       isTimerRunning: state.isTimerRunning,
     })
