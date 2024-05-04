@@ -12,7 +12,9 @@ export default (props: Props) => {
         <p class="h-full text-[190px] text-[24vmin] leading-tight text-center font-bold">{props.view!.data}</p>
       </Show>
       <Show when={props.view?.type === 'image'}>
-        <img class="max-w-screen max-h-screen" src={props.view!.data} alt="img" />
+        <div class="absolute inset-0 fcc">
+          <img class="w-auto h-auto h-full max-w-screen max-h-screen" src={props.view!.data} alt="img" />
+        </div>
       </Show>
     </>
   )

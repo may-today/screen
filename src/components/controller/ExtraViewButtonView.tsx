@@ -138,14 +138,14 @@ export default (props: Props) => {
                     />
                   </Tabs.Content>
                   <Tabs.Content value="image">
-                    <div class="fcc gap-1 p-4 aspect-video border border-base rounded-md" onClick={handleClickUpload}>
+                    <div class="fcc gap-1 p-4 aspect-video border border-base rounded-md overflow-hidden" onClick={handleClickUpload}>
                       <Show when={tempFileSource()} fallback={(
                         <>
                           <HardDriveUpload size={20} strokeWidth={1.5} class="op-50" />
                           <span class="op-50 text-sm">从相册选择</span>
                         </>
                       )}>
-                        <img class="max-w-full max-h-full" src={tempFileSource()} alt="img-preview" />
+                        <img class="w-auto h-auto h-full max-w-full max-h-full" src={tempFileSource()} alt="img-preview" />
                       </Show>
                     </div>
                   </Tabs.Content>
