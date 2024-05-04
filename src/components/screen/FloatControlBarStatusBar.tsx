@@ -7,6 +7,7 @@ import { X, EyeOff } from 'lucide-solid'
 import { $blackScreen } from '@/stores/coreState'
 import Button from '@/components/common/Button'
 import ToggleButton from '@/components/common/ToggleButton'
+import ExtraViewButtonView from '@/components/controller/ExtraViewButtonView'
 
 export default () => {
   const currentSongData = useStore($currentSongData)
@@ -31,9 +32,9 @@ export default () => {
           </Button>
         </Show>
       </div>
+      <ExtraViewButtonView type="simple" class="border-r border-base" />
       <ToggleButton toggle={blackScreen()} onClick={handleToggleBlackScreen}>
         <EyeOff size={16} />
-        <span>关屏</span>
       </ToggleButton>
     </div>
   )

@@ -1,4 +1,5 @@
 import { createSignal, Show } from 'solid-js'
+import clsx from 'clsx'
 import { useStore } from '@nanostores/solid'
 import { Keyboard, X, HardDriveUpload } from 'lucide-solid'
 import { Portal } from 'solid-js/web'
@@ -18,7 +19,12 @@ const toBase64 = (file: File): Promise<string | ArrayBuffer | null> => new Promi
   reader.onerror = reject;
 })
 
-export default () => {
+interface Props {
+  class?: string
+  type?: 'simple' | 'normal'
+}
+
+export default (props: Props) => {
   const extraView = useStore($extraView)
   const [showDialog, setShowDialog] = createSignal(false)
   const [currentTab, setCurrentTab] = createSignal('text')
@@ -86,15 +92,22 @@ export default () => {
       setTempFileSource('')
       setShowDialog(false)
     }
-    
   }
 
   return (
     <Dialog open={showDialog()} onOpenChange={handleDialogOpenChange}>
-      <Dialog.Trigger class="w-full h-full bg-transparent">
+      <Dialog.Trigger
+        class={clsx([
+          props.type !== 'simple' ? 'w-full h-full' : '',
+          'bg-transparent',
+          props.class || '',
+        ]
+      )}>
         <ToggleButton toggle={!!extraView()} class="w-full h-full">
           <Keyboard size={16} />
-          <span>图片/文字</span>
+          <Show when={props.type !== 'simple'}>
+            <span>图片/文字</span>
+          </Show>
         </ToggleButton>
       </Dialog.Trigger>
       <Portal>
