@@ -25,10 +25,6 @@ export default (props: Props) => {
               <Dialog.Description>五迷创作的云端提词器</Dialog.Description>
             </div>
             <div class="p-6 pt-3">
-              <p class="text-sm leading-relaxed fg-lighter">感谢参与曲库整理的你们：</p>
-              <p class="text-sm leading-relaxed fg-lighter">五月天/周杰伦曲库：<a class="fg-base" target="_blank" href="https://ddiu.io">Diu</a></p>
-              <p class="text-sm leading-relaxed fg-lighter">林俊杰曲库：拱廊</p>
-              <br />
               <p class="text-sm leading-relaxed fg-lighter">制作: <a class="fg-base" target="_blank" href="https://ddiu.io">Diu</a></p>
               <p class="text-sm leading-relaxed fg-lighter">源代码: <a class="fg-base" target="_blank" href="https://github.com/may-today/screen">may-today/screen</a></p>
             </div>
