@@ -138,7 +138,7 @@ export default (props: Props) => {
                     />
                   </Tabs.Content>
                   <Tabs.Content value="image">
-                    <div class="fcc gap-1 p-4 aspect-video border border-base rounded-md overflow-hidden" onClick={handleClickUpload}>
+                    <div class="fcc gap-1 aspect-[4/3] border border-base rounded-md overflow-hidden" onClick={handleClickUpload}>
                       <Show when={tempFileSource()} fallback={(
                         <>
                           <HardDriveUpload size={20} strokeWidth={1.5} class="op-50" />
