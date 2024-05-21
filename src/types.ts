@@ -6,8 +6,11 @@ export interface SongMeta {
     artist?: string
     year?: number
     album?: string
-    banlam?: boolean
+    lyricist?: string
+    composer?: string
+    banlam: boolean
     length?: number
+    showTitle?: string
   }
 }
 
