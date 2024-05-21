@@ -1,7 +1,7 @@
 export const datasetConfig = {
   mayday: {
     name: '五月天',
-    downUrl: 'https://wx-static.ddiu.site/dataset/mayday.json',
+    downUrl: 'https://wx-static.ddiu.site/dataset/mayday-5525.json',
   },
   jayzhou: {
     name: '周杰伦',
