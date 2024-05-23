@@ -157,11 +157,12 @@ export const useCoreState = () => {
     if (!$currentSongId.get()) {
       return
     }
-    $currentLyricIndex.set(index)
     if (index < 0) {
       $timeServer.clear()
+      $currentLyricIndex.set(index)
       return
     }
+    $currentLyricIndex.set(index)
     const timeline = $currentTimelineData.get()
     const targetStartTime = timeline[index].startTime
     if (targetStartTime >= 0) {
@@ -228,6 +229,7 @@ export const useCoreState = () => {
   }
 
   return {
+    currentLyricIndex,
     currentLyricLine,
     triggerAction,
     receiveAction,
