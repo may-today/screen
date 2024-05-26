@@ -4,6 +4,7 @@ import type { LyricLine } from '@/types'
 
 interface Props {
   lyric: LyricLine
+  nextLyric?: LyricLine
 }
 
 export default (props: Props) => {

@@ -41,7 +41,7 @@ export default () => {
               </div>
             </Show>
             <div class={clsx([
-              'flex-1',
+              'flex-1 min-h-[1em]',
               line.data.isHighlight ? 'fg-primary' : '',
               currentLyricIndex() === index() ? 'font-bold' : ''
             ])}>

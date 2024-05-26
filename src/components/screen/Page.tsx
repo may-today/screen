@@ -11,6 +11,7 @@ import ExtraViewScreenView from './ExtraViewScreenView'
 export default () => {
   const currentSongData = useStore($currentSongData)
   const currentLyricLine = $coreState.currentLyricLine
+  const nextLyricLine = $coreState.nextLyricLine
   const extraView = useStore($extraView)
   const blackScreen = useStore($blackScreen)
 
@@ -26,7 +27,7 @@ export default () => {
             </Motion>
           </Match>
           <Match when={currentLyricLine()}>
-            <LyricScreenView lyric={currentLyricLine()!.data} />
+            <LyricScreenView lyric={currentLyricLine()!.data} nextLyric={nextLyricLine()?.data} />
           </Match>
           <Match when={currentSongData()}>
             <Motion animate={{ opacity: [0, 1] }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>

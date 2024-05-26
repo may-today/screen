@@ -19,6 +19,14 @@ export const useCoreState = () => {
     }
     return timelineData[index]
   }
+  const nextLyricLine = () => {
+    const timelineData = currentTimelineData()
+    const index = currentLyricIndex()
+    if (!timelineData || index < 0 || index >= timelineData.length - 1) {
+      return null
+    }
+    return timelineData[index + 1] || null
+  }
   const currentLyricTimeIndexMap = () => {
     const timelineData = currentTimelineData()
     const map = new Map<number, number>()
@@ -231,6 +239,7 @@ export const useCoreState = () => {
   return {
     currentLyricIndex,
     currentLyricLine,
+    nextLyricLine,
     triggerAction,
     receiveAction,
     pushSnapShot,
