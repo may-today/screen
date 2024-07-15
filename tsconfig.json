@@ -6,7 +6,8 @@
     "jsxImportSource": "solid-js",
     "types": [
       "vite-plugin-pwa/client",
-      "vite-plugin-pwa/info"
+      "vite-plugin-pwa/info",
+      "@types/web-bluetooth"
     ],
     "paths": {
       "@/*": ["src/*"],

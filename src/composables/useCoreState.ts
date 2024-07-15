@@ -1,11 +1,22 @@
 import { createSignal } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { $dataset, $currentSongId, $blackScreen, $autoPlay, $extraView, $singleTrack, $currentLyricIndex } from '@/stores/coreState'
+import { 
+  $dataset,
+  $currentSongId,
+  $blackScreen,
+  $autoPlay,
+  $extraView,
+  $singleTrack,
+  $currentLyricIndex,
+  $stickDevices
+} from '@/stores/coreState'
 import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
 import { singleTrackPlaceholderId } from '@/logic/singleTrack'
 import type { StateAction, ExtraView, StateSnapshot, SongDetail } from '@/types'
+import { requestStick as _requestStick, writeTo } from '@/logic/bluetoothStick'
+import { m } from '@/logic/light';
 
 export const useCoreState = () => {
   const [stateTime, setStateTime] = createSignal(0)
@@ -39,7 +50,49 @@ export const useCoreState = () => {
     return map
   }
 
+  const currentLightTimeIndexMap = () => {}
+  const stickDeviceData = useStore($stickDevices);
+
+  const requestStick = () => {
+    _requestStick()
+      .then(device => {
+    
+        (window as any).dbg = {
+          device,
+          writeTo,
+        }
+
+        device.addEventListener('gattserverdisconnected', e => {
+          console.log('ble device disconnected', e, device.id)
+          $stickDevices.set(
+            [
+              ...$stickDevices.get().filter(dvc => dvc.id !== device.id),
+            ]
+          )
+        })
+        $stickDevices.set(
+          [
+            ...$stickDevices.get().filter(dvc => dvc.id !== device.id),
+            device,
+          ]
+        )
+      })
+      .catch(err => {
+        console.error('request BLE device failed', err)
+      })
+  }
+
   $timeServer.$currentTime.subscribe((time) => {
+    // !important: this is a mock test Light time precision is 100ms while lyric is 1000ms
+    // !important: we need change the precision of $timeServer
+    $stickDevices.get().forEach(device => {
+      writeTo(
+        {
+          color: m[time % m.length][0][1],
+          device,
+        }
+      )
+    })
     const timelineIndexMap = currentLyricTimeIndexMap()
     if (timelineIndexMap.has(time)) {
       $currentLyricIndex.set(timelineIndexMap.get(time)!)
@@ -244,6 +297,8 @@ export const useCoreState = () => {
     receiveAction,
     pushSnapShot,
     pullSnapShot,
+    requestStick,
+    stickDeviceData,
   } as const
 }
 
