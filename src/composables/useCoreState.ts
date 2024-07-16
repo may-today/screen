@@ -82,7 +82,8 @@ export const useCoreState = () => {
       })
   }
 
-  $timeServer.$currentTime.subscribe((time) => {
+  $timeServer.$currentTime.subscribe((time1) => {
+    const time = Math.floor(time1 / 10);
     // !important: this is a mock test Light time precision is 100ms while lyric is 1000ms
     // !important: we need change the precision of $timeServer
     $stickDevices.get().forEach(device => {

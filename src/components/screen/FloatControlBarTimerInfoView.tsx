@@ -41,7 +41,7 @@ export default () => {
           onClick={handleStartOrPauseTimer}
         >
           { isTimerRunning() ? <Play size={16} /> : <Asterisk size={16} /> }
-          <div class="text-sm font-mono">{parseTime(currentTime())}</div>
+          <div class="text-sm font-mono">{parseTime(Math.floor(currentTime() / 10))}</div>
         </div>
       </Show>
       <ToggleButton toggle={autoPlay()} disabled={!isSupportAutoPlay()} onClick={handleToggleAutoPlay}>
