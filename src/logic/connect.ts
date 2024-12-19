@@ -11,6 +11,12 @@ export const getServerOptions = () => {
       host,
       port: Number(port),
       secure: !isIp,
+      config: import.meta.env.PUBLIC_STUN_HOST ? {
+        iceServers: [
+          { url: import.meta.env.PUBLIC_STUN_HOST },
+          { url: import.meta.env.PUBLIC_TURN_HOST, username: import.meta.env.PUBLIC_TURN_USERNAME, credential: import.meta.env.PUBLIC_TURN_PASSWORD },
+        ],
+      } : undefined,
     } as PeerOptions
   }
   return {
