@@ -21,7 +21,6 @@
     "clsx": "^2.1.1",
     "limax": "^4.1.0",
     "lucide-solid": "^0.293.0",
-    "motion": "^10.16.4",
     "nanostores": "^0.9.5",
     "peerjs": "^1.5.4",
     "solid-js": "^1.9.4",
