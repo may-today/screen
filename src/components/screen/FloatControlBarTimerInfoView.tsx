@@ -7,8 +7,8 @@ import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
 import { $coreState } from '@/composables/useCoreState'
 import ToggleButton from '@/components/common/ToggleButton'
-import {Popover} from "@ark-ui/solid";
-import {Portal} from "solid-js/web";
+import { Popover } from '@ark-ui/solid'
+import { Portal } from 'solid-js/web'
 
 export default () => {
   const currentTime = useStore($timeServer.$currentTime)
