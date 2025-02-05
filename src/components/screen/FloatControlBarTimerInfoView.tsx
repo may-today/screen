@@ -7,6 +7,8 @@ import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
 import { $coreState } from '@/composables/useCoreState'
 import ToggleButton from '@/components/common/ToggleButton'
+import {Popover} from "@ark-ui/solid";
+import {Portal} from "solid-js/web";
 
 export default () => {
   const currentTime = useStore($timeServer.$currentTime)
@@ -44,10 +46,29 @@ export default () => {
           <div class="text-sm font-mono">{parseTime(currentTime())}</div>
         </div>
       </Show>
-      <ToggleButton toggle={autoPlay()} disabled={!isSupportAutoPlay()} onClick={handleToggleAutoPlay}>
-        { autoPlay() ? <AlarmClock size={16} /> : <AlarmClockOff size={16} /> }
-        <span>自动播放</span>
-      </ToggleButton>
+
+      <Show when={currentSongData() && !isSupportAutoPlay()} fallback={
+        <ToggleButton toggle={autoPlay()} disabled={!isSupportAutoPlay()} onClick={handleToggleAutoPlay}>
+          { autoPlay() ? <AlarmClock size={16} /> : <AlarmClockOff size={16} /> }
+          <span>自动播放</span>
+        </ToggleButton>
+      }>
+        <Popover.Root closeOnInteractOutside={false} positioning={{ placement: 'top' }}>
+          <Popover.Trigger>
+            <ToggleButton toggle={autoPlay()} disabled={!isSupportAutoPlay()} onClick={handleToggleAutoPlay}>
+              { autoPlay() ? <AlarmClock size={16} /> : <AlarmClockOff size={16} /> }
+              <span>自动播放</span>
+            </ToggleButton>
+          </Popover.Trigger>
+          <Portal>
+            <Popover.Positioner>
+              <Popover.Content>
+                <span class="text-sm op-50 py-1 px-2">当前歌曲不支持自动播放</span>
+              </Popover.Content>
+            </Popover.Positioner>
+          </Portal>
+        </Popover.Root>
+      </Show>
     </div>
   )
 }
