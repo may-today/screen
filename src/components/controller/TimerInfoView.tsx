@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/solid'
-import { Play, Asterisk } from 'lucide-solid'
+import { Play, Pause } from 'lucide-solid'
 import { $autoPlay } from '@/stores/coreState'
 import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
@@ -30,7 +30,7 @@ export default () => {
           class="flex items-center gap-1 px-4 border-l border-base hv-base select-none"
           onClick={handleStartOrPauseTimer}
         >
-          { isTimerRunning() ? <Play size={16} /> : <Asterisk size={16} /> }
+          { isTimerRunning() ? <Play size={16} /> : <Pause size={16} /> }
           <div class="text-sm font-mono">{parseTime(currentTime())}</div>
         </div>
       </Show>
