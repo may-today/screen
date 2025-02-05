@@ -2,7 +2,7 @@ import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
 import { Dialog } from '@ark-ui/solid'
-import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
+import { Popover } from '@ark-ui/solid'
 import { X, HelpCircle, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
@@ -63,7 +63,7 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} trapFocus={false}>
+    <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} trapFocus={false}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -78,16 +78,16 @@ export default () => {
                 <p class="text-sm fg-lighter">
                   建议在同一局域网下连接
                 </p>
-                <Popover>
-                  <PopoverTrigger>
+                <Popover.Root>
+                  <Popover.Trigger>
                     <HelpCircle class="fg-lighter" size={14} />
-                  </PopoverTrigger>
+                  </Popover.Trigger>
                   <Portal>
-                    <PopoverPositioner>
-                      <PopoverContent class="black sm z-50 p-4">我们将使用 WebRTC 连接。为保证最好的连接效果，请尽量让设备连接到同一个网络。</PopoverContent>
-                    </PopoverPositioner>
+                    <Popover.Positioner>
+                      <Popover.Content class="black sm z-50 p-4">我们将使用 WebRTC 连接。为保证最好的连接效果，请尽量让设备连接到同一个网络。</Popover.Content>
+                    </Popover.Positioner>
                   </Portal>
-                </Popover>
+                </Popover.Root>
               </div>
             </div>
             <div class="flex justify-end px-6 pb-6">
@@ -107,6 +107,6 @@ export default () => {
         </Dialog.Positioner>
         <ConnectMessageDialog />
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }

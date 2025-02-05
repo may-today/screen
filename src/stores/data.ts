@@ -1,4 +1,4 @@
-import { atom, action, computed } from 'nanostores'
+import { atom, computed } from 'nanostores'
 import { $statusText } from './ui'
 import { $currentSongId, $singleTrack } from './coreState'
 import { parseLyricTimeline } from '@/logic/lyric'
@@ -24,11 +24,11 @@ export const $currentTimelineData = computed([$currentSongData], (songData) => {
   return parseLyricTimeline(songData?.detail)
 })
 
-export const setDataDownloadStatus = action($dataDownloadStatus, 'setDataDownloadStatus', (store, status: DataDownloadStatus) => {
-  store.set(status)
+export const setDataDownloadStatus = (status: DataDownloadStatus) => {
+  $dataDownloadStatus.set(status)
   const statusText = getStatusTextByStatus(status)
   $statusText.set(statusText)
-})
+}
 
 const getStatusTextByStatus = (status: DataDownloadStatus) => {
   return {

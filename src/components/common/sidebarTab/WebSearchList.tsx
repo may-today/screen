@@ -1,7 +1,7 @@
 import { For, createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import clsx from 'clsx'
-import { Toast, createToaster } from '@ark-ui/solid'
+import { Toast, Toaster, createToaster } from '@ark-ui/solid'
 import { Search, X } from 'lucide-solid'
 import { debounce } from '@solid-primitives/scheduled'
 import { $coreState } from '@/composables'
@@ -39,7 +39,7 @@ export default () => {
     const lyricList = await getLyricByTrackId(song.id)
     if (!lyricList) {
       setIsLoading(false)
-      toast().create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
+      toaster.create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
       return
     }
     const singleTrack: SongDetail = {
@@ -63,20 +63,9 @@ export default () => {
     setFilteredList([])
   }
 
-  const [Toaster, toast] = createToaster({
+  const toaster = createToaster({
     placement: 'top-end',
     duration: 3000,
-    render(toast) {
-      return (
-        <Toast.Root>
-          <Toast.Title>{toast().title}</Toast.Title>
-          <Toast.Description>{toast().description}</Toast.Description>
-          <Toast.CloseTrigger class="fcc w-8 h-8 bg-transparent">
-            <X size={20} />
-          </Toast.CloseTrigger>
-        </Toast.Root>
-      )
-    },
   })
 
   const SearchList = () => (
@@ -135,7 +124,17 @@ export default () => {
         <SearchBox />
       </div>
       <Portal>
-        <Toaster />
+        <Toaster toaster={toaster}>
+          {(toast) => (
+              <Toast.Root>
+                <Toast.Title>{toast().title}</Toast.Title>
+                <Toast.Description>{toast().description}</Toast.Description>
+                <Toast.CloseTrigger class="fcc w-8 h-8 bg-transparent">
+                  <X size={20} />
+                </Toast.CloseTrigger>
+              </Toast.Root>
+          )}
+        </Toaster>
       </Portal>
     </>
   )

@@ -77,7 +77,7 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
+    <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -125,6 +125,6 @@ export default () => {
         </Dialog.Positioner>
         <ConnectMessageDialog />
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }

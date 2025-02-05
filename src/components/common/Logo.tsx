@@ -12,7 +12,7 @@ export default (props: Props) => {
   const [showDialog, setShowDialog] = createSignal(false)
 
   return (
-    <Dialog open={showDialog()} trapFocus={false}>
+    <Dialog.Root open={showDialog()} trapFocus={false}>
       <Dialog.Trigger>
         <span class="text-sm p-1">May<span class="fg-primary">Screen</span></span>
       </Dialog.Trigger>
@@ -39,6 +39,6 @@ export default (props: Props) => {
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }
