@@ -12,7 +12,6 @@
   "dependencies": {
     "@ark-ui/solid": "^1.1.0",
     "@astrojs/solid-js": "^3.0.2",
-    "@motionone/solid": "^10.16.4",
     "@nanostores/solid": "^0.4.2",
     "@solid-primitives/keyed": "^1.2.0",
     "@solid-primitives/scheduled": "^1.4.1",
@@ -26,6 +25,7 @@
     "nanostores": "^0.9.5",
     "peerjs": "^1.5.1",
     "solid-js": "^1.8.6",
+    "solid-motionone": "^1.0.3",
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
