@@ -1,24 +1,24 @@
 import { Portal } from 'solid-js/web'
 import { MenuIcon } from 'lucide-solid'
-import { Popover, PopoverContent, PopoverPositioner, PopoverTrigger } from '@ark-ui/solid'
+import { Popover } from '@ark-ui/solid'
 import Button from '@/components/common/Button'
 import FloatControllerMenuPanel from './FloatControllerMenuPanel'
 
 export default () => {
   return (
-    <Popover modal>
-      <PopoverTrigger>
+    <Popover.Root modal>
+      <Popover.Trigger>
         <Button size="large" variant="outline">
           <MenuIcon class="op-25" />
         </Button>
-      </PopoverTrigger>
+      </Popover.Trigger>
       <Portal>
-        <PopoverPositioner>
-          <PopoverContent class="bottom-in bg-blur">
+        <Popover.Positioner>
+          <Popover.Content class="bottom-in bg-blur">
             <FloatControllerMenuPanel />
-          </PopoverContent>
-        </PopoverPositioner>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
+    </Popover.Root>
   )
 }

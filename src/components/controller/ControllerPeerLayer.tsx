@@ -2,8 +2,7 @@ import { Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
-import { Dialog } from '@ark-ui/solid'
-import { PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
+import { Dialog, PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2, MoreHorizontal } from 'lucide-solid'
 import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
@@ -12,6 +11,7 @@ import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import ConnectMessageDialog from '../common/ConnectMessageDialog'
 import type { StateAction } from '@/types'
+import { Index } from 'solid-js'
 
 export default () => {
   const connectStatus = useStore($connectStatus)
@@ -22,7 +22,7 @@ export default () => {
   const customPeerHost = getCustomPeerHost()
 
   console.log('serverOptions', serverOptions)
-  
+
   const peer = new Peer(uuid, serverOptions)
   peer.on('open', (id) => {
     setConnectStatus('ready')
@@ -77,7 +77,7 @@ export default () => {
   }
 
   return (
-    <Dialog open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
+    <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -88,16 +88,12 @@ export default () => {
             </div>
             <div class="p-6 pt-3">
               <Show when={connectStatus() === 'ready' || connectStatus() === 'error'}>
-                <PinInput autoFocus blurOnComplete onValueComplete={handleInputDone} class="mb-3">
-                  <PinInputControl>
-                    <PinInputInput index={0} />
-                    <PinInputInput index={1} />
-                    <PinInputInput index={2} />
-                    <PinInputInput index={3} />
-                    <PinInputInput index={4} />
-                    <PinInputInput index={5} />
-                  </PinInputControl>
-                </PinInput>
+                <PinInput.Root autoFocus blurOnComplete onValueComplete={handleInputDone} class="mb-3">
+                  <PinInput.Control>
+                    <Index each={[0, 1, 2, 3, 4, 5]}>{(id) => <PinInput.Input index={id()} />}</Index>
+                  </PinInput.Control>
+                  <PinInput.HiddenInput />
+                </PinInput.Root>
                 <Show when={sessionRoomId}>
                   <div class="flex justify-center">
                     <Button size="small" variant="ghost" class="inline-flex" onClick={() => handleConnectToPeer(sessionRoomId!)}>
@@ -129,6 +125,6 @@ export default () => {
         </Dialog.Positioner>
         <ConnectMessageDialog />
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }

@@ -10,32 +10,31 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@ark-ui/solid": "^1.1.0",
-    "@astrojs/solid-js": "^3.0.2",
-    "@motionone/solid": "^10.16.4",
-    "@nanostores/solid": "^0.4.2",
-    "@solid-primitives/keyed": "^1.2.0",
-    "@solid-primitives/scheduled": "^1.4.1",
-    "@solid-primitives/upload": "^0.0.114",
-    "@unocss/reset": "^0.57.7",
-    "astro": "^3.6.1",
-    "clsx": "^2.0.0",
+    "@ark-ui/solid": "^4.10.1",
+    "@astrojs/solid-js": "^5.0.4",
+    "@nanostores/solid": "^0.5.0",
+    "@solid-primitives/keyed": "^1.5.0",
+    "@solid-primitives/scheduled": "^1.5.0",
+    "@solid-primitives/upload": "^0.1.0",
+    "@unocss/reset": "^65.4.3",
+    "astro": "^5.2.5",
+    "clsx": "^2.1.1",
     "limax": "^4.1.0",
-    "lucide-solid": "^0.293.0",
-    "motion": "^10.16.4",
-    "nanostores": "^0.9.5",
-    "peerjs": "^1.5.1",
-    "solid-js": "^1.8.6",
-    "workbox-window": "^7.0.0"
+    "lucide-solid": "^0.474.0",
+    "nanostores": "^0.11.3",
+    "peerjs": "^1.5.4",
+    "solid-js": "^1.9.4",
+    "solid-motionone": "^1.0.3",
+    "workbox-window": "^7.3.0"
   },
   "devDependencies": {
-    "@iconify-json/ph": "^1.1.8",
-    "@unocss/preset-icons": "^0.57.7",
-    "@unocss/preset-web-fonts": "^0.57.7",
-    "@unocss/transformer-directives": "^0.57.7",
-    "@vite-pwa/astro": "^0.1.5",
-    "unocss": "^0.57.7",
-    "vite-plugin-pwa": "^0.17.2"
+    "@iconify-json/ph": "^1.2.2",
+    "@unocss/preset-icons": "^65.4.3",
+    "@unocss/preset-web-fonts": "^65.4.3",
+    "@unocss/transformer-directives": "^65.4.3",
+    "@vite-pwa/astro": "^0.5.0",
+    "unocss": "^65.4.3",
+    "vite-plugin-pwa": "^0.21.1"
   },
-  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
+  "packageManager": "pnpm@10.2.0"
 }

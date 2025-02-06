@@ -53,16 +53,16 @@ export default (props: Props) => {
         return
       }
       try {
-        const base64 = await toBase64(selectedFile.file)   
+        const base64 = await toBase64(selectedFile.file)
         if (typeof base64 !== 'string') {
           handleClearExtraView()
           return
-        }   
+        }
         const extraView: ExtraView = {
           type: 'image',
           data: base64,
         }
-        $coreState.triggerAction({ type: 'set_extra', payload: extraView }) 
+        $coreState.triggerAction({ type: 'set_extra', payload: extraView })
       } catch (error) {
         handleClearExtraView()
       }
@@ -95,7 +95,7 @@ export default (props: Props) => {
   }
 
   return (
-    <Dialog open={showDialog()} onOpenChange={handleDialogOpenChange}>
+    <Dialog.Root open={showDialog()} onOpenChange={handleDialogOpenChange}>
       <Dialog.Trigger
         class={clsx([
           props.type !== 'simple' ? 'w-full h-full' : '',
@@ -162,6 +162,6 @@ export default (props: Props) => {
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }
