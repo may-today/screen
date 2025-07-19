@@ -1,4 +1,4 @@
-import { atom, action } from 'nanostores'
+import { atom } from 'nanostores'
 import { $statusText } from './ui'
 import type { DataConnection } from 'peerjs'
 import type { ConnectStatus } from '@/types'
@@ -8,11 +8,11 @@ export const $roomId = atom<string | null>(null)
 export const $connectStatus = atom<ConnectStatus>('not-ready')
 export const $connectErrorMessage = atom<string | null>(null)
 
-export const setConnectStatus = action($connectStatus, 'setConnectStatus', (store, status: ConnectStatus) => {
-  store.set(status)
+export const setConnectStatus = (status: ConnectStatus) => {
+  $connectStatus.set(status)
   const statusText = getStatusTextByStatus(status)
   $statusText.set(statusText)
-})
+}
 
 const getStatusTextByStatus = (status: ConnectStatus) => {
   return {

@@ -1,4 +1,4 @@
-import { Motion } from '@motionone/solid'
+import { Motion } from 'solid-motionone'
 import { Rerun } from '@solid-primitives/keyed'
 import type { LyricLine } from '@/types'
 

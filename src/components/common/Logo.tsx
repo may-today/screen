@@ -1,18 +1,11 @@
-import { createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { Dialog } from '@ark-ui/solid'
 import { X } from 'lucide-solid'
 import Button from './Button'
 
-interface Props {
-  showHomeButton?: boolean
-}
-
-export default (props: Props) => {
-  const [showDialog, setShowDialog] = createSignal(false)
-
+export default () => {
   return (
-    <Dialog open={showDialog()} trapFocus={false}>
+    <Dialog.Root trapFocus={false}>
       <Dialog.Trigger>
         <span class="text-sm p-1">May<span class="fg-primary">Screen</span></span>
       </Dialog.Trigger>
@@ -39,6 +32,6 @@ export default (props: Props) => {
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }

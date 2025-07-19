@@ -8,7 +8,7 @@ export default () => {
   const sidebarOpen = useStore($sidebarOpen)
 
   return (
-    <Dialog open={sidebarOpen()} onOpenChange={(e) => $sidebarOpen.set(e.open)} trapFocus={false}>
+    <Dialog.Root open={sidebarOpen()} onOpenChange={(e) => $sidebarOpen.set(e.open)} trapFocus={false}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -17,6 +17,6 @@ export default () => {
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
-    </Dialog>
+    </Dialog.Root>
   )
 }
