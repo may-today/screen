@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const pageTitle = Astro.props.title ? `${Astro.props.title} - MayScreen` : 'MayScreen'
-const pageClass= Astro.props.class || 'flex flex-col items-stretch h-[-webkit-fill-available] h-[100svh] bg-base fg-base'
+const pageClass= Astro.props.class || 'flex flex-col items-stretch h-screen h-[-webkit-fill-available] h-[100svh] bg-base fg-base'
 const themeColor = Astro.props.themeColor || '#0A0A0A'
 ---
 
