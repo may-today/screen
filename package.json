@@ -33,6 +33,9 @@
     "@unocss/preset-web-fonts": "^65.4.3",
     "@unocss/transformer-directives": "^65.4.3",
     "@vite-pwa/astro": "^0.5.0",
+    "@vitejs/plugin-legacy": "^7.2.1",
+    "resize-observer-polyfill": "^1.5.1",
+    "terser": "^5.43.1",
     "unocss": "^65.4.3",
     "vite-plugin-pwa": "^0.21.1"
   },

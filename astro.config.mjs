@@ -6,6 +6,8 @@ import transformerDirectives from '@unocss/transformer-directives'
 import AstroPWA from '@vite-pwa/astro'
 import solid from '@astrojs/solid-js'
 
+import legacy from '@vitejs/plugin-legacy'
+
 // https://astro.build/config
 export default defineConfig({
   server: {
@@ -89,5 +91,13 @@ export default defineConfig({
     build: {
       target: 'es2015',
     },
+    plugins: [
+      legacy({
+        targets: ['Chrome > 70', 'Safari  12.1', 'ios >= 12.1'],
+        modernTargets: ['Chrome > 70', 'Safari  12.1', 'ios >= 12.1'],
+        modernPolyfills: true,
+        renderLegacyChunks: false,
+      }),
+    ],
   },
 })
