@@ -42,10 +42,19 @@ export const parseRawLRCFile = (content: string) => {
       toneText: toneText?.replaceAll('  ', '\u00a0\u00a0') || undefined,
       toneText2: toneText2?.replaceAll('  ', '\u00a0\u00a0') || undefined,
     } as LyricLine
-  }).filter(line => {
-    if (!line) return false
-    if (!line.text && !!line.toneText) return false
-    return true
-  }) as LyricLine[]
-  return lyricLines
+  }).filter(line => !!line) as LyricLine[]
+  
+  // merge adjacent empty text lines, only keep the first empty line
+  const processedLyricLines: LyricLine[] = []
+  let lastWasEmpty = false
+  for (const line of lyricLines) {
+    const isEmpty = line.text === ''
+    if (isEmpty && lastWasEmpty) {
+      continue
+    }
+    processedLyricLines.push(line)
+    lastWasEmpty = isEmpty
+  }
+  
+  return processedLyricLines
 }
