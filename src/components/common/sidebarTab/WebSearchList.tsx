@@ -5,8 +5,9 @@ import { Toast, Toaster, createToaster } from '@ark-ui/solid'
 import { Search, X } from 'lucide-solid'
 import { debounce } from '@solid-primitives/scheduled'
 import { $coreState } from '@/composables'
-import { getTrackListByKeyword, getLyricByTrackId, type WebSearchTrackItem } from '@/logic/singleTrack'
+import { getTrackListByKeyword, getLyricBySongId, type WebSearchTrackItem } from '@/logic/singleTrack'
 import { parseTime } from '@/logic/time'
+import { parseRawLRCFile } from '@/logic/lyric'
 import { $sidebarOpen } from '@/stores/ui'
 import type { SongDetail } from '@/types'
 
@@ -36,20 +37,20 @@ export default () => {
 
   const handleSongClick = async (song: WebSearchTrackItem) => {
     setIsLoading(true)
-    const lyricList = await getLyricByTrackId(song.id)
-    if (!lyricList) {
+    const lyricText = await getLyricBySongId(song.id).catch(() => null)
+    if (!lyricText) {
       setIsLoading(false)
       toaster.create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
       return
     }
     const singleTrack: SongDetail = {
-      title: song.name,
+      title: song.song_name,
       slug: song.id,
       index: '',
       meta: {
-        artist: song.artists_str,
+        artist: song.artist,
       },
-      detail: lyricList,
+      detail: parseRawLRCFile(lyricText),
     }
     $coreState.triggerAction({ type: 'set_single_track', payload: singleTrack })
     clearInputState()
@@ -80,11 +81,11 @@ export default () => {
             onClick={() => handleSongClick(item)}
           >
             <div>
-              <span>{ item.name }</span>
+              <span>{ item.song_name }</span>
               <span class="text-xs op-50 ml-2">{ parseTime(item.duration) }</span>
             </div>
-            <div class="text-xs line-clamp-5 op-50 fg-primary">{ item.artists_str }</div>
-            <div class="text-xs line-clamp-5 op-50">{ item.album?.name }</div>
+            <div class="text-xs line-clamp-5 op-50 fg-primary">{ item.artist }</div>
+            <div class="text-xs line-clamp-5 op-50">{ item.album_name }</div>
           </div>
         )}
       </For>

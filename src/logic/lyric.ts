@@ -42,6 +42,10 @@ export const parseRawLRCFile = (content: string) => {
       toneText: toneText?.replaceAll('  ', '\u00a0\u00a0') || undefined,
       toneText2: toneText2?.replaceAll('  ', '\u00a0\u00a0') || undefined,
     } as LyricLine
-  }).filter(line => line) as LyricLine[]
+  }).filter(line => {
+    if (!line) return false
+    if (!line.text && !!line.toneText) return false
+    return true
+  }) as LyricLine[]
   return lyricLines
 }

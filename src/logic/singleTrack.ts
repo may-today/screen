@@ -4,24 +4,17 @@ export const singleTrackPlaceholderId = '__single_track'
 
 export interface WebSearchTrackItem {
   id: string
-  name: string
+  song_name: string
+  song_name_original: string
+  album_name: string
+  artist: string
   duration: number
-  artists: {
-    id: string
-    name: string
-  }[]
-  artists_str: string
-  album: {
-    id: string
-    name: string
-    image: string
-  }
 }
 
-const screenApiHost = 'https://screen-api.mayday.blue'
+const screenApiHost = 'https://mayscreen-api.ddiu.site'
 
 export const getTrackListByKeyword = async (keyword: string) => {
-  const res = await fetch(`${screenApiHost}/song_search?q=${keyword}`)
+  const res = await fetch(`${screenApiHost}/v1/search?keyword=${keyword}`)
   if (!res.ok) {
     console.error(res.statusText)
     return null
@@ -31,11 +24,11 @@ export const getTrackListByKeyword = async (keyword: string) => {
     console.error(data.error)
     return []
   }
-  return (data.tracks || []) as WebSearchTrackItem[]
+  return (data.data?.list || []) as WebSearchTrackItem[]
 }
 
-export const getLyricByTrackId = async (trackId: string) => {
-  const res = await fetch(`${screenApiHost}/get_lyric?trackid=${trackId}`)
+export const getLyricBySongId = async (songId: string) => {
+  const res = await fetch(`${screenApiHost}/v1/lyric?id=${songId}`)
   if (!res.ok) {
     console.error(res.statusText)
     return null
@@ -45,5 +38,5 @@ export const getLyricByTrackId = async (trackId: string) => {
     console.error(data.error)
     return null
   }
-  return (data.lines || []) as LyricLine[]
+  return (data.data?.content || []) as string
 }
