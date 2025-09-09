@@ -1,14 +1,15 @@
 import { For, Show, createSignal } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
-import { Tabs, Menu, Popover } from '@ark-ui/solid'
-import { ChevronsUpDown } from 'lucide-solid'
+import { Tabs, Popover } from '@ark-ui/solid'
+import { ChevronsUpDown, ListMusic } from 'lucide-solid'
 import { $coreState } from '@/composables'
 import { $dataset } from '@/stores/coreState'
 import { datasetConfig } from '@/assets/dataset'
 import SongList from './sidebarTab/SongList'
 import WebSearchList from './sidebarTab/WebSearchList'
 import UploadLyricPanel from './sidebarTab/UploadLyricPanel'
+import FavList from './sidebarTab/FavList'
 
 export default () => {
   const [currentTab, setCurrentTab] = createSignal('local_list')
@@ -35,6 +36,9 @@ export default () => {
       </Tabs.Content>
       <Tabs.Content value="upload" class="flex-1 overflow-hidden">
         <UploadLyricPanel />
+      </Tabs.Content>
+      <Tabs.Content value="fav_list" class="flex-1 overflow-hidden">
+        <FavList />
       </Tabs.Content>
       <Tabs.List class="flex items-center px-3 h-12 border-t border-base">
         <Tabs.Trigger value="local_list">
@@ -67,6 +71,10 @@ export default () => {
         </Tabs.Trigger>
         <Tabs.Trigger value="web_list">网络搜索</Tabs.Trigger>
         <Tabs.Trigger value="upload">上传</Tabs.Trigger>
+        <div class="flex-1" />
+        <Tabs.Trigger value="fav_list">
+          <ListMusic size={20} />
+        </Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>
   )

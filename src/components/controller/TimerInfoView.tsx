@@ -1,10 +1,12 @@
+import { Show } from 'solid-js'
 import { useStore } from '@nanostores/solid'
-import { Play, Pause } from 'lucide-solid'
+import { Play, Pause, HeartPlus } from 'lucide-solid'
 import { $autoPlay } from '@/stores/coreState'
 import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
 import { $coreState } from '@/composables/useCoreState'
-import { Show } from 'solid-js'
+import { $currentSongData } from '@/stores/data'
+import { addFav } from '@/stores/favList'
 
 export default () => {
   const currentTime = useStore($timeServer.$currentTime)
@@ -34,6 +36,12 @@ export default () => {
           <div class="text-sm font-mono">{parseTime(currentTime())}</div>
         </div>
       </Show>
+      <div
+        class="fcc border-l border-base px-4 hv-base"
+        onClick={() => addFav($currentSongData.get()!)}
+      >
+        <HeartPlus size={16} />
+      </div>
     </div>
   )
 }

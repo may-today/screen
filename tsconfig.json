@@ -11,6 +11,6 @@
     "paths": {
       "@/*": ["src/*"],
     },
-    "resolvePackageJsonExports": false,
+    "resolvePackageJsonExports": true,
   },
 }

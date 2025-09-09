@@ -17,7 +17,7 @@
 }
 
 [data-scope='dialog'][data-part='content'].sidebar {
-  @apply fixed top-0 left-0 bottom-0 w-70vw max-w-300px max-h-100vh m-0;
+  @apply fixed top-0 left-0 bottom-0 w-80vw max-w-360px max-h-100vh m-0;
   @apply flex flex-col border-0 border-r border-base bg-base rounded-0;
   @apply overflow-hidden transition-all;
   animation: none !important;
