@@ -1,13 +1,12 @@
 import { For, createSignal } from 'solid-js'
-import { Portal } from 'solid-js/web'
 import clsx from 'clsx'
-import { Toast, Toaster, createToaster } from '@ark-ui/solid'
-import { Search, X } from 'lucide-solid'
+import { Search } from 'lucide-solid'
 import { debounce } from '@solid-primitives/scheduled'
 import { $coreState } from '@/composables'
 import { getTrackListByKeyword, getLyricBySongId, type WebSearchTrackItem } from '@/logic/singleTrack'
 import { parseTime } from '@/logic/time'
 import { parseRawLRCFile } from '@/logic/lyric'
+import { toaster } from '@/logic/toaster'
 import { $sidebarOpen } from '@/stores/ui'
 import type { SongDetail } from '@/types'
 
@@ -18,7 +17,7 @@ export default () => {
   const [isLoading, setIsLoading] = createSignal<boolean>(false)
 
   const handleInput = () => {
-    const input = inputRef.value
+    const input = inputRef!.value
     setInputText(input)
     if (!input) {
       setFilteredList([])
@@ -59,15 +58,10 @@ export default () => {
   }
 
   const clearInputState = () => {
-    inputRef.value = ''
+    inputRef!.value = ''
     setInputText('')
     setFilteredList([])
   }
-
-  const toaster = createToaster({
-    placement: 'top-end',
-    duration: 3000,
-  })
 
   const SearchList = () => (
     <div class="flex-1 p-4 overflow-y-auto">
@@ -109,7 +103,7 @@ export default () => {
             if (e.key === 'Escape') {
               clearInputState()
             } else if (e.key === 'Enter') {
-              inputRef.blur()
+              inputRef!.blur()
             }
           }}
           placeholder="输入歌名搜索网络歌词"
@@ -119,24 +113,9 @@ export default () => {
   )
 
   return (
-    <>
-      <div class="h-full flex flex-col">
-        <SearchList />
-        <SearchBox />
-      </div>
-      <Portal>
-        <Toaster toaster={toaster}>
-          {(toast) => (
-              <Toast.Root>
-                <Toast.Title>{toast().title}</Toast.Title>
-                <Toast.Description>{toast().description}</Toast.Description>
-                <Toast.CloseTrigger class="fcc w-8 h-8 bg-transparent">
-                  <X size={20} />
-                </Toast.CloseTrigger>
-              </Toast.Root>
-          )}
-        </Toaster>
-      </Portal>
-    </>
+    <div class="h-full flex flex-col">
+      <SearchList />
+      <SearchBox />
+    </div>
   )
 }

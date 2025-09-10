@@ -6,6 +6,7 @@ import StatusView from '@/components/common/StatusView'
 import Page from '@/components/screen/Page'
 import FullScreenControlArea from '@/components/screen/FullScreenControlArea'
 import FloatControlBar from '@/components/screen/FloatControlBar'
+import GlobalToaster from '@/components/common/GlobalToaster'
 ---
 
 <Layout title="屏幕" class="bg-black text-white w-screen h-full" themeColor="#000000">
@@ -19,4 +20,5 @@ import FloatControlBar from '@/components/screen/FloatControlBar'
   <div class="absolute bottom-2 right-2 z-10">
     <FloatControlBar client:only />
   </div>
+  <GlobalToaster client:only />
 </Layout>

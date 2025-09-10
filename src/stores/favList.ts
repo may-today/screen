@@ -68,3 +68,46 @@ export const loadPersistentFav = () => {
     $favIdList.set(favIdList)
   } catch {}
 }
+
+export const exportFavList = () => {
+  const favData = {
+    favDict: $favDict.get(),
+    favIdList: $favIdList.get(),
+    exportTime: new Date().toISOString()
+  }
+  const dataStr = JSON.stringify(favData, null, 2)
+  const dataBlob = new Blob([dataStr], { type: 'application/json' })
+  const url = URL.createObjectURL(dataBlob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `mayscreen-fav-${new Date().toISOString().split('T')[0]}.json`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
+
+export const importFavList = (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string
+        const favData = JSON.parse(content)
+        
+        if (favData.favDict && favData.favIdList) {
+          $favDict.set(favData.favDict)
+          $favIdList.set(favData.favIdList)
+          persistentFav()
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      } catch {
+        resolve(false)
+      }
+    }
+    reader.onerror = () => resolve(false)
+    reader.readAsText(file)
+  })
+}

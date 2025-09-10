@@ -8,6 +8,7 @@ import BottomControlBar from '@/components/controller/BottomControlBar'
 import LyricListView from '@/components/common/LyricListView'
 import StatusView from '@/components/common/StatusView'
 import Logo from '@/components/common/Logo'
+import GlobalToaster from '@/components/common/GlobalToaster'
 ---
 
 <Layout title="遥控器">
@@ -25,4 +26,5 @@ import Logo from '@/components/common/Logo'
       <Logo client:only />
     </div>
   </main>
+  <GlobalToaster client:only />
 </Layout>
