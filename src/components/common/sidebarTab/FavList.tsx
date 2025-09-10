@@ -9,50 +9,35 @@ import { getTrackListByKeyword, getLyricBySongId, type WebSearchTrackItem } from
 import { parseTime } from '@/logic/time'
 import { parseRawLRCFile } from '@/logic/lyric'
 import { $sidebarOpen } from '@/stores/ui'
-import { $favDict, $favIdList } from '@/stores/favList'
+import { $favIdList, $favMetaList } from '@/stores/favList'
 import type { SongDetail } from '@/types'
 import { useStore } from '@nanostores/solid'
 
 export default () => {
-  const favDict = useStore($favDict)
+  const favMetaList = useStore($favMetaList)
   const favIdList = useStore($favIdList)
 
-  const handleSongClick = async (song: WebSearchTrackItem) => {
-    // setIsLoading(true)
-    // const lyricText = await getLyricBySongId(song.id).catch(() => null)
-    // if (!lyricText) {
-    //   setIsLoading(false)
-    //   toaster.create({ title: '下载失败', description: '获取不到该歌曲的歌词' })
-    //   return
-    // }
-    // const singleTrack: SongDetail = {
-    //   title: song.song_name,
-    //   slug: song.id,
-    //   index: '',
-    //   meta: {
-    //     artist: song.artist,
-    //   },
-    //   detail: parseRawLRCFile(lyricText),
-    // }
-    // $coreState.triggerAction({ type: 'set_single_track', payload: singleTrack })
-    // clearInputState()
-    // $sidebarOpen.set(false)
-    // setIsLoading(false)
+  const handleSongClick = async (slug: string) => {
+    const currentFavMetaList = favMetaList()
+    if (currentFavMetaList[slug]) {
+      const singleTrack = JSON.parse(currentFavMetaList[slug].detailStr) as SongDetail
+      $coreState.triggerAction({ type: 'set_single_track', payload: singleTrack })
+      $sidebarOpen.set(false)
+    }
   }
 
   const SearchList = () => (
     <div class="flex-1 p-4 overflow-y-auto">
-      <div>{JSON.stringify(favIdList())}</div>
-      <For each={favIdList()}>
-        {slug => (
+      <For each={Object.entries(favMetaList())}>
+        {([slug, item]) => (
           <div
             class={clsx([
               'flex items-center px-3 py-2 rounded hv-base',
               // song.slug === currentSongId() ? 'fg-primary font-bold bg-primary hover:bg-primary' : 'hover:bg-base-200'
             ])}
-            // onClick={() => handleSongClick(song.slug)}
+            onClick={() => handleSongClick(slug)}
           >
-            { favDict()[slug]?.title }
+            { item.title }
           </div>
           // <div
           //   class={[
@@ -75,7 +60,7 @@ export default () => {
 
   const ListInfo = () => (
     <div class="relative flex items-center gap-2 h-12 border-t border-base px-4">
-      <div class="text-sm op-50">收藏列表 · { Object.values(favDict()).length }</div>
+      <div class="text-sm op-50">收藏列表 · { favIdList().length }</div>
     </div>
   )
 

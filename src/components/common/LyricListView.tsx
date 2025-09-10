@@ -15,7 +15,7 @@ export default () => {
 
   $currentTimelineData.listen(() => {
     setTimeout(() => {
-      scrollDiv.scrollTop = 0
+      scrollDiv!.scrollTop = 0
     }, 0)
   })
 

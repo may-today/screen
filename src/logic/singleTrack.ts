@@ -1,5 +1,3 @@
-import type { LyricLine } from '@/types'
-
 export const singleTrackPlaceholderId = '__single_track'
 
 export interface WebSearchTrackItem {

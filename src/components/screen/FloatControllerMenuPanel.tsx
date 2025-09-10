@@ -20,7 +20,7 @@ export default () => {
 
   return (
     <Tabs.Root
-      class="flex flex-col w-70vw max-w-300px h-80vh sm:h-60vh overflow-hidden select-none"
+      class="flex flex-col w-70vw max-w-360px h-80vh max-h-600px overflow-hidden select-none"
       value={currentTab()}
       onValueChange={(e) => setCurrentTab(e.value!)}
     >

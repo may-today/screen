@@ -26,7 +26,7 @@ export default () => {
     const [songTitle, songArtist] = rawSongName.split('-', 2).map((str) => str.trim())
     const singleTrack: SongDetail = {
       title: songTitle,
-      slug: songTitle,
+      slug: `manual:${songTitle}`,
       index: '',
       meta: {
         artist: songArtist,

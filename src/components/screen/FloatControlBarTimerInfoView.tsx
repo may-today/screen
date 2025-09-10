@@ -7,6 +7,7 @@ import { parseTime } from '@/logic/time'
 import { $timeServer } from '@/composables/useTimeServer'
 import { $coreState } from '@/composables/useCoreState'
 import ToggleButton from '@/components/common/ToggleButton'
+import FavToggleButton from '@/components/common/FavToggleButton'
 import { Popover } from '@ark-ui/solid'
 import { Portal } from 'solid-js/web'
 
@@ -69,6 +70,7 @@ export default () => {
           </Portal>
         </Popover.Root>
       </Show>
+      <FavToggleButton />
     </div>
   )
 }
