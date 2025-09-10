@@ -1,5 +1,6 @@
 import { onMount } from 'solid-js'
 import { loadStorageData, fetchAndUpdateData } from '@/logic/data'
+import { loadPersistentFav } from '@/stores/favList'
 import { $dataset } from '@/stores/coreState'
 
 export default () => {
@@ -11,5 +12,6 @@ export default () => {
         await fetchAndUpdateData(dataset) && fetchedDatasets.push(dataset)
       }
     })
+    loadPersistentFav()
   })
 }

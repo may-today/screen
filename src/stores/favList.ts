@@ -5,11 +5,14 @@ export const $favDict = atom<Record<string, string>>({})
 export const $favIdList = atom<string[]>([])
 
 export const $favMetaList = computed([$favDict, $favIdList], (favDict, favIdList) => {
-  const metaList = {} as Record<string, {
-    title: string
-    detailStr: string
-  }>
-  favIdList.forEach(slug => {
+  const metaList = {} as Record<
+    string,
+    {
+      title: string
+      detailStr: string
+    }
+  >
+  favIdList.forEach((slug) => {
     if (favDict[slug]) {
       const song = JSON.parse(favDict[slug]) as SongDetail
       metaList[slug] = {
@@ -30,11 +33,38 @@ export const addFav = (song: SongDetail | null) => {
   favDict[song.slug] = JSON.stringify(song)
   $favDict.set(favDict)
   $favIdList.set([...$favIdList.get(), song.slug])
+  persistentFav()
 }
 
 export const removeFav = (slug: string) => {
   const favDict = $favDict.get()
   delete favDict[slug]
   $favDict.set(favDict)
-  $favIdList.set($favIdList.get().filter(id => id !== slug))
+  $favIdList.set($favIdList.get().filter((id) => id !== slug))
+  persistentFav()
+}
+
+export const clearFav = () => {
+  $favDict.set({})
+  $favIdList.set([])
+  persistentFav()
+}
+
+const persistentFav = () => {
+  localStorage.setItem('favDict', JSON.stringify($favDict.get()))
+  localStorage.setItem('favIdList', JSON.stringify($favIdList.get()))
+}
+
+export const loadPersistentFav = () => {
+  const favDictStr = localStorage.getItem('favDict')
+  const favIdListStr = localStorage.getItem('favIdList')
+  if (!favDictStr || !favIdListStr) {
+    return
+  }
+  try {
+    const favDict = JSON.parse(favDictStr)
+    const favIdList = JSON.parse(favIdListStr)
+    $favDict.set(favDict)
+    $favIdList.set(favIdList)
+  } catch {}
 }
