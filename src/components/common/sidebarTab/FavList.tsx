@@ -2,11 +2,11 @@ import { For } from 'solid-js'
 import clsx from 'clsx'
 import { Popover } from '@ark-ui/solid'
 import { useStore } from '@nanostores/solid'
-import { Ellipsis, Download, Upload, Trash } from 'lucide-solid'
+import { Ellipsis, Download, Upload, Trash, SendHorizontal } from 'lucide-solid'
 import { $coreState } from '@/composables'
 import { toaster } from '@/logic/toaster'
 import { $sidebarOpen } from '@/stores/ui'
-import { $favIdList, $favMetaList, clearFav, exportFavList, importFavList } from '@/stores/favList'
+import { $favIdList, $favMetaList, clearFav, exportFavList, generateFavListExportData, importFavList } from '@/stores/favList'
 import { $currentSongData } from '@/stores/data'
 import type { SongDetail } from '@/types'
 
@@ -46,6 +46,11 @@ export default () => {
     input.click()
   }
 
+  const handleSendToDevice = () => {
+    $coreState.triggerAction({ type: 'set_fav_data', payload: generateFavListExportData() })
+    toaster.create({ title: '同步完成', description: '已尝试同步收藏列表到远端设备' })
+  }
+
   const SearchList = () => (
     <div class="flex-1 p-4 overflow-y-auto">
       <For each={Object.entries(favMetaList())}>
@@ -76,6 +81,13 @@ export default () => {
         </Popover.Trigger>
         <Popover.Positioner>
           <Popover.Content class="py-1">
+            <Popover.CloseTrigger
+              class="flex items-center gap-2 px-4 py-2 rounded hv-base text-sm"
+              onClick={handleSendToDevice}
+            >
+              <SendHorizontal size={16} />
+              同步列表
+            </Popover.CloseTrigger>
             <Popover.CloseTrigger
               class="flex items-center gap-2 px-4 py-2 rounded hv-base text-sm"
               onClick={handleImport}

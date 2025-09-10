@@ -1,5 +1,5 @@
 import { atom, computed } from 'nanostores'
-import type { SongDetail } from '@/types'
+import type { SongDetail, FavListExportData } from '@/types'
 
 export const $favDict = atom<Record<string, string>>({})
 export const $favIdList = atom<string[]>([])
@@ -69,12 +69,26 @@ export const loadPersistentFav = () => {
   } catch {}
 }
 
-export const exportFavList = () => {
-  const favData = {
+export const generateFavListExportData = () => {
+  return {
     favDict: $favDict.get(),
     favIdList: $favIdList.get(),
-    exportTime: new Date().toISOString()
+    exportTime: new Date().toISOString(),
   }
+}
+
+export const importFavListExportData = (data: FavListExportData) => {
+  if (data.favDict && data.favIdList) {
+    $favDict.set(data.favDict)
+    $favIdList.set(data.favIdList)
+    persistentFav()
+    return true
+  }
+  return false
+}
+
+export const exportFavList = () => {
+  const favData = generateFavListExportData()
   const dataStr = JSON.stringify(favData, null, 2)
   const dataBlob = new Blob([dataStr], { type: 'application/json' })
   const url = URL.createObjectURL(dataBlob)
@@ -93,12 +107,8 @@ export const importFavList = (file: File): Promise<boolean> => {
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string
-        const favData = JSON.parse(content)
-        
-        if (favData.favDict && favData.favIdList) {
-          $favDict.set(favData.favDict)
-          $favIdList.set(favData.favIdList)
-          persistentFav()
+        const favData = JSON.parse(content) as FavListExportData
+        if (importFavListExportData(favData)) {
           resolve(true)
         } else {
           resolve(false)

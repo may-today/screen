@@ -5,7 +5,8 @@ import { $currentTimelineData, $currentSongData } from '@/stores/data'
 import { sendAction } from '@/logic/connect'
 import { $timeServer } from './useTimeServer'
 import { singleTrackPlaceholderId } from '@/logic/singleTrack'
-import type { StateAction, ExtraView, StateSnapshot, SongDetail } from '@/types'
+import type { StateAction, ExtraView, StateSnapshot, SongDetail, FavListExportData } from '@/types'
+import { importFavListExportData } from '@/stores/favList'
 
 export const useCoreState = () => {
   const [stateTime, setStateTime] = createSignal(0)
@@ -86,6 +87,9 @@ export const useCoreState = () => {
         break
       case 'set_single_track':
         setSingleTrack(action.payload)
+        break
+      case 'set_fav_data':
+        setFavData(action.payload)
         break
     }
   }
@@ -224,6 +228,10 @@ export const useCoreState = () => {
     if (track) {
       setSongId(singleTrackPlaceholderId)
     }
+  }
+
+  const setFavData = (data: FavListExportData) => {
+    importFavListExportData(data)
   }
 
   const showPrevNextLineLyric = (type: 'prev' | 'next') => {

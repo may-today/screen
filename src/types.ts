@@ -54,6 +54,12 @@ export type ExtraView = {
   data: string
 } | null
 
+export interface FavListExportData {
+  favDict: Record<string, string>
+  favIdList: string[]
+  exportTime: string
+}
+
 export interface StateActionBase {
   type: string
 }
@@ -97,6 +103,10 @@ export interface StateActionSetSingleLyric extends StateActionBase {
   type: 'set_single_track'
   payload: SongDetail | null
 }
+export interface StateActionSetFavData extends StateActionBase {
+  type: 'set_fav_data'
+  payload: FavListExportData
+}
 export type StateAction = StateActionSyncState
   | StateActionSetDataset
   | StateActionSetId
@@ -107,6 +117,7 @@ export type StateAction = StateActionSyncState
   | StateActionSetAutoPlay
   | StateActionSetExtraView
   | StateActionSetSingleLyric
+  | StateActionSetFavData
 
 export interface StateSnapshot {
   time: number
