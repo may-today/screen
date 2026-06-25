@@ -1,22 +1,27 @@
-import { For } from 'solid-js'
+import { For, createMemo, createEffect } from 'solid-js'
 import { useStore } from '@nanostores/solid'
 import clsx from 'clsx'
 import { $metaGroupList } from '@/stores/data'
 import { $currentSongId } from '@/stores/coreState'
 import { $coreState } from '@/composables'
+import type { GroupListItem } from '@/types'
 
 interface Props {
   class?: string
   onClick?: (songId: string) => void
+  groupList?: GroupListItem[]
 }
 
 export default (props: Props) => {
-  const metaGroupList = useStore($metaGroupList)
+  const metaGroupListStore = useStore($metaGroupList)
   const currentSongId = useStore($currentSongId)
 
   let scrollDiv: HTMLDivElement
 
-  $metaGroupList.listen(() => {
+  const groupList = createMemo(() => props.groupList ?? metaGroupListStore())
+
+  createEffect(() => {
+    groupList()
     scrollDiv.scrollTop = 0
   })
 
@@ -30,7 +35,7 @@ export default (props: Props) => {
 
   return (
     <div ref={scrollDiv!} class={`h-full overflow-auto ${props.class || ''}`}>
-      <For each={metaGroupList()}>
+      <For each={groupList()}>
         {(group) => (
           <div>
             <h1 class="px-3 py-1 fg-primary font-bold">{group.index}</h1>
