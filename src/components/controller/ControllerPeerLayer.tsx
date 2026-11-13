@@ -1,10 +1,10 @@
-import { Show } from 'solid-js'
+import { createSignal,Show } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
 import { Peer, type DataConnection } from 'peerjs'
 import { Dialog, PinInput, PinInputControl, PinInputInput } from '@ark-ui/solid'
 import { X, Loader2, MoreHorizontal } from 'lucide-solid'
-import { $peerConnect, $roomId, $connectStatus, setConnectStatus } from '@/stores/connect'
+import { $peerConnect, $roomId, $connectStatus, setConnectStatus, $peerConnectList, $roomIdList } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
 import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
@@ -12,6 +12,8 @@ import Button from '@/components/common/Button'
 import ConnectMessageDialog from '../common/ConnectMessageDialog'
 import type { StateAction } from '@/types'
 import { Index } from 'solid-js'
+import React, { useState } from 'react';
+
 
 export default () => {
   const connectStatus = useStore($connectStatus)
@@ -21,6 +23,8 @@ export default () => {
   const serverOptions = getServerOptions()
   const customPeerHost = getCustomPeerHost()
 
+  const [roomIdListText, setRoomIdListText] = createSignal('text')
+  
   console.log('serverOptions', serverOptions)
 
   const peer = new Peer(uuid, serverOptions)
@@ -44,19 +48,27 @@ export default () => {
     conn.on('open', () => {
       console.log('conn open', conn.peer)
       setConnectStatus('connected')
-      sessionStorage.setItem('controllerRoomId', conn.peer)
       $peerConnect.set(conn)
+      addPeerConnectList(conn)
       $connectionDialogOpen.set(false)
       $roomId.set(conn.peer)
+      //避免屏幕端重启后 遥控器端重复添加roomId
+      if(!$roomIdList.get().toString().includes(conn.peer)){
+        addRoomIdList(conn.peer)
+      }
       $coreState.pushSnapShot()
+      sessionStorage.setItem('controllerRoomId', $roomIdList.get().toString())
     })
     conn.on('close', () => {
       setConnectStatus('ready')
-      const lastRoomId = $roomId.get()
-      if (lastRoomId) {
+      const lastRoomIdList = $roomIdList.get()
+      if(lastRoomIdList.length > 0){
         setTimeout(() => {
-          handleConnectToPeer(lastRoomId)
+          lastRoomIdList.forEach((rid) => {
+            handleConnectToPeer(rid)
+          })
         }, 3000)
+        
       }
     })
     conn.on('error', (err) => {
@@ -75,6 +87,36 @@ export default () => {
     const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。', customPeerHost || '')
     setCustomPeerHost(promptAnswer)
   }
+
+  const addPeerConnectList = (conn: DataConnection) =>{
+    $peerConnectList.set([...$peerConnectList.get(), conn]);
+  }
+
+  const addRoomIdList = (rid: string) =>{
+    $roomIdList.set([...$roomIdList.get(), rid]);
+  }
+
+  // 3. 处理按钮点击
+  const RoomIdListSubmit = () => {
+    const currentValue = roomIdListText(); 
+    if (!currentValue) {
+      console.warn("请输入房间 ID");
+      return;
+    }
+
+    // 2. 处理数据（例如分割成数组）
+    const roomIds = currentValue.split(",");
+    
+  
+    // 3. 执行后续逻辑，连接屏幕
+    // handleConnectToPeer(sessionRoomId!)
+    roomIds.forEach((item) =>{
+      //alert(item)
+      handleConnectToPeer(item)
+    })
+  };
+
+
 
   return (
     <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => !e.open && $connectionDialogOpen.set(false)} trapFocus={false}>
@@ -96,8 +138,34 @@ export default () => {
                 </PinInput.Root>
                 <Show when={sessionRoomId}>
                   <div class="flex justify-center">
-                    <Button size="small" variant="ghost" class="inline-flex" onClick={() => handleConnectToPeer(sessionRoomId!)}>
-                      <p class="op-50">连接到上次：{sessionRoomId}</p>
+                    <Button size="small" variant="ghost" class="inline-flex" onClick={() =>{
+                      if(sessionRoomId &&sessionRoomId.split(",").length > 1){
+                        sessionRoomId.split(",").forEach((rid) =>{                      
+                          handleConnectToPeer(rid)
+                        })
+                      }else{
+                        handleConnectToPeer(sessionRoomId!)
+                      }
+                    }}>
+
+                      <p class="op-50">连接到上次：{sessionRoomId?.replace(","," & ")}</p>
+                    </Button>
+                  </div>
+                </Show>
+                <Show when={true}>
+                  <div class="flex justify-center">
+                  <input
+                    id="RoomIdList"
+                    class="bg-transparent ring-0 h-12 outline-none text-sm placeholder:op-50 dark:placeholder:op-30 border-b border-gray-300 px-2"
+                    type="text"
+                    placeholder="输入多个屏幕id 以,分隔"
+                    value={roomIdListText()}       // 绑定 value
+                    onChange={(e) => setRoomIdListText(e.target.value) } // 绑定 onChange
+                  />
+
+                  <Button size="small" variant="ghost" class="inline-flex"  onClick={() => RoomIdListSubmit()}>
+                                     
+                      <p class="op-50">连接多个屏幕</p>
                     </Button>
                   </div>
                 </Show>

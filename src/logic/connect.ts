@@ -1,5 +1,5 @@
 import type { Peer, PeerOptions } from 'peerjs'
-import { $peerConnect, setConnectStatus, $connectErrorMessage } from '@/stores/connect'
+import { $peerConnect, setConnectStatus, $connectErrorMessage, $peerConnectList } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
 export const getServerOptions = () => {
@@ -20,17 +20,23 @@ export const getServerOptions = () => {
     } as PeerOptions
   }
   return {
-    host: 'peer.ddiu.site',
-    port: 443,
-    secure: true,
+    host: 'localhost',
+    port: 9000,
+    secure: false,
   } as PeerOptions
 }
 
 export const sendAction = (action: StateAction) => {
   const connect = $peerConnect.get()
-  if (connect && connect.open) {
-    connect.send(action)
-  }
+
+  const connectList = $peerConnectList.get()
+
+  connectList.forEach((connect) => {
+    // 在这里处理每一个 connect 对象
+    if (connect && connect.open) {
+      connect.send(action);
+    }
+  });
 }
 
 export const getCustomPeerHost = () => {

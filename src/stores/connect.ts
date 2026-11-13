@@ -4,7 +4,9 @@ import type { DataConnection } from 'peerjs'
 import type { ConnectStatus } from '@/types'
 
 export const $peerConnect = atom<DataConnection | null>(null)
+export const $peerConnectList = atom<DataConnection[]>([]);
 export const $roomId = atom<string | null>(null)
+export const $roomIdList = atom<string[]>([])
 export const $connectStatus = atom<ConnectStatus>('not-ready')
 export const $connectErrorMessage = atom<string | null>(null)
 

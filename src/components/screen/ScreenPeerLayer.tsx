@@ -25,6 +25,7 @@ export default () => {
 
   const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
   peer.on('open', (id) => {
+    console.log('screenPeerLayer peer.open', id)
     $roomId.set(id)
     setConnectStatus('ready')
     sessionStorage.setItem('screenRoomId', id)
@@ -32,6 +33,7 @@ export default () => {
   handlePeer(peer)
 
   peer.on('connection', (conn) => {
+    console.log('screenPeerLayer peer.connection', conn)
     handleConnection(conn)
   })
 
