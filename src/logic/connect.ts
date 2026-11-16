@@ -27,16 +27,22 @@ export const getServerOptions = () => {
 }
 
 export const sendAction = (action: StateAction) => {
+  debugger
   const connect = $peerConnect.get()
 
   const connectList = $peerConnectList.get()
 
-  connectList.forEach((connect) => {
-    // 在这里处理每一个 connect 对象
-    if (connect && connect.open) {
-      connect.send(action);
-    }
-  });
+  
+  if(connectList.length > 0){ //遥控器向多个屏幕发送指令
+    connectList.forEach((conn) => {
+      if (conn && conn.open) {
+        conn.send(action);
+      }
+     });
+  }else{ //屏幕点击歌词时 依旧可以将遥控器进行同步
+    connect!.send(action);
+  }
+
 }
 
 export const getCustomPeerHost = () => {

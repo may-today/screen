@@ -9,6 +9,7 @@ export const $roomId = atom<string | null>(null)
 export const $roomIdList = atom<string[]>([])
 export const $connectStatus = atom<ConnectStatus>('not-ready')
 export const $connectErrorMessage = atom<string | null>(null)
+export const $roomStatus = atom<Map<string, string>>(new Map());
 
 export const setConnectStatus = (status: ConnectStatus) => {
   $connectStatus.set(status)
@@ -26,3 +27,12 @@ const getStatusTextByStatus = (status: ConnectStatus) => {
   }[status]
 }
 
+
+export const updateRoomStatus = (roomId: string, newStatus: string) => {
+  const currentMap = $roomStatus.get();
+  const newMap = new Map(currentMap);
+  newMap.set(roomId, newStatus);
+
+  // SolidJS 检测到 newMap !== currentMap，从而触发 UI 更新
+  $roomStatus.set(newMap);
+};
