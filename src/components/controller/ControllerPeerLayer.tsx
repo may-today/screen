@@ -103,6 +103,16 @@ export default () => {
       const action = data as StateAction
       console.log('conn data', action)
       $coreState.receiveAction(action)
+
+      //由屏幕端传过来的信息 可以由遥控端转发给另外的屏幕 实现一对多 多对多控制
+      const connectList = $peerConnectList.get()
+      if(connectList.length > 0){
+        connectList.forEach((connect) => {
+          if (connect && connect.open && connect.peer != conn.peer) {
+            connect.send(action);
+          }
+        });
+      }
     })
   }
 
