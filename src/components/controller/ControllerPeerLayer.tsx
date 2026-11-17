@@ -64,10 +64,9 @@ export default () => {
       sessionStorage.setItem('controllerRoomId', $roomIdList.get().toString())
     })
     conn.on('close', () => {
-      debugger
       console.log('conn close', conn.peer)
       const lastRoomIdList = $roomIdList.get()
-      
+  
       if(lastRoomIdList.length == 0){ //没有一个连接的时候 才是待连接状态
         setConnectStatus('ready')
       }else if(lastRoomIdList.length == 1 && lastRoomIdList[0]==conn.peer){ //一对一连接模式时 直接尝试重新连接
@@ -129,11 +128,10 @@ export default () => {
     $roomIdList.set([...$roomIdList.get(), rid]);
   }
 
-  // 3. 处理按钮点击
+  // 屏幕批量连接（提交框未做）
   const RoomIdListSubmit = () => {
     const currentValue = roomIdListText(); 
     if (!currentValue) {
-      console.warn("请输入房间 ID");
       return;
     }
 
@@ -144,7 +142,6 @@ export default () => {
     // 3. 执行后续逻辑，连接屏幕
     // handleConnectToPeer(sessionRoomId!)
     roomIds.forEach((item) =>{
-      //alert(item)
       handleConnectToPeer(item)
     })
   };
@@ -161,48 +158,46 @@ export default () => {
               <Dialog.Title>连接屏幕</Dialog.Title>
               <Dialog.Description>{ customPeerHost ? `自定义 Peer: ${customPeerHost}` : '请输入屏幕 ID 进行连接' }</Dialog.Description>
             </div>
-            <div class="p-6 pt-3">
-              <Show when={1 == 1}>
-                <PinInput.Root  autoFocus blurOnComplete value={pinValue()} onValueComplete={handleInputDone} class="mb-3">
-                  <PinInput.Control>
-                    <Index each={[0, 1, 2, 3, 4, 5]}>{(id) => <PinInput.Input index={id()} />}</Index>
-                  </PinInput.Control>
-                  <PinInput.HiddenInput />
-                </PinInput.Root>
-                <Show when={sessionRoomId}>
-                  <div class="flex justify-center">
-                    <Button size="small" variant="ghost" class="inline-flex rounded-xl border-1 bg-white" onClick={() =>{
-                      if(sessionRoomId &&sessionRoomId.split(",").length > 1){
-                        sessionRoomId.split(",").forEach((rid) =>{                      
-                          handleConnectToPeer(rid)
-                        })
-                      }else{
-                        handleConnectToPeer(sessionRoomId!)
-                      }
-                    }}>
+            <div class="p-6 pt-3"> 
+              <PinInput.Root  autoFocus blurOnComplete value={pinValue()} onValueComplete={handleInputDone} class="mb-3">
+                <PinInput.Control>
+                  <Index each={[0, 1, 2, 3, 4, 5]}>{(id) => <PinInput.Input index={id()} />}</Index>
+                </PinInput.Control>
+                <PinInput.HiddenInput />
+              </PinInput.Root>
+              <Show when={sessionRoomId}>
+                <div class="flex justify-center">
+                  <Button size="small" variant="ghost" class="inline-flex rounded-xl border-1 bg-white" onClick={() =>{
+                    if(sessionRoomId &&sessionRoomId.split(",").length > 1){
+                      sessionRoomId.split(",").forEach((rid) =>{                      
+                        handleConnectToPeer(rid)
+                      })
+                    }else{
+                      handleConnectToPeer(sessionRoomId!)
+                    }
+                  }}>
 
-                      <p class="op-50 text-black">连接到上次：{sessionRoomId?.replaceAll(","," & ")}</p>
-                    </Button>
-                  </div>
-                </Show>
-                <Show when={false}>
-                  <div class="flex justify-center">
-                  <input
-                    id="RoomIdList"
-                    class="bg-transparent ring-0 h-12 outline-none text-sm placeholder:op-50 dark:placeholder:op-30 border-b border-gray-300 px-2"
-                    type="text"
-                    placeholder="输入多个屏幕id 以,分隔"
-                    value={roomIdListText()}       // 绑定 value
-                    onChange={(e) => setRoomIdListText(e.target.value) } // 绑定 onChange
-                  />
-
-                  <Button size="small" variant="ghost" class="inline-flex"  onClick={() => RoomIdListSubmit()}>
-                                     
-                      <p class="op-50">连接多个屏幕</p>
-                    </Button>
-                  </div>
-                </Show>
+                    <p class="op-50 text-black">连接到上次：{sessionRoomId?.replaceAll(","," & ")}</p>
+                  </Button>
+                </div>
               </Show>
+              <Show when={false}>
+                <div class="flex justify-center">
+                <input
+                  id="RoomIdList"
+                  class="bg-transparent ring-0 h-12 outline-none text-sm placeholder:op-50 dark:placeholder:op-30 border-b border-gray-300 px-2"
+                  type="text"
+                  placeholder="输入多个屏幕id 以,分隔"
+                  value={roomIdListText()}       // 绑定 value
+                  onChange={(e) => setRoomIdListText(e.target.value) } // 绑定 onChange
+                />
+
+                <Button size="small" variant="ghost" class="inline-flex"  onClick={() => RoomIdListSubmit()}>             
+                    <p class="op-50">连接多个屏幕</p>
+                  </Button>
+                </div>
+              </Show>
+              
               <Show when={connectStatus() === 'not-ready' || connectStatus() === 'connecting'}>
                 <div class="fcc gap-2">
                   <Loader2 class="animate-spin" />

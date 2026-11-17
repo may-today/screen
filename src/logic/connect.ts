@@ -27,7 +27,6 @@ export const getServerOptions = () => {
 }
 
 export const sendAction = (action: StateAction) => {
-  debugger
   const connect = $peerConnect.get()
 
   const connectList = $peerConnectList.get()
