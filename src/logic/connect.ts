@@ -76,8 +76,11 @@ export const handlePeer = (peer: Peer) => {
   })
   peer.on('error', (err) => {
     if(err.message.includes('Could not connect to peer')){
-      updateRoomStatus(Object.keys(peer.connections)[0],'error')
-      setConnectStatus('ready')
+      // err.message   'Could not connect to peer 314766';
+      const prefix = 'Could not connect to peer ';
+      const errRoomId = err.message.slice(prefix.length);
+      updateRoomStatus(errRoomId,'error')
+      setConnectStatus('error')
     }else{
       setConnectStatus('error')
     }

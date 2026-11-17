@@ -77,7 +77,6 @@ export default () => {
   const getRoomDotClass = (targetRoomId: string) => {
     const map = roomStatus(); // 读取最新的 Map
     const status = map.get(targetRoomId);
-    // 兜底处理 undefined 情况
     const key = (status ?? 'not-ready') as keyof typeof STATUS_CLASS_MAP;
     return STATUS_CLASS_MAP[key];
   };
@@ -85,16 +84,16 @@ export default () => {
   const getRoomBgClass = (targetRoomId: string) => {
     const map = roomStatus(); // 读取最新的 Map
     const status = map.get(targetRoomId);
-    // 兜底处理 undefined 情况
     const key = (status ?? 'not-ready') as keyof typeof ROOM_STATUS_CLASS_MAP;
     return ROOM_STATUS_CLASS_MAP[key];
   };
 
-
+  const isScreen = window.location.href.includes('screen');
+  const isController = window.location.href.includes('controller');
 
   return (
     <div class="flex items-center gap-1 -ml-1">     
-      <Show when={1 == 1 && window.location.href.includes('screen')}>      
+      <Show when={isScreen}>      
         <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
           <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
         </div>
@@ -102,7 +101,7 @@ export default () => {
           <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
         </Show>
       </Show>
-      <Show when={window.location.href.includes('controller')}>    
+      <Show when={isController}>    
         <Show when={connectStatus() == 'not-ready' && roomIdList().length == 0}> 
           <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
             <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
