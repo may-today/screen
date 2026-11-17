@@ -20,9 +20,9 @@ export const getServerOptions = () => {
     } as PeerOptions
   }
   return {
-    host: 'localhost',
-    port: 9000,
-    secure: false,
+    host: 'peer.ddiu.site',
+    port: 443,
+    secure: true,
   } as PeerOptions
 }
 
