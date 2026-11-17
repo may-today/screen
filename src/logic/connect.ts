@@ -1,5 +1,5 @@
 import type { Peer, PeerOptions } from 'peerjs'
-import { $peerConnect, setConnectStatus, $connectErrorMessage, $peerConnectList } from '@/stores/connect'
+import { $peerConnect, setConnectStatus, $connectErrorMessage, $peerConnectList, updateRoomStatus } from '@/stores/connect'
 import type { StateAction } from '@/types'
 
 export const getServerOptions = () => {
@@ -38,9 +38,11 @@ export const sendAction = (action: StateAction) => {
       if (conn && conn.open) {
         conn.send(action);
       }
-     });
-  }else{ //屏幕点击歌词时 依旧可以将遥控器进行同步
-    connect!.send(action);
+    });
+  }else{ //屏幕点击歌词时 依旧可以将遥控器进行同步   
+    if(connect && connect.open){
+      connect.send(action);
+    }
   }
 
 }
@@ -73,7 +75,12 @@ export const handlePeer = (peer: Peer) => {
     }, 500)
   })
   peer.on('error', (err) => {
-    setConnectStatus('error')
+    if(err.message.includes('Could not connect to peer')){
+      updateRoomStatus(Object.keys(peer.connections)[0],'error')
+      setConnectStatus('ready')
+    }else{
+      setConnectStatus('error')
+    }
     console.log('peer error', err)
     const fatalErrorMessage = {
       'browser-incompatible': '当前浏览器不支持连接功能，请尝试更换浏览器或使用单机模式。',

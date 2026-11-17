@@ -64,6 +64,22 @@ export default () => {
     setCustomPeerHost(promptAnswer)
   }
 
+  const closeAllConnections = (peer: Peer) => {
+    const connections = Object.values(peer.connections).flat() as Array<DataConnection>
+    connections.forEach((conn) => {
+        conn.close()
+    })
+    console.log('[屏幕端] 主动关闭连接:', peer.id)
+  }
+  const cleanup = () => {
+    if (!peer || peer.destroyed) return
+
+    closeAllConnections(peer)
+    peer.destroy()
+  }
+  window.addEventListener('pagehide', cleanup)
+  window.addEventListener('beforeunload', cleanup)
+
   return (
     <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} trapFocus={false}>
       <Portal>

@@ -13,7 +13,7 @@ import GlobalToaster from '@/components/common/GlobalToaster'
   <DataLayer client:only />
 	<ScreenPeerLayer client:only />
   <div class="absolute flex items-center justify-center bottom-1 left-2 bg-transparent p-1 z-10">
-    <StatusView client:load />
+    <StatusView client:only />
   </div>
   <Page client:load />
   <FullScreenControlArea client:only />

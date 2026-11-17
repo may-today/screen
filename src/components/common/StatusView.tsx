@@ -16,7 +16,7 @@ export default () => {
   const roomStatus = useStore($roomStatus)
 
 
-  //新增状态：控制操作对话框的显示及选中的屏幕ID
+  //新增：控制操作对话框的显示及选中的屏幕ID
   const [actionDialog, setActionDialog] = createSignal<{ open: boolean; roomId: string | null }>({
     open: false,
     roomId: null
@@ -91,44 +91,44 @@ export default () => {
   };
 
 
+
   return (
     <div class="flex items-center gap-1 -ml-1">     
-      <Show when={connectStatus() == 'not-ready' || connectStatus() == 'ready'}>
+      <Show when={1 == 1 && window.location.href.includes('screen')}>      
         <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
-          <div class={`h-2 w-2 rounded-full ${statusDotClass()}`} />
+          <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
         </div>
-        <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
+        <Show when={connectStatus() !== 'connected'}>
+          <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
+        </Show>
       </Show>
-      <Show when={(connectStatus() == 'connecting' ||connectStatus() == 'connected') && window.location.href.includes('screen')}>
-        <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
-          <div class={`h-2 w-2 rounded-full ${statusDotClass()}`} />
-        </div>
-      </Show>
-      <Show when={(connectStatus() == 'connecting' ||connectStatus() == 'connected') && window.location.href.includes('controller')}>   
-        <For each={roomIdList()}>
-          {/* {(roomId, index) => (
-            <div class={`flex items-center gap-1  rounded-xl border-2 border-gray-300 min-w-[5rem]`} 
-              onClick={() => setActionDialog({ open: true, roomId })}>
-              <div class="p-[2px]" >
-                <div  class={`h-2 w-2 rounded-full ${getRoomDotClass(roomId)}`}/>
-              </div>
-              <p  class="op-50 text-center font-semibold">{roomId}</p>
-            </div>
-          )} */}
-          {(roomId, index) => (
-            <div class={`flex items-center gap-1  rounded-xl border-2  ${getRoomBgClass(roomId)}`} 
-              onClick={() => setActionDialog({ open: true, roomId })}>
-              <p  class="op-60 text-center font-semibold pl-1 pr-1 text-black">{roomId}</p>
-            </div>
-          )}
-        </For>
-        <Show when={roomIdList().length <= 2}>  
-          <Button  size="small" variant="outline" class="flex min-w-2rem items-center gap-1  rounded-xl border-3 border-gray-300" onClick={() => $connectionDialogOpen.set(true)}>
-            {/* <Plus size={16} /> */}
-            <p  class="op-50 text-center font-semibold font-mono text-[clamp(16px,2vw,20px)]">+</p>
-          </Button>
+      <Show when={window.location.href.includes('controller')}>    
+        <Show when={connectStatus() == 'not-ready' && roomIdList().length == 0}> 
+          <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
+            <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
+          </div>
         </Show> 
-      </Show>        
+        <Show when={connectStatus() == 'ready' && roomIdList().length == 0}> 
+          <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
+            <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
+          </div>
+          <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
+        </Show>
+          <Show when={roomIdList().length > 0 }>   
+            <For each={roomIdList()}>
+              {(roomId, index) => (
+                <div class={`flex items-center gap-1  rounded-xl border-2  ${getRoomBgClass(roomId)}`} 
+                  onClick={() => setActionDialog({ open: true, roomId })}>
+                  <p  class="op-60 text-center font-semibold pl-1 pr-1 text-black">{roomId}</p>
+                </div>
+              )}
+            </For>
+            <Show when={roomIdList().length <= 2}>  
+              <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>新增连接</Button>
+            </Show> 
+          </Show>           
+      </Show>
+     
       <div class="text-sm fg-lighter" ref={noticeTextDom!}>{statusText()}</div>
       <Show when={actionDialog().open}>
         <Portal>
