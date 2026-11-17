@@ -84,10 +84,6 @@ export default () => {
         }, 3000)   
 
       }
-      /**
-       * 情况1：一对一的时候 屏幕F5刷新 会自动重连该屏幕
-       * 情况2：一对多的时候 屏幕2进行F5刷新 会自动重连两个屏幕
-       */
 
       const peerConnectList = $peerConnectList.get()
 
