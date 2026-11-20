@@ -12,7 +12,6 @@ import Button from '@/components/common/Button'
 import ConnectMessageDialog from '../common/ConnectMessageDialog'
 import type { StateAction } from '@/types'
 import { Index } from 'solid-js'
-import React, { useState } from 'react';
 
 
 export default () => {
