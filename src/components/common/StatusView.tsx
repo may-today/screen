@@ -4,7 +4,6 @@ import { $statusText, $connectionDialogOpen } from '@/stores/ui'
 import Button from './Button'
 import { Show, For, createSignal, createMemo } from 'solid-js'
 import { Portal } from 'solid-js/web'
-import { Plus } from 'lucide-solid';
 
 
 export default () => {
@@ -88,8 +87,10 @@ export default () => {
     return ROOM_STATUS_CLASS_MAP[key];
   };
 
-  const isScreen = window.location.href.includes('screen');
-  const isController = window.location.href.includes('controller');
+  // 域名中也带有screen字段 不能使用window.location.href.includes('screen')判断屏幕端和遥控器端 使用pathname排除域名干扰
+  const pathStr = new URL(window.location.href).pathname;
+  const isScreen = pathStr.includes('screen');
+  const isController = pathStr.includes('controller');
 
   return (
     <div class="flex items-center gap-1 -ml-1">     
@@ -113,19 +114,19 @@ export default () => {
           </div>
           <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>连接</Button>
         </Show>
-          <Show when={roomIdList().length > 0 }>   
-            <For each={roomIdList()}>
-              {(roomId, index) => (
-                <div class={`flex items-center gap-1  rounded-xl border-2  ${getRoomBgClass(roomId)}`} 
-                  onClick={() => setActionDialog({ open: true, roomId })}>
-                  <p  class="op-60 text-center font-semibold pl-1 pr-1 text-black">{roomId}</p>
-                </div>
-              )}
-            </For>
-            <Show when={roomIdList().length <= 2}>  
-              <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>新增连接</Button>
-            </Show> 
-          </Show>           
+        <Show when={roomIdList().length > 0 }>   
+          <For each={roomIdList()}>
+            {(roomId, index) => (
+              <div class={`flex items-center gap-1  rounded-xl border-2  ${getRoomBgClass(roomId)}`} 
+                onClick={() => setActionDialog({ open: true, roomId })}>
+                <p  class="op-60 text-center font-semibold pl-1 pr-1 text-black">{roomId}</p>
+              </div>
+            )}
+          </For>
+          <Show when={roomIdList().length <= 2}>  
+            <Button size="small" variant="outline" class="op-50" onClick={() => $connectionDialogOpen.set(true)}>新增连接</Button>
+          </Show> 
+        </Show>           
       </Show>
      
       <div class="text-sm fg-lighter" ref={noticeTextDom!}>{statusText()}</div>
