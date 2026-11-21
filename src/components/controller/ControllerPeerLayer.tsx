@@ -8,7 +8,6 @@ import { $connectStatus, $roomIdList, updateRoomStatus } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
 import { getServerOptions, handlePeer, hasChannel, trackChannel, retryRoom, refreshConnectStatus, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
-import Button from '@/components/common/Button'
 import ConnectMessageDialog from '../common/ConnectMessageDialog'
 
 export default () => {
@@ -82,10 +81,10 @@ export default () => {
               </PinInput.Root>
               <Show when={previousRooms.length > 0}>
                 <div class="flex justify-center">
-                  <Button size="small" variant="ghost" class="inline-flex rounded-xl border-1 bg-white"
+                  <button type="button" class="rounded-md border border-base bg-transparent text-neutral-300 hv-base px-2 py-1 text-xs"
                     onClick={() => previousRooms.forEach(handleConnectToPeer)}>
-                    <p class="op-50 text-black">连接到上次：{previousRooms.join(' & ')}</p>
-                  </Button>
+                    连接到上次：<span class="font-mono">{previousRooms.join(' · ')}</span>
+                  </button>
                 </div>
               </Show>
               <Show when={connectStatus() === 'not-ready' || connectStatus() === 'connecting'}>

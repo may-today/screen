@@ -14,7 +14,7 @@ export const setConnectStatus = (status: ConnectStatus) => {
   $statusText.set(statusText)
 }
 
-const getStatusTextByStatus = (status: ConnectStatus) => {
+export const getStatusTextByStatus = (status: ConnectStatus) => {
   return {
     'not-ready': '初始化中',
     ready: '未连接',
