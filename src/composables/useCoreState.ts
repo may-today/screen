@@ -9,7 +9,13 @@ import type { StateAction, ExtraView, StateSnapshot, SongDetail, FavListExportDa
 import { importFavListExportData } from '@/stores/favList'
 
 export const useCoreState = () => {
-  const [stateTime, setStateTime] = createSignal(0)
+  const source = Math.random().toString(36).slice(2)
+  let stateTime = 0
+  let stateSource = ''
+  const version = () => stateTime + '/' + stateSource
+  const isNewer = (time: number, author: string) =>
+    time > stateTime || (time === stateTime && author > stateSource)
+
   const currentTimelineData = useStore($currentTimelineData)
   const currentLyricIndex = useStore($currentLyricIndex)
   const currentLyricLine = () => {
@@ -54,9 +60,6 @@ export const useCoreState = () => {
 
   const handleAction = (action: StateAction) => {
     console.log('handleAction', action.type, action.payload)
-    if (action.type !== 'sync_state') {
-      setStateTime(Date.now())
-    }
     switch (action.type) {
       case 'sync_state':
         pullSnapShot(action.payload)
@@ -95,17 +98,52 @@ export const useCoreState = () => {
   }
 
   const triggerAction = (action: StateAction) => {
-    sendAction(action)
+    if (action.type === 'set_fav_data') {
+      sendAction(action)
+      handleAction(action)
+      return
+    }
+    const parent = version()
+    stateTime = Math.max(Date.now(), stateTime + 1)
+    stateSource = source
     handleAction(action)
+    // The playback timers can tick between the click and its delivery.
+    const update: StateAction = action.type === 'show_prev_next_line'
+      ? { type: 'set_lyric_index', payload: $currentLyricIndex.get() }
+      : action
+    sendAction({ ...update, revision: { time: stateTime, source, parent } })
   }
 
   const receiveAction = (action: StateAction) => {
+    if (action.type === 'request_snapshot') {
+      if (action.payload === source) pushSnapShot()
+      return
+    }
+    if (action.type === 'sync_state' || action.type === 'set_fav_data') {
+      handleAction(action)
+      return
+    }
+    const revision = action.revision
+    if (revision) {
+      if (!isNewer(revision.time, revision.source)) return
+      // A relative command is only valid against the state its author saw.
+      if (revision.parent !== version()) {
+        sendAction({ type: 'request_snapshot', payload: revision.source })
+        return
+      }
+      stateTime = revision.time
+      stateSource = revision.source
+    } else {
+      stateTime = Math.max(Date.now(), stateTime + 1)
+      stateSource = ''
+    }
     handleAction(action)
   }
 
   const pushSnapShot = () => {
     const currentSnapshot: StateSnapshot = {
-      time: stateTime(),
+      time: stateTime,
+      source: stateSource,
       state: {
         dataset: $dataset.get(),
         currentSongId: $currentSongId.get(),
@@ -125,13 +163,7 @@ export const useCoreState = () => {
   }
 
   const pullSnapShot = (snapshot: StateSnapshot) => {
-    const currentStateTime = stateTime()
-    console.log(`pullSnapShot local: ${currentStateTime} remote: ${snapshot.time}`)
-    if (stateTime() >= snapshot.time) {
-      console.log('pullSnapShot useLocal')
-      return
-    }
-    console.log('pullSnapShot useRemote')
+    if (!isNewer(snapshot.time, snapshot.source ?? '')) return
     const state = snapshot.state
     $dataset.set(state.dataset)
     $singleTrack.set(state.singleTrack)
@@ -144,7 +176,8 @@ export const useCoreState = () => {
     $currentLyricIndex.set(state.currentLyricIndex)
     $autoPlay.set(state.autoPlay)
     $extraView.set(state.extraView)
-    setStateTime(snapshot.time)
+    stateTime = snapshot.time
+    stateSource = snapshot.source ?? ''
   }
 
   const setDataset = (dataset: string) => {
@@ -176,8 +209,8 @@ export const useCoreState = () => {
     }
     $currentLyricIndex.set(index)
     const timeline = $currentTimelineData.get()
-    const targetStartTime = timeline[index].startTime
-    if (targetStartTime >= 0) {
+    const targetStartTime = timeline[index]?.startTime
+    if (targetStartTime != null && targetStartTime >= 0) {
       $timeServer.$currentTime.set(targetStartTime)
       if ($autoPlay.get()) {
         $timeServer.pause()

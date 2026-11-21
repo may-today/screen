@@ -1,15 +1,12 @@
 import { atom } from 'nanostores'
 import { $statusText } from './ui'
-import type { DataConnection } from 'peerjs'
 import type { ConnectStatus } from '@/types'
 
-export const $peerConnect = atom<DataConnection | null>(null)
-export const $peerConnectList = atom<DataConnection[]>([]);
 export const $roomId = atom<string | null>(null)
 export const $roomIdList = atom<string[]>([])
 export const $connectStatus = atom<ConnectStatus>('not-ready')
 export const $connectErrorMessage = atom<string | null>(null)
-export const $roomStatus = atom<Map<string, string>>(new Map());
+export const $roomStatus = atom(new Map<string, ConnectStatus>())
 
 export const setConnectStatus = (status: ConnectStatus) => {
   $connectStatus.set(status)
@@ -17,7 +14,7 @@ export const setConnectStatus = (status: ConnectStatus) => {
   $statusText.set(statusText)
 }
 
-const getStatusTextByStatus = (status: ConnectStatus) => {
+export const getStatusTextByStatus = (status: ConnectStatus) => {
   return {
     'not-ready': '初始化中',
     ready: '未连接',
@@ -28,7 +25,7 @@ const getStatusTextByStatus = (status: ConnectStatus) => {
 }
 
 
-export const updateRoomStatus = (roomId: string, newStatus: string) => {
+export const updateRoomStatus = (roomId: string, newStatus: ConnectStatus) => {
   const currentMap = $roomStatus.get();
   const newMap = new Map(currentMap);
   newMap.set(roomId, newStatus);

@@ -1,84 +1,60 @@
+import { onCleanup } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import { useStore } from '@nanostores/solid'
-import { Peer, type DataConnection } from 'peerjs'
+import { Peer } from 'peerjs'
 import { Dialog } from '@ark-ui/solid'
 import { Popover } from '@ark-ui/solid'
 import { X, HelpCircle, MoreHorizontal } from 'lucide-solid'
-import { $peerConnect, $roomId, setConnectStatus } from '@/stores/connect'
+import { $roomId } from '@/stores/connect'
 import { $connectionDialogOpen } from '@/stores/ui'
-import { getServerOptions, handlePeer, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
+import { getServerOptions, handlePeer, closeChannel, refreshConnectStatus, trackChannel, setCustomPeerHost, getCustomPeerHost } from '@/logic/connect'
 import { $coreState } from '@/composables'
 import Button from '@/components/common/Button'
 import ConnectMessageDialog from '../common/ConnectMessageDialog'
-import type { StateAction } from '@/types'
 
 export default () => {
   const roomId = useStore($roomId)
   const connectionDialogOpen = useStore($connectionDialogOpen)
 
-  const sessionRoomId = sessionStorage.getItem('screenRoomId')
-  const generatePin = () => Math.floor(Math.random() * 1e6).toString().padStart(6, '0')
-  const serverOptions = getServerOptions()
   const customPeerHost = getCustomPeerHost()
-
-  console.log('serverOptions', serverOptions)
-
-  const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
-  peer.on('open', (id) => {
-    console.log('screenPeerLayer peer.open', id)
-    $roomId.set(id)
-    setConnectStatus('ready')
-    sessionStorage.setItem('screenRoomId', id)
-  })
-  handlePeer(peer)
-
-  peer.on('connection', (conn) => {
-    console.log('screenPeerLayer peer.connection', conn)
-    handleConnection(conn)
-  })
-
-  const handleConnection = (conn: DataConnection) => {
-    conn.on('open', () => {
-      setConnectStatus('connected')
-      $peerConnect.set(conn)
-      $connectionDialogOpen.set(false)
-      $coreState.pushSnapShot()
+  const startPeer = () => {
+    const id = sessionStorage.getItem('screenRoomId')
+    const options = getServerOptions()
+    const peer = id ? new Peer(id, options) : new Peer(options)
+    handlePeer(peer)
+    peer.on('open', id => {
+      $roomId.set(id)
+      refreshConnectStatus()
+      sessionStorage.setItem('screenRoomId', id)
     })
-    conn.on('close', () => {
-      setConnectStatus('ready')
+    peer.on('connection', conn => {
+      closeChannel(conn.peer)
+      trackChannel(conn, () => {
+        refreshConnectStatus()
+        $connectionDialogOpen.set(false)
+        $coreState.pushSnapShot()
+      }, $coreState.receiveAction, failed => refreshConnectStatus(failed ? 'error' : 'ready'))
     })
-    conn.on('error', (err) => {
-      console.log('conn error', err)
-      setConnectStatus('error')
-    })
-    conn.on('data', (data) => {
-      setConnectStatus('connected')
-      const action = data as StateAction
-      console.log('conn data', action)
-      $coreState.receiveAction(action)
-    })
+    return peer
   }
+
+  let peer = startPeer()
+  const stop = () => peer.destroy()
+  const restore = (event: PageTransitionEvent) => {
+    if (event.persisted && peer.destroyed) peer = startPeer()
+  }
+  window.addEventListener('pagehide', stop)
+  window.addEventListener('pageshow', restore)
+  onCleanup(() => {
+    window.removeEventListener('pagehide', stop)
+    window.removeEventListener('pageshow', restore)
+    stop()
+  })
 
   const handleSwitchPeerHost = () => {
     const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。', customPeerHost || '')
     setCustomPeerHost(promptAnswer)
   }
-
-  const closeAllConnections = (peer: Peer) => {
-    const connections = Object.values(peer.connections).flat() as Array<DataConnection>
-    connections.forEach((conn) => {
-        conn.close()
-    })
-    console.log('[屏幕端] 主动关闭连接:', peer.id)
-  }
-  const cleanup = () => {
-    if (!peer || peer.destroyed) return
-
-    closeAllConnections(peer)
-    peer.destroy()
-  }
-  window.addEventListener('pagehide', cleanup)
-  window.addEventListener('beforeunload', cleanup)
 
   return (
     <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} trapFocus={false}>
