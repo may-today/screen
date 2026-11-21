@@ -25,6 +25,7 @@ export default () => {
 
   const peer = sessionRoomId ? new Peer(sessionRoomId, serverOptions) : new Peer(serverOptions)
   peer.on('open', (id) => {
+    console.log('screenPeerLayer peer.open', id)
     $roomId.set(id)
     setConnectStatus('ready')
     sessionStorage.setItem('screenRoomId', id)
@@ -32,6 +33,7 @@ export default () => {
   handlePeer(peer)
 
   peer.on('connection', (conn) => {
+    console.log('screenPeerLayer peer.connection', conn)
     handleConnection(conn)
   })
 
@@ -61,6 +63,22 @@ export default () => {
     const promptAnswer = prompt('更换一个 Peer 服务器，请确保两端的服务器一致。', customPeerHost || '')
     setCustomPeerHost(promptAnswer)
   }
+
+  const closeAllConnections = (peer: Peer) => {
+    const connections = Object.values(peer.connections).flat() as Array<DataConnection>
+    connections.forEach((conn) => {
+        conn.close()
+    })
+    console.log('[屏幕端] 主动关闭连接:', peer.id)
+  }
+  const cleanup = () => {
+    if (!peer || peer.destroyed) return
+
+    closeAllConnections(peer)
+    peer.destroy()
+  }
+  window.addEventListener('pagehide', cleanup)
+  window.addEventListener('beforeunload', cleanup)
 
   return (
     <Dialog.Root open={connectionDialogOpen()} onOpenChange={(e) => $connectionDialogOpen.set(e.open)} trapFocus={false}>
