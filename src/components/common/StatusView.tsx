@@ -1,8 +1,9 @@
 import { useStore } from '@nanostores/solid'
-import { $connectStatus, $peerConnectList, $roomId, $roomIdList, $roomStatus } from '@/stores/connect'
+import { $connectStatus, $roomIdList, $roomStatus } from '@/stores/connect'
 import { $statusText, $connectionDialogOpen } from '@/stores/ui'
+import { forgetRoom } from '@/logic/connect'
 import Button from './Button'
-import { Show, For, createSignal, createMemo } from 'solid-js'
+import { Show, For, createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 
 
@@ -10,7 +11,6 @@ export default () => {
   const connectStatus = useStore($connectStatus)
   const statusText = useStore($statusText)
   let noticeTextDom: HTMLDivElement
-  const roomId = useStore($roomId)
   const roomIdList = useStore($roomIdList)
   const roomStatus = useStore($roomStatus)
 
@@ -21,27 +21,11 @@ export default () => {
     roomId: null
   });
 
-  const handleAction = (action: 'refresh' | 'close') => {
-    const rid = actionDialog().roomId;
-    if (!rid) return;
-
-    if (action === 'refresh') {
-      alert(`刷新连接: ${rid}`);
-      // TODO: 在此处调用PeerJS 重连逻辑
-    } else if (action === 'close') {
-      $roomIdList.set($roomIdList.get().filter(item => item !== rid));
-      sessionStorage.setItem('controllerRoomId', $roomIdList.get().toString())
-      const peerConnectList = $peerConnectList.get()
-      peerConnectList.forEach((conn,index) =>{
-        if(conn.peer == rid){
-          conn.close()
-          console.log(`close connect: ${rid}`);
-        }
-      })
-    }
-    setActionDialog({ open: false, roomId: null });
-  };
-
+  const disconnect = () => {
+    const id = actionDialog().roomId
+    if (id) forgetRoom(id)
+    setActionDialog({ open: false, roomId: null })
+  }
 
   $statusText.listen((v) => {
     noticeTextDom.classList.remove('anim-text-out')
@@ -103,12 +87,7 @@ export default () => {
         </Show>
       </Show>
       <Show when={isController}>    
-        <Show when={connectStatus() == 'not-ready' && roomIdList().length == 0}> 
-          <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
-            <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
-          </div>
-        </Show> 
-        <Show when={connectStatus() == 'ready' && roomIdList().length == 0}> 
+        <Show when={roomIdList().length === 0}>
           <div class="p-1.5" onClick={() => $connectionDialogOpen.set(true)}>
             <div class={`h-2 w-2 rounded-full bg-gray ${statusDotClass()}`} />
           </div>
@@ -144,14 +123,8 @@ export default () => {
                 操作屏幕: <span class="font-mono font-semibold text-blue-600 dark:text-blue-400">{actionDialog().roomId}</span>
               </h3>        
               <div class="space-y-3">
-                {/* <button
-                  onClick={() => handleAction('refresh')}
-                  class="w-full py-2.5 px-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 font-medium transition-colors flex items-center justify-center gap-2"
-                >
-                  刷新连接
-                </button> */}
                 <button
-                  onClick={() => handleAction('close')}
+                  onClick={disconnect}
                   class="w-full py-2.5 px-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 font-medium transition-colors flex items-center justify-center gap-2"
                 >
                   断开连接

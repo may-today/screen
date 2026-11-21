@@ -61,6 +61,8 @@ export interface FavListExportData {
 }
 
 export interface StateActionBase {
+  messageId?: string
+  revision?: { time: number; source: string; parent: string }
   type: string
 }
 export interface StateActionSyncState extends StateActionBase {
@@ -107,7 +109,8 @@ export interface StateActionSetFavData extends StateActionBase {
   type: 'set_fav_data'
   payload: FavListExportData
 }
-export type StateAction = StateActionSyncState
+export type StateAction = (StateActionBase & { type: 'request_snapshot'; payload: string })
+  | StateActionSyncState
   | StateActionSetDataset
   | StateActionSetId
   | StateActionSetLyricLine
@@ -120,6 +123,7 @@ export type StateAction = StateActionSyncState
   | StateActionSetFavData
 
 export interface StateSnapshot {
+  source?: string
   time: number
   state: {
     dataset: string
